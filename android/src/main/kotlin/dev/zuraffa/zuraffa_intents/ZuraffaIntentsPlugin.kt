@@ -43,40 +43,6 @@ class ZuraffaIntentsPlugin: FlutterPlugin, Messages.ZuraffaIntentsApi, EventChan
     Messages.ZuraffaIntentsApi.setup(binding.binaryMessenger, null)
   }
 
-//  override fun getInitialSharedMedia(result: Result<SharedMedia>?) {
-//    result?.let { _result -> {
-//      initialMedia?.let { _media -> _result.success(_media) }
-//    } }
-//  }
-
-//  override fun recordSentMessage(media: SharedMedia) {
-//    val packageName = applicationContext.packageName
-//    val shortcutTarget = "$packageName.dynamic_share_target"
-//    val shortcutBuilder = ShortcutInfoCompat.Builder(applicationContext, media.conversationIdentifier ?: "").setShortLabel(media.speakableGroupName ?: "Unknown")
-//      .setIsConversation()
-//      .setCategories(setOf(shortcutTarget))
-//      .setIntent(Intent(Intent.ACTION_DEFAULT))
-//      .setLongLived(true)
-//
-//    val personBuilder = Person.Builder()
-//      .setKey(media.conversationIdentifier)
-//      .setName(media.speakableGroupName)
-//
-//    media.imageFilePath?.let {
-//      val bitmap = BitmapFactory.decodeFile(it)
-//      val icon = IconCompat.createWithAdaptiveBitmap(bitmap)
-//      shortcutBuilder.setIcon(icon)
-//      personBuilder.setIcon(icon)
-//    }
-//
-//    val person = personBuilder.build()
-//    shortcutBuilder.setPerson(person)
-//
-//    val shortcut = shortcutBuilder.build()
-//
-//    ShortcutManagerCompat.addDynamicShortcuts(applicationContext, listOf(shortcut))
-//  }
-
   override fun getInitialSharedMedia(result: Messages.Result<Messages.SharedMedia>?) {
     result?.success(initialMedia)
   }
@@ -180,10 +146,8 @@ class ZuraffaIntentsPlugin: FlutterPlugin, Messages.ZuraffaIntentsApi, EventChan
         text = null
       }
     }
-//    val conversationIdentifier = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)
     val conversationIdentifier = intent.getStringExtra("android.intent.extra.shortcut.ID") ?: intent.getStringExtra("conversationIdentifier")
     if (attachments != null || text != null || conversationIdentifier != null) {
-//      val media = SharedMedia(attachments = attachments, content = text)
       val media = Messages.SharedMedia.Builder().setAttachments(attachments).setContent(text).setConversationIdentifier(conversationIdentifier).setSubject(subject).build()
       if (initial) initialMedia = media
       eventSink?.success(media.toMap())

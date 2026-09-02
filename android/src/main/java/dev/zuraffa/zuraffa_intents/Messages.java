@@ -104,6 +104,12 @@ public class Messages {
       this.conversationIdentifier = setterArg;
     }
 
+    private @Nullable List<String> recipientIdentifiers;
+    public @Nullable List<String> getRecipientIdentifiers() { return recipientIdentifiers; }
+    public void setRecipientIdentifiers(@Nullable List<String> setterArg) {
+      this.recipientIdentifiers = setterArg;
+    }
+
     private @Nullable String content;
     public @Nullable String getContent() { return content; }
     public void setContent(@Nullable String setterArg) {
@@ -151,6 +157,11 @@ public class Messages {
         this.conversationIdentifier = setterArg;
         return this;
       }
+      private @Nullable List<String> recipientIdentifiers;
+      public @NonNull Builder setRecipientIdentifiers(@Nullable List<String> setterArg) {
+        this.recipientIdentifiers = setterArg;
+        return this;
+      }
       private @Nullable String content;
       public @NonNull Builder setContent(@Nullable String setterArg) {
         this.content = setterArg;
@@ -186,6 +197,7 @@ public class Messages {
         pigeonReturn.setAttachments(attachments);
         pigeonReturn.setConversationIdentifier(conversationIdentifier);
         pigeonReturn.setContent(content);
+        pigeonReturn.setRecipientIdentifiers(recipientIdentifiers);
         pigeonReturn.setSpeakableGroupName(speakableGroupName);
         pigeonReturn.setServiceName(serviceName);
         pigeonReturn.setSenderIdentifier(senderIdentifier);
@@ -203,6 +215,7 @@ public class Messages {
       toMapResult.put("attachments", list.isEmpty() ? null : list);
       toMapResult.put("conversationIdentifier", conversationIdentifier);
       toMapResult.put("content", content);
+      toMapResult.put("recipientIdentifiers", recipientIdentifiers);
       toMapResult.put("speakableGroupName", speakableGroupName);
       toMapResult.put("serviceName", serviceName);
       toMapResult.put("senderIdentifier", senderIdentifier);
@@ -222,6 +235,8 @@ public class Messages {
       pigeonResult.setConversationIdentifier((String)conversationIdentifier);
       Object content = map.get("content");
       pigeonResult.setContent((String)content);
+      Object recipientIdentifiers = map.get("recipientIdentifiers");
+      pigeonResult.setRecipientIdentifiers((List<String>)recipientIdentifiers);
       Object speakableGroupName = map.get("speakableGroupName");
       pigeonResult.setSpeakableGroupName((String)speakableGroupName);
       Object serviceName = map.get("serviceName");

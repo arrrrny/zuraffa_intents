@@ -120,7 +120,8 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                     serviceName: nil,
                     senderIdentifier: nil,
                     imageFilePath: nil,
-                    subject: nil
+                    subject: nil,
+                    recipientIdentifiers: nil
                 )
             }
 

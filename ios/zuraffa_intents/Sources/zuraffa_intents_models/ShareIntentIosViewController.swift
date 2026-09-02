@@ -324,9 +324,12 @@ open class ShareIntentIosViewController: UIViewController {
             content: sharedText.joined(separator: "\n"),
             speakableGroupName: speakableGroupName?.spokenPhrase, serviceName: serviceName,
             senderIdentifier: sender?.contactIdentifier ?? sender?.customIdentifier,
-            imageFilePath: nil, subject: subject)
+            imageFilePath: nil, subject: subject, recipientIdentifiers: nil)
 
-        let json = sharedMedia.toJson()
+        guard let json = sharedMedia.toJson() else {
+            print("failed to encode SharedMedia")
+            return
+        }
 
         userDefaults.set(json, forKey: sharedKey)
         userDefaults.synchronize()

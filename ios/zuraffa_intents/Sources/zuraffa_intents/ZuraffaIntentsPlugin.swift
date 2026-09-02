@@ -183,7 +183,6 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
 
     private func handleUrl(url: URL?, setInitialData: Bool) -> Bool {
         if let url = url {
-            //            let appDomain = Bundle.main.bundleIdentifier!
             let appGroupId =
                 (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String)
                 ?? "group.\(Bundle.main.bundleIdentifier!)"
@@ -202,7 +201,8 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                         SharedAttachment.init(
                             path: url.absoluteString, type: SharedAttachmentType.file)
                     ], conversationIdentifier: nil, content: nil, speakableGroupName: nil,
-                    serviceName: nil, senderIdentifier: nil, imageFilePath: nil, subject: nil)
+                    serviceName: nil, senderIdentifier: nil, imageFilePath: nil, subject: nil,
+                    recipientIdentifiers: nil)
             }
 
             if let media = sharedMedia {
@@ -216,62 +216,6 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
 
                 return true
             }
-            //            if url.fragment == "media" {
-            //                if let key = url.host?.components(separatedBy: "=").last,
-            //                   let json = userDefaults?.object(forKey: key) as? Data {
-            //                    let sharedMedia = SharedMedia.fromMap(nil)
-            //                    let sharedMediaFiles: [SharedMediaFile] = sharedArray.compactMap {
-            //                        guard let path = getAbsolutePath(for: $0.path) else {
-            //                            return nil
-            //                        }
-            //                        if ($0.type == .video && $0.thumbnail != nil) {
-            //                            let thumbnail = getAbsolutePath(for: $0.thumbnail!)
-            //                            return SharedMediaFile.init(path: path, thumbnail: thumbnail, duration: $0.duration, type: $0.type)
-            //                        } else if ($0.type == .video && $0.thumbnail == nil) {
-            //                            return SharedMediaFile.init(path: path, thumbnail: nil, duration: $0.duration, type: $0.type)
-            //                        }
-            //
-            //                        return SharedMediaFile.init(path: path, thumbnail: nil, duration: $0.duration, type: $0.type)
-            //                    }
-            //                    latestMedia = sharedMediaFiles
-            //                    if(setInitialData) {
-            //                        initialMedia = latestMedia
-            //                    }
-            //                    eventSinkMedia?(toJson(data: latestMedia))
-            //                }
-            //            } else if url.fragment == "file" {
-            //                if let key = url.host?.components(separatedBy: "=").last,
-            //                   let json = userDefaults?.object(forKey: key) as? Data {
-            //                    let sharedArray = decode(data: json)
-            //                    let sharedMediaFiles: [SharedMediaFile] = sharedArray.compactMap{
-            //                        guard let path = getAbsolutePath(for: $0.path) else {
-            //                            return nil
-            //                        }
-            //                        return SharedMediaFile.init(path: $0.path, thumbnail: nil, duration: nil, type: $0.type)
-            //                    }
-            //                    latestMedia = sharedMediaFiles
-            //                    if(setInitialData) {
-            //                        initialMedia = latestMedia
-            //                    }
-            //                    eventSinkMedia?(toJson(data: latestMedia))
-            //                }
-            //            } else if url.fragment == "text" {
-            //                if let key = url.host?.components(separatedBy: "=").last,
-            //                   let sharedArray = userDefaults?.object(forKey: key) as? [String] {
-            //                    latestText =  sharedArray.joined(separator: ",")
-            //                    if(setInitialData) {
-            //                        initialText = latestText
-            //                    }
-            //                    eventSinkText?(latestText)
-            //                }
-            //            } else {
-            //                latestText = url.absoluteString
-            //                if(setInitialData) {
-            //                    initialText = latestText
-            //                }
-            //                eventSinkText?(latestText)
-            //            }
-            //            return true
         }
         latestMedia = nil
         return false
@@ -343,7 +287,7 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                             code: "NATIVE_ERR", message: "Error: donating insendmessage intent",
                             details: nil)
                     } else {
-                        print("Successfully dontated INSendMessageIntent")
+                        print("Successfully donated INSendMessageIntent")
                     }
                 })
             }

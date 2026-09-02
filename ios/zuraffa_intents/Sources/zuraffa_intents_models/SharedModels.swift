@@ -40,11 +40,12 @@ open class SharedMedia: Codable {
     public var senderIdentifier: String?
     public var imageFilePath: String?
     public var subject: String?
+    public var recipientIdentifiers: [String?]?
 
     public init(
         attachments: [SharedAttachment]?, conversationIdentifier: String?, content: String?,
         speakableGroupName: String?, serviceName: String?, senderIdentifier: String?,
-        imageFilePath: String?, subject: String?
+        imageFilePath: String?, subject: String?, recipientIdentifiers: [String?]?
     ) {
         self.attachments = attachments
         self.conversationIdentifier = conversationIdentifier
@@ -54,6 +55,7 @@ open class SharedMedia: Codable {
         self.senderIdentifier = senderIdentifier
         self.imageFilePath = imageFilePath
         self.subject = subject
+        self.recipientIdentifiers = recipientIdentifiers
     }
 
     public class func fromMap(map: [String: Any?]?) -> SharedMedia? {
@@ -66,7 +68,8 @@ open class SharedMedia: Codable {
                 speakableGroupName: _map["speakableGroupName"] as? String,
                 serviceName: _map["serviceName"] as? String,
                 senderIdentifier: _map["senderIdentifier"] as? String,
-                imageFilePath: _map["imageFilePath"] as? String, subject: _map["subject"] as? String
+                imageFilePath: _map["imageFilePath"] as? String, subject: _map["subject"] as? String,
+                recipientIdentifiers: _map["recipientIdentifiers"] as? [String?]
             )
         } else {
             return nil
@@ -90,7 +93,8 @@ open class SharedMedia: Codable {
                     serviceName: _map["serviceName"] as? String,
                     senderIdentifier: _map["senderIdentifier"] as? String,
                     imageFilePath: _map["imageFilePath"] as? String,
-                    subject: _map["subject"] as? String)
+                    subject: _map["subject"] as? String,
+                    recipientIdentifiers: _map["recipientIdentifiers"] as? [String?])
             }
         }
         return nil
@@ -100,19 +104,14 @@ open class SharedMedia: Codable {
         return [
             "attachments": attachments?.map { $0.toDictionary() },
             "conversationIdentifier": conversationIdentifier, "content": content,
+            "recipientIdentifiers": recipientIdentifiers,
             "speakableGroupName": speakableGroupName, "serviceName": serviceName,
             "senderIdentifier": senderIdentifier, "imageFilePath": imageFilePath,
             "subject": subject,
         ]
     }
 
-    public func toJson() -> Data {
-        var data: Data?
-        do {
-            data = try JSONEncoder().encode(self)
-        } catch {
-            print("failed to encode SharedMedia")
-        }
-        return data!
+    public func toJson() -> Data? {
+        return try? JSONEncoder().encode(self)
     }
 }

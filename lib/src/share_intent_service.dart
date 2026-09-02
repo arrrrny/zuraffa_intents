@@ -77,9 +77,16 @@ class ShareIntentService {
 /// the identical instances. Pure-Dart/test contexts that want the
 /// [InMemoryShareIntentAdapter] construct [ShareIntentService] directly or
 /// register their own [ShareIntentPort] binding first.
-void registerShareIntentDependencies(GetIt getIt) {
+///
+/// Pass [binaryMessenger] to route the underlying platform channels over a
+/// custom messenger (tests, background isolates). Defaults to the default
+/// messenger.
+void registerShareIntentDependencies(
+  GetIt getIt, {
+  BinaryMessenger? binaryMessenger,
+}) {
   getIt.registerLazySingleton<ShareIntentPort>(
-    MethodChannelShareIntentPort.new,
+    () => MethodChannelShareIntentPort(binaryMessenger: binaryMessenger),
   );
   getIt.registerLazySingleton<ShareIntentService>(
     () => ShareIntentService(port: getIt<ShareIntentPort>()),

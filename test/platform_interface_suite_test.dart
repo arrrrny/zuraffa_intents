@@ -847,5 +847,62 @@ void main() {
         reason: 'leftover source-plugin identifiers in: $offenders',
       );
     });
+
+    test(
+      'U41: native SharedMedia payload key set matches sharedMediaWireMap '
+      '(every Dart wire key is present in each native toMap/toDictionary)',
+      () {
+        const expected = <String>{
+          'attachments',
+          'recipientIdentifiers',
+          'conversationIdentifier',
+          'content',
+          'speakableGroupName',
+          'serviceName',
+          'senderIdentifier',
+          'imageFilePath',
+          'subject',
+        };
+
+        final javaMessages = File(
+          'android/src/main/java/dev/zuraffa/zuraffa_intents/Messages.java',
+        ).readAsStringSync();
+        for (final key in expected) {
+          expect(
+            javaMessages,
+            contains('toMapResult.put("$key"'),
+            reason:
+                'Android Messages.java SharedMedia.toMap() must emit '
+                '"$key"',
+          );
+        }
+
+        final iosModels = File(
+          'ios/zuraffa_intents/Sources/zuraffa_intents_models/SharedModels.swift',
+        ).readAsStringSync();
+        for (final key in expected) {
+          expect(
+            iosModels,
+            contains('"$key":'),
+            reason:
+                'iOS SharedModels.swift SharedMedia.toDictionary() must '
+                'emit "$key"',
+          );
+        }
+
+        final macosModels = File(
+          'macos/zuraffa_intents/Sources/zuraffa_intents_models/SharedModels.swift',
+        ).readAsStringSync();
+        for (final key in expected) {
+          expect(
+            macosModels,
+            contains('"$key":'),
+            reason:
+                'macOS SharedModels.swift SharedMedia.toDictionary() must '
+                'emit "$key"',
+          );
+        }
+      },
+    );
   });
 }

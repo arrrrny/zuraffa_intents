@@ -118,10 +118,14 @@ open class ShareIntentMacosViewController: NSViewController {
             serviceName: nil,
             senderIdentifier: nil,
             imageFilePath: nil,
-            subject: nil
+            subject: nil,
+            recipientIdentifiers: nil
         )
 
-        let json = sharedMedia.toJson()
+        guard let json = sharedMedia.toJson() else {
+            print("failed to encode SharedMedia")
+            return
+        }
         userDefaults.set(json, forKey: sharedKey)
         userDefaults.synchronize()
 

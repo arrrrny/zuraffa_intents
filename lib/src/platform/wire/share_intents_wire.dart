@@ -41,9 +41,7 @@ const int kSharedMediaLegacyTag = 130;
 /// The default apple-like predicate: attachment paths coming from the iOS
 /// or macOS plugin are percent-encoded and must be run through
 /// `Uri.decodeFull`. `kIsWeb` short-circuits BEFORE `dart:io` is touched —
-/// `Platform` throws on web, so evaluation order is load-bearing (the
-/// hand-rolled source this plugin replaces got this backwards and crashed
-/// on web).
+/// `Platform` throws on web, so evaluation order is load-bearing.
 bool defaultIsAppleLikeUriPath() =>
     !kIsWeb && (Platform.isIOS || Platform.isMacOS);
 
