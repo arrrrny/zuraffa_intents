@@ -1,3 +1,7 @@
+# Zuraffa
+
+> Built with [Zuraffa](https://github.com/arrrrny/zuraffa) — the Flutter/Dart project generator.
+
 <!--
 This README describes the package. If you publish this package to pub.dev,
 this README's contents appear on the landing page for your package.
