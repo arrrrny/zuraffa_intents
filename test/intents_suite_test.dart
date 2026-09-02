@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:get_it/get_it.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:zuraffa_intents/zuraffa_intents.dart';
 
 /// Spec `001-intents-port` — the pure-Dart reimplementation of the
@@ -60,41 +60,47 @@ class ScriptedShareIntentPort implements ShareIntentPort {
 }
 
 SharedMedia _fullMedia() => SharedMedia(
-      attachments: [
-        SharedAttachment(
-            path: '/tmp/pic.jpg', type: SharedAttachmentType.image),
-        SharedAttachment(
-            path: '/tmp/clip.mp4', type: SharedAttachmentType.video),
-      ],
-      recipientIdentifiers: const ['r-1', null, 'r-3'],
-      conversationIdentifier: 'conv-42',
-      content: 'Look at this',
-      speakableGroupName: 'Design Crew',
-      serviceName: 'Messages',
-      senderIdentifier: 'sender-7',
-      imageFilePath: '/tmp/sender.png',
-      subject: 'Vacation',
-    );
+  attachments: [
+    SharedAttachment(path: '/tmp/pic.jpg', type: SharedAttachmentType.image),
+    SharedAttachment(path: '/tmp/clip.mp4', type: SharedAttachmentType.video),
+  ],
+  recipientIdentifiers: const ['r-1', null, 'r-3'],
+  conversationIdentifier: 'conv-42',
+  content: 'Look at this',
+  speakableGroupName: 'Design Crew',
+  serviceName: 'Messages',
+  senderIdentifier: 'sender-7',
+  imageFilePath: '/tmp/sender.png',
+  subject: 'Vacation',
+);
 
 void main() {
   group('SharedAttachmentType vocabulary (FR-001)', () {
-    test(
-        'U1: the attachment vocabulary is exactly image/video/audio/file '
+    test('U1: the attachment vocabulary is exactly image/video/audio/file '
         'in declaration order with stable wire indices', () {
-      expect(SharedAttachmentType.values.map((t) => t.name).toList(),
-          ['image', 'video', 'audio', 'file']);
-      expect(SharedAttachmentType.values.map((t) => t.index).toList(),
-          [0, 1, 2, 3]);
+      expect(SharedAttachmentType.values.map((t) => t.name).toList(), [
+        'image',
+        'video',
+        'audio',
+        'file',
+      ]);
+      expect(SharedAttachmentType.values.map((t) => t.index).toList(), [
+        0,
+        1,
+        2,
+        3,
+      ]);
     });
   });
 
   group('SharedAttachment entity (FR-002, FR-003)', () {
     test('U2: copyWith replaces only the given field', () {
       final attachment = SharedAttachment(
-          path: '/tmp/pic.jpg', type: SharedAttachmentType.image);
+        path: '/tmp/pic.jpg',
+        type: SharedAttachmentType.image,
+      );
 
-      final retyped =
-          attachment.copyWith(type: SharedAttachmentType.video);
+      final retyped = attachment.copyWith(type: SharedAttachmentType.video);
       expect(retyped.path, '/tmp/pic.jpg');
       expect(retyped.type, SharedAttachmentType.video);
 
@@ -103,29 +109,48 @@ void main() {
       expect(moved.type, SharedAttachmentType.image);
     });
 
-    test(
-        'U3: equality is field-based — same path+type equal with matching '
+    test('U3: equality is field-based — same path+type equal with matching '
         'hashCode; different path or type unequal', () {
       final a = SharedAttachment(
-          path: '/tmp/pic.jpg', type: SharedAttachmentType.image);
+        path: '/tmp/pic.jpg',
+        type: SharedAttachmentType.image,
+      );
       final b = SharedAttachment(
-          path: '/tmp/pic.jpg', type: SharedAttachmentType.image);
+        path: '/tmp/pic.jpg',
+        type: SharedAttachmentType.image,
+      );
 
       expect(a, equals(b));
       expect(a.hashCode, b.hashCode);
       expect(
-          a,
-          isNot(equals(SharedAttachment(
-              path: '/tmp/other.jpg', type: SharedAttachmentType.image))));
+        a,
+        isNot(
+          equals(
+            SharedAttachment(
+              path: '/tmp/other.jpg',
+              type: SharedAttachmentType.image,
+            ),
+          ),
+        ),
+      );
       expect(
-          a,
-          isNot(equals(SharedAttachment(
-              path: '/tmp/pic.jpg', type: SharedAttachmentType.file))));
+        a,
+        isNot(
+          equals(
+            SharedAttachment(
+              path: '/tmp/pic.jpg',
+              type: SharedAttachmentType.file,
+            ),
+          ),
+        ),
+      );
     });
 
     test('U4: toJson → fromJson round-trips path and type exactly', () {
       final attachment = SharedAttachment(
-          path: '/tmp/voice.m4a', type: SharedAttachmentType.audio);
+        path: '/tmp/voice.m4a',
+        type: SharedAttachmentType.audio,
+      );
 
       final decoded = SharedAttachment.fromJson(attachment.toJson());
 
@@ -135,10 +160,8 @@ void main() {
   });
 
   group('SharedMedia entity (FR-004, FR-005)', () {
-    test(
-        'U5: a fully-populated media round-trips preserving all nine '
-        'fields incl. nested attachments and a null recipient element',
-        () {
+    test('U5: a fully-populated media round-trips preserving all nine '
+        'fields incl. nested attachments and a null recipient element', () {
       final media = _fullMedia();
 
       final decoded = SharedMedia.fromJson(media.toJson());
@@ -158,8 +181,7 @@ void main() {
       expect(decoded.attachments![1].type, SharedAttachmentType.video);
     });
 
-    test(
-        'U6: a minimal media round-trips equivalently and its JSON omits '
+    test('U6: a minimal media round-trips equivalently and its JSON omits '
         'the absent fields', () {
       final media = SharedMedia();
 
@@ -180,15 +202,18 @@ void main() {
       expect(decoded.subject, isNull);
     });
 
-    test(
-        'U7: copyWith replaces the attachments list wholesale and '
+    test('U7: copyWith replaces the attachments list wholesale and '
         'preserves untouched fields', () {
       final media = _fullMedia();
 
-      final replaced = media.copyWith(attachments: [
-        SharedAttachment(
-            path: '/tmp/report.pdf', type: SharedAttachmentType.file),
-      ]);
+      final replaced = media.copyWith(
+        attachments: [
+          SharedAttachment(
+            path: '/tmp/report.pdf',
+            type: SharedAttachmentType.file,
+          ),
+        ],
+      );
 
       expect(replaced.attachments, hasLength(1));
       expect(replaced.attachments![0].path, '/tmp/report.pdf');
@@ -199,22 +224,33 @@ void main() {
       expect(replaced.speakableGroupName, 'Design Crew');
     });
 
-    test(
-        'U8: scalar-field equality is field-based with consistent '
+    test('U8: scalar-field equality is field-based with consistent '
         'hashCode', () {
       final a = SharedMedia(
-          content: 'hello', subject: 's', conversationIdentifier: 'c');
+        content: 'hello',
+        subject: 's',
+        conversationIdentifier: 'c',
+      );
       final b = SharedMedia(
-          content: 'hello', subject: 's', conversationIdentifier: 'c');
+        content: 'hello',
+        subject: 's',
+        conversationIdentifier: 'c',
+      );
 
       expect(a, equals(b));
       expect(a.hashCode, b.hashCode);
       expect(
-          a,
-          isNot(equals(SharedMedia(
+        a,
+        isNot(
+          equals(
+            SharedMedia(
               content: 'hello',
               subject: 's',
-              conversationIdentifier: 'other'))));
+              conversationIdentifier: 'other',
+            ),
+          ),
+        ),
+      );
     });
   });
 
@@ -225,15 +261,16 @@ void main() {
       expect(await adapter.getInitialSharedMedia(), isNull);
     });
 
-    test(
-        'U10: a stored initial share is served verbatim and repeatably '
+    test('U10: a stored initial share is served verbatim and repeatably '
         'across reads until reset', () async {
       final adapter = InMemoryShareIntentAdapter();
       final share = SharedMedia(
         content: 'boot share',
         attachments: [
           SharedAttachment(
-              path: '/tmp/a.png', type: SharedAttachmentType.image),
+            path: '/tmp/a.png',
+            type: SharedAttachmentType.image,
+          ),
         ],
       );
       adapter.storeInitial(share);
@@ -246,8 +283,7 @@ void main() {
       expect(first.attachments![0].path, '/tmp/a.png');
     });
 
-    test(
-        'U11: reset clears the stored share and is idempotent', () async {
+    test('U11: reset clears the stored share and is idempotent', () async {
       final adapter = InMemoryShareIntentAdapter();
       adapter.storeInitial(SharedMedia(content: 'once'));
 
@@ -260,8 +296,7 @@ void main() {
   });
 
   group('InMemoryShareIntentAdapter sent-message records (FR-007)', () {
-    test(
-        'U12: recordSentMessage maps named arguments into the wire '
+    test('U12: recordSentMessage maps named arguments into the wire '
         'fields', () async {
       final adapter = InMemoryShareIntentAdapter();
 
@@ -279,13 +314,14 @@ void main() {
       expect(record.serviceName, 'WhatsApp');
     });
 
-    test(
-        'U13: records accumulate one per call in call order; omitted '
+    test('U13: records accumulate one per call in call order; omitted '
         'optionals record as null', () async {
       final adapter = InMemoryShareIntentAdapter();
 
       await adapter.recordSentMessage(
-          conversationIdentifier: 'conv-1', conversationName: 'Mom');
+        conversationIdentifier: 'conv-1',
+        conversationName: 'Mom',
+      );
       await adapter.recordSentMessage(
         conversationIdentifier: 'conv-2',
         conversationName: 'Dad',
@@ -302,8 +338,7 @@ void main() {
   });
 
   group('InMemoryShareIntentAdapter sharedMediaStream (FR-008)', () {
-    test(
-        'U14: the stream is broadcast — two listeners each receive the '
+    test('U14: the stream is broadcast — two listeners each receive the '
         'emitted share', () async {
       final adapter = InMemoryShareIntentAdapter();
 
@@ -320,17 +355,17 @@ void main() {
       expect(received.every((m) => m.content == 'live share'), isTrue);
     });
 
-    test(
-        'U15: repeated access yields the identical stream instance '
+    test('U15: repeated access yields the identical stream instance '
         '(lazy singleton)', () {
       final adapter = InMemoryShareIntentAdapter();
 
-      expect(identical(
-          adapter.sharedMediaStream, adapter.sharedMediaStream), isTrue);
+      expect(
+        identical(adapter.sharedMediaStream, adapter.sharedMediaStream),
+        isTrue,
+      );
     });
 
-    test(
-        'U16: a late subscriber does not receive pre-subscription '
+    test('U16: a late subscriber does not receive pre-subscription '
         'emissions', () async {
       final adapter = InMemoryShareIntentAdapter();
 
@@ -346,8 +381,7 @@ void main() {
       adapter.emit(SharedMedia(content: 'late'));
       await Future<void>.delayed(Duration.zero);
 
-      expect(earlyReceived.map((m) => m.content).toList(),
-          ['early', 'late']);
+      expect(earlyReceived.map((m) => m.content).toList(), ['early', 'late']);
       expect(lateReceived.map((m) => m.content).toList(), ['late']);
 
       await earlySub.cancel();
@@ -356,24 +390,23 @@ void main() {
   });
 
   group('ShareIntentService facade (FR-009)', () {
-    test(
-        'U17: the service defaults to the in-memory adapter and '
+    test('U17: the service defaults to the in-memory adapter and '
         'delegates the initial-media lifecycle', () async {
       final service = ShareIntentService();
 
       expect(service.port, isA<InMemoryShareIntentAdapter>());
       expect(await service.getInitialSharedMedia(), isNull);
 
-      (service.port as InMemoryShareIntentAdapter)
-          .storeInitial(SharedMedia(content: 'boot'));
+      (service.port as InMemoryShareIntentAdapter).storeInitial(
+        SharedMedia(content: 'boot'),
+      );
       expect((await service.getInitialSharedMedia())!.content, 'boot');
 
       await service.resetInitialSharedMedia();
       expect(await service.getInitialSharedMedia(), isNull);
     });
 
-    test(
-        'U18: recordSentMessage arguments pass through verbatim and a '
+    test('U18: recordSentMessage arguments pass through verbatim and a '
         'port-thrown error surfaces unmodified', () async {
       final port = ScriptedShareIntentPort();
       final service = ShareIntentService(port: port);
@@ -403,15 +436,15 @@ void main() {
       expect(identical(surfaced, boom), isTrue);
     });
 
-    test(
-        'U19: the service re-exposes the port stream identically and the '
+    test('U19: the service re-exposes the port stream identically and the '
         'composition root registers a lazy singleton', () async {
       final port = ScriptedShareIntentPort();
       final service = ShareIntentService(port: port);
 
       expect(
-          identical(service.sharedMediaStream, port.sharedMediaStream),
-          isTrue);
+        identical(service.sharedMediaStream, port.sharedMediaStream),
+        isTrue,
+      );
 
       final getIt = GetIt.instance..reset();
       registerShareIntentDependencies(getIt);

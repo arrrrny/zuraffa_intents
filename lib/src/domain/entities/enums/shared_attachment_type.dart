@@ -6,9 +6,4 @@
 /// The declaration order is the wire vocabulary: the source plugin's
 /// codec encodes attachment types by index, so appending is safe but
 /// reordering is a breaking change (spec 001 FR-001).
-enum SharedAttachmentType {
-  image,
-  video,
-  audio,
-  file,
-}
+enum SharedAttachmentType { image, video, audio, file }
