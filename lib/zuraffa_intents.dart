@@ -21,4 +21,6 @@ export 'src/domain/entities/enums/shared_attachment_type.dart';
 export 'src/domain/entities/shared_attachment/shared_attachment.dart';
 export 'src/domain/entities/shared_media/shared_media.dart';
 export 'src/domain/intents/share_intent_port.dart';
+export 'src/platform/method_channel/method_channel_share_intent_port.dart';
+export 'src/platform/wire/share_intents_wire.dart';
 export 'src/share_intent_service.dart';
