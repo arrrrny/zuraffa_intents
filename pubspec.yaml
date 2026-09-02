@@ -1,17 +1,16 @@
 name: zuraffa_intents
-description: A starting point for Dart libraries or applications.
+description: The incoming-share seam for the Zuraffa ecosystem — receive share intents and record share suggestions, reimplementing the zikzak_share_handler contract in pure Dart.
 version: 1.0.0
 # repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.13.1
 
-# Add regular dependencies here.
 dependencies:
+  get_it: ^9.2.1
   json_annotation: ^4.12.0
   zorphy_annotation: ^2.3.1
   zuraffa: ^6.1.0
-  # path: ^1.9.0
 
 dev_dependencies:
   build_runner: ^2.16.0
@@ -23,4 +22,5 @@ dev_dependencies:
 
 dependency_overrides:
   analyzer: 14.1.0
+
 
