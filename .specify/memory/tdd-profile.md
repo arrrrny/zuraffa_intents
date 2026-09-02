@@ -13,16 +13,16 @@ This profile is read by the `tdd` spec-kit extension.
 
 ## Commands
 
-- Single test: `dart test {file} --name "{name}"'
-- Whole file: `dart test {file}'
-- Full suite: `dart test'
-- Coverage: `dart test --coverage'
+- Single test: `dart test {file} --plain-name "{name}"`
+- Whole file: `dart test {file}`
+- Full suite: `dart test`
+- Coverage: `dart test --coverage`
 
 ## Keys (machine-readable)
 
 ```yaml
 runner: dart
-single: 'dart test {file} --name "{name}"'
+single: 'dart test {file} --plain-name "{name}"'
 file: 'dart test {file}'
 suite: 'dart test'
 coverage: 'dart test --coverage'
