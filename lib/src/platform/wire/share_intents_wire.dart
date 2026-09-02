@@ -51,10 +51,7 @@ bool defaultIsAppleLikeUriPath() =>
 /// attachment type rides the wire as the declaration-order index (the
 /// plugin's vocabulary; reordering the enum is a breaking change).
 Map<Object?, Object?> sharedAttachmentWireMap(SharedAttachment attachment) =>
-    <Object?, Object?>{
-      'path': attachment.path,
-      'type': attachment.type.index,
-    };
+    <Object?, Object?>{'path': attachment.path, 'type': attachment.type.index};
 
 /// `SharedMedia` → the Pigeon wire map. All nine keys are ALWAYS present,
 /// `null`s preserved: the native sides read by key
@@ -63,8 +60,9 @@ Map<Object?, Object?> sharedAttachmentWireMap(SharedAttachment attachment) =>
 /// wire maps — the exact shape the native `SharedMedia.toMap()` emits.
 Map<Object?, Object?> sharedMediaWireMap(SharedMedia media) =>
     <Object?, Object?>{
-      'attachments':
-          media.attachments?.map<Object?>(sharedAttachmentWireMap).toList(),
+      'attachments': media.attachments
+          ?.map<Object?>(sharedAttachmentWireMap)
+          .toList(),
       'recipientIdentifiers': media.recipientIdentifiers?.toList(),
       'conversationIdentifier': media.conversationIdentifier,
       'content': media.content,
@@ -89,8 +87,8 @@ SharedMedia decodeSharedMedia(
     attachments: (map['attachments'] as List<Object?>?)
         ?.map((e) => _decodeAttachment(e!, appleLike))
         .toList(),
-    recipientIdentifiers:
-        (map['recipientIdentifiers'] as List<Object?>?)?.cast<String?>(),
+    recipientIdentifiers: (map['recipientIdentifiers'] as List<Object?>?)
+        ?.cast<String?>(),
     conversationIdentifier: map['conversationIdentifier'] as String?,
     content: map['content'] as String?,
     speakableGroupName: map['speakableGroupName'] as String?,
@@ -135,8 +133,7 @@ class ShareIntentsApiCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case kSharedAttachmentTag:
-        return _decodeAttachment(
-            readValue(buffer)!, defaultIsAppleLikeUriPath);
+        return _decodeAttachment(readValue(buffer)!, defaultIsAppleLikeUriPath);
       case kSharedMediaTag:
       case kSharedMediaLegacyTag:
         return decodeSharedMedia(readValue(buffer));

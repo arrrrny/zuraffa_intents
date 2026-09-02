@@ -16,14 +16,16 @@ import '../wire/share_intents_wire.dart';
 /// `sharedMediaStream` [EventChannel] behind a lazy-singleton stream —
 /// the `_sharedMediaStream ??=` contract, driver edition.
 class MethodChannelShareIntentPort implements ShareIntentPort {
-  MethodChannelShareIntentPort({
-    BinaryMessenger? binaryMessenger,
-    bool Function()? isAppleLikeUriPath,
-  })  : _binaryMessenger = binaryMessenger, // ignore: prefer_initializing_formals — named params cannot be private
-        _isAppleLikeUriPath = isAppleLikeUriPath; // ignore: prefer_initializing_formals
+  MethodChannelShareIntentPort({this.binaryMessenger, this.isAppleLikeUriPath});
 
-  final BinaryMessenger? _binaryMessenger;
-  final bool Function()? _isAppleLikeUriPath;
+  /// The messenger the API channels ride (null → the default messenger).
+  /// Scopes to the pigeon `BasicMessageChannel`s; the `EventChannel` always
+  /// rides the default messenger in this Flutter SDK.
+  final BinaryMessenger? binaryMessenger;
+
+  /// Overrides the apple-like attachment-path predicate (tests, custom
+  /// platform routing). Null → [defaultIsAppleLikeUriPath].
+  final bool Function()? isAppleLikeUriPath;
 
   static const ShareIntentsApiCodec _codec = ShareIntentsApiCodec();
 
@@ -37,15 +39,15 @@ class MethodChannelShareIntentPort implements ShareIntentPort {
     final channel = BasicMessageChannel<Object?>(
       channelName,
       _codec,
-      binaryMessenger: _binaryMessenger,
+      binaryMessenger: binaryMessenger,
     );
     return await channel.send(message) as Map<Object?, Object?>?;
   }
 
   PlatformException _channelError() => PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
+    code: 'channel-error',
+    message: 'Unable to establish connection on channel.',
+  );
 
   Never _throwWireError(Map<Object?, Object?> reply) {
     final error = reply['error']! as Map<Object?, Object?>;
@@ -64,8 +66,7 @@ class MethodChannelShareIntentPort implements ShareIntentPort {
     final result = reply['result'];
     if (result == null) return null;
     if (result is SharedMedia) return result;
-    return decodeSharedMedia(result,
-        isAppleLikeUriPath: _isAppleLikeUriPath);
+    return decodeSharedMedia(result, isAppleLikeUriPath: isAppleLikeUriPath);
   }
 
   @override
@@ -92,8 +93,7 @@ class MethodChannelShareIntentPort implements ShareIntentPort {
     return _guard(() => _send(kResetInitialSharedMediaChannel, null));
   }
 
-  Future<void> _guard(
-      Future<Map<Object?, Object?>?> Function() send) async {
+  Future<void> _guard(Future<Map<Object?, Object?>?> Function() send) async {
     final reply = await send();
     if (reply == null) throw _channelError();
     if (reply['error'] != null) _throwWireError(reply);
@@ -103,11 +103,11 @@ class MethodChannelShareIntentPort implements ShareIntentPort {
 
   @override
   Stream<SharedMedia> get sharedMediaStream {
-    // The EventChannel always rides the default messenger in this Flutter
-    // SDK; the BinaryMessenger injection scopes to the API channels.
     return _sharedMediaStream ??= EventChannel(kSharedMediaStreamChannel)
         .receiveBroadcastStream()
-        .map<SharedMedia>((event) =>
-            decodeSharedMedia(event, isAppleLikeUriPath: _isAppleLikeUriPath));
+        .map<SharedMedia>(
+          (event) =>
+              decodeSharedMedia(event, isAppleLikeUriPath: isAppleLikeUriPath),
+        );
   }
 }

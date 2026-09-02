@@ -31,7 +31,7 @@ class ShareIntentService {
   final ShareIntentPort port;
 
   ShareIntentService({ShareIntentPort? port})
-      : port = port ?? InMemoryShareIntentAdapter();
+    : port = port ?? InMemoryShareIntentAdapter();
 
   /// The plugin constructor: binds the method-channel platform driver (the
   /// real native share pipeline). Pass a [BinaryMessenger] to route the
@@ -43,8 +43,7 @@ class ShareIntentService {
 
   /// Returns the initially stored shared media for single time use on
   /// app boot.
-  Future<SharedMedia?> getInitialSharedMedia() =>
-      port.getInitialSharedMedia();
+  Future<SharedMedia?> getInitialSharedMedia() => port.getInitialSharedMedia();
 
   /// Records a sent message so the share menu can suggest
   /// recipients/conversations to share to.
@@ -64,8 +63,7 @@ class ShareIntentService {
 
   /// Resets the initial shared media to null to prevent duplicate
   /// handling.
-  Future<void> resetInitialSharedMedia() =>
-      port.resetInitialSharedMedia();
+  Future<void> resetInitialSharedMedia() => port.resetInitialSharedMedia();
 
   /// Stream that can be listened to for shared media when the app is
   /// already running — the port's stream instance, re-exposed
@@ -81,7 +79,9 @@ class ShareIntentService {
 /// register their own [ShareIntentPort] binding first.
 void registerShareIntentDependencies(GetIt getIt) {
   getIt.registerLazySingleton<ShareIntentPort>(
-      MethodChannelShareIntentPort.new);
+    MethodChannelShareIntentPort.new,
+  );
   getIt.registerLazySingleton<ShareIntentService>(
-      () => ShareIntentService(port: getIt<ShareIntentPort>()));
+    () => ShareIntentService(port: getIt<ShareIntentPort>()),
+  );
 }
