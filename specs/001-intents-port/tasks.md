@@ -25,39 +25,39 @@
 
 ## 3. Red — failing suite first
 
-- [ ] 3.1 Write `test/intents_suite_test.dart` (U1–U19) importing the
+- [x] 3.1 Write `test/intents_suite_test.dart` (U1–U19) importing the
       package barrel; run the profile's suite command and observe the red
       (compile failure against the not-yet-written API).
-- [ ] 3.2 Record the per-cycle red protocol in
+- [x] 3.2 Record the per-cycle red protocol in
       `specs/001-intents-port/tdd/cycle-log.md`.
 
 ## 4. Green — make the suite pass
 
-- [ ] 4.1 `SharedAttachmentType` enum + enums barrel (FR-001).
-- [ ] 4.2 `SharedAttachment` and `SharedMedia` zorphy entities
+- [x] 4.1 `SharedAttachmentType` enum + enums barrel (FR-001).
+- [x] 4.2 `SharedAttachment` and `SharedMedia` zorphy entities
       (`@Zorphy(generateJson: true)`), run `dart run build_runner build
       --delete-conflicting-outputs`, commit generated `.zorphy.dart`/`.g.dart`
       (FR-002..FR-005).
-- [ ] 4.3 `ShareIntentPort` (domain seam) (FR-006..FR-009).
-- [ ] 4.4 `InMemoryShareIntentAdapter` (pure-Dart driver stand-in:
+- [x] 4.3 `ShareIntentPort` (domain seam) (FR-006..FR-009).
+- [x] 4.4 `InMemoryShareIntentAdapter` (pure-Dart driver stand-in:
       initial-share store, sent-message records, broadcast controller)
       (FR-006..FR-008).
-- [ ] 4.5 `ShareIntentService` facade + `registerShareIntentDependencies`
+- [x] 4.5 `ShareIntentService` facade + `registerShareIntentDependencies`
       GetIt composition root (FR-009).
-- [ ] 4.6 Replace the scaffold barrel and placeholder (`Awesome`) and its
+- [x] 4.6 Replace the scaffold barrel and placeholder (`Awesome`) and its
       test; refresh `example/zuraffa_intents_example.dart` and `README.md`.
-- [ ] 4.7 `dart test` green (19/19 suite + baseline smoke),
+- [x] 4.7 `dart test` green (19/19 suite + baseline smoke),
       `dart analyze` clean.
 
 ## 5. Mutant audit
 
-- [ ] 5.1 Deliberate-mutant matrix over `lib/` (one mutant per behavior;
+- [x] 5.1 Deliberate-mutant matrix over `lib/` (one mutant per behavior;
       targeted test must fail via `--plain-name "<id>:"`; revert must be
       byte-identical). Require 0 SURVIVED.
-- [ ] 5.2 Record the matrix in `specs/001-intents-port/tdd/mutant-run.md`.
+- [x] 5.2 Record the matrix in `specs/001-intents-port/tdd/mutant-run.md`.
 
 ## 6. Verification
 
-- [ ] 6.1 `specs/001-intents-port/tdd/verification.md` with frontmatter
+- [x] 6.1 `specs/001-intents-port/tdd/verification.md` with frontmatter
       (suite counts, mutant verdict) and the PASS/FAIL judgment against
       all 9 FRs.
