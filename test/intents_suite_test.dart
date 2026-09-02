@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:get_it/get_it.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:zuraffa_intents/zuraffa_intents.dart';
 
 /// Spec `001-intents-port` — the pure-Dart reimplementation of the
