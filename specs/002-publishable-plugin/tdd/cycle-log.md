@@ -44,3 +44,29 @@
   not iOS/macOS) without touching `Platform` on web — the web-safety fix
   over the source plugin is structural (kIsWeb short-circuit), not
   environmental.
+
+## Green + mutation outcome (final)
+
+- Green: 41/41 (bootstrap smoke + spec-001's 19 + spec-002's 21), `flutter
+  analyze` clean, `dart format` clean, `flutter pub publish --dry-run` 0
+  warnings (after packaging commit e0849a1).
+- Fixture/protocol notes recorded during green:
+  - The codec tests must drive the real messenger entry points
+    (`encodeMessage`/`decodeMessage`, and for events a
+    `StandardMethodCodec` success envelope through `handlePlatformMessage`)
+    — hand-rolled `readValueOfType(tag, buffer)` calls double-consume the
+    tag byte and do not model the framework.
+  - `ByteData.buffer.asUint8List()` includes buffer padding; slices must use
+    `offsetInBytes`/`lengthInBytes` (caught by decodeMessage's
+    trailing-bytes `FormatException`).
+  - The quirk tests feed wire maps (type-as-index), not zorphy JSON
+    (type-as-name) — two different serializations, both pinned.
+- Deliberate-mutant matrix: 21/21 KILLED, 0 SURVIVED, reverts byte-identical
+  (`tdd/mutant-run.md`; harness: mutant_matrix_publishable.py in the agent
+  workspace).
+- zfa tooling probe on the converted plugin: `zfa doctor` 0 errors / 2 info
+  (manual GetIt registrations — by design, the composition root is the
+  port seam); `zfa build` green. No zfa misfires this cycle. The genuine
+  tooling gap — no plugin/platform-conversion preset (`--platforms`), which
+  forced the hand-written dart→flutter profile conversion — is filed as
+  zuraffa#800.
