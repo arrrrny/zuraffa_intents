@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
@@ -44,6 +45,12 @@ SharedMedia _encodedMedia() => SharedMedia(
   ],
   content: 'quirk me',
 );
+
+/// Whether this test host is an apple-like URI path platform (iOS/macOS).
+/// The default predicate decodes percent-encoded paths on these hosts;
+/// assertions that compare decoded vs raw paths must branch on this.
+final bool _isAppleLikeHost =
+    !kIsWeb && (Platform.isIOS || Platform.isMacOS);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -152,7 +159,10 @@ void main() {
       expect(back.subject, 'Vacation');
       expect(back.recipientIdentifiers, ['r-1', null, 'r-3']);
       expect(back.attachments, hasLength(2));
-      expect(back.attachments![0].path, '/tmp/pic%20name.jpg');
+      expect(
+        back.attachments![0].path,
+        _isAppleLikeHost ? '/tmp/pic name.jpg' : '/tmp/pic%20name.jpg',
+      );
       expect(back.attachments![0].type, SharedAttachmentType.image);
       expect(back.attachments![1].type, SharedAttachmentType.video);
     });
@@ -262,8 +272,8 @@ void main() {
       // The default predicate must consult kIsWeb first (dart:io is never
       // touched on web) and otherwise defer to Platform.
       expect(defaultIsAppleLikeUriPath, isA<bool Function()>());
-      // On this VM host (not web, not iOS/macOS) the default is false.
-      expect(defaultIsAppleLikeUriPath(), isFalse);
+      // On macOS/iOS the default is true; on Linux it is false.
+      expect(defaultIsAppleLikeUriPath(), _isAppleLikeHost);
     });
   });
 
@@ -588,13 +598,15 @@ void main() {
         (_) {},
       );
 
-      // The default predicate on this host is false → path untouched.
+      // The default predicate on this host decides whether the path is decoded.
       await Future<void>.delayed(Duration.zero);
       expect(received, hasLength(1));
       expect(received[0].content, 'live share');
       expect(
         received[0].attachments![0].path,
-        'file:///var/mobile/pic%20name.jpg',
+        _isAppleLikeHost
+            ? 'file:///var/mobile/pic name.jpg'
+            : 'file:///var/mobile/pic%20name.jpg',
       );
 
       await subscription.cancel();
