@@ -14,8 +14,8 @@
   `ShareIntentsApiCodec` (128/129/130), iOS/macOS `Uri.decodeFull`
   attachment-path quirk behind a `kIsWeb`-short-circuited injectable
   predicate, `sharedMediaStream` EventChannel lazy singleton, platform
-  composition-root wiring — 21 TDD behaviors, deliberate-mutant matrix 0
-  SURVIVED.
+  composition-root wiring — 22 TDD behaviors (U20–U41), deliberate-mutant
+  matrix 0 SURVIVED.
 - Native implementations ported from the proven `zikzak_share_handler`
   sources: Android (Kotlin + Pigeon Java), iOS/macOS (Swift, SPM
   `Package.swift` **and** CocoaPods podspecs — the source shipped only a

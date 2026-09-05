@@ -7,7 +7,7 @@ sent messages so the OS share menu can suggest conversations.
 `zuraffa_intents` is the drop-in replacement for `zikzak_share_handler`,
 rebuilt on the Zuraffa port/adapter architecture and produced entirely under
 the repo's zfa TDD discipline (spec-001: the pure-Dart contract, 19
-behaviors; spec-002: the platform-interface layer + native ports, 21
+behaviors; spec-002: the platform-interface layer + native ports, 22
 behaviors; deliberate-mutant matrices 0 SURVIVED on both).
 
 ## Platform support
@@ -61,6 +61,14 @@ registerShareIntentDependencies(getIt);
 final intents = getIt<ShareIntentService>();
 ```
 
+To route platform channels over a custom `BinaryMessenger` (tests,
+background isolates):
+
+```dart
+registerShareIntentDependencies(getIt, binaryMessenger: myMessenger);
+final intents = getIt<ShareIntentService>();
+```
+
 `ShareIntentService()` (direct construction) keeps binding the pure-Dart
 `InMemoryShareIntentAdapter` — the test/dev driver that plays the platform's
 producer role (`storeInitial`, `emit`, `sentMessageRecords`).
@@ -106,13 +114,13 @@ resolved as `<packageName>.MainActivity`.
 - **Channels**: result/error/channel-error pigeon semantics; EventChannel
   lazy-singleton stream.
 - **Consistency**: the Dart channel literals and the ported native files are
-  pinned equal by the suite — drift is a failing test (U38–U40).
+  pinned equal by the suite — drift is a failing test (U38–U41).
 
 ## Development
 
 ```bash
 flutter pub get
-flutter test                 # 41 behaviors (spec-001 + spec-002)
+flutter test                 # 42 behaviors (spec-001: 19, spec-002: 22, bootstrap: 1)
 flutter analyze
 flutter pub publish --dry-run
 ```
