@@ -8,6 +8,24 @@
 **zuraffa_intents**: ✅ **READY** — all tests pass, analyze clean, dry-run validates  
 **zuraffa_permissions**: ❌ **BLOCKED** — 5 packages need LICENSE, README, CHANGELOG, and dependency fixes
 
+### pub.dev reality check (2026-09-08)
+
+| Package | pub.dev status |
+| --- | --- |
+| `zuraffa` | ✅ published, latest **6.2.1** (2026-09-07) |
+| `zuraffa_flutter` | ✅ published, latest 6.2.1 |
+| `zuraffa_ui` | ✅ published, latest 0.1.0 |
+| `zuraffa_agent` | intentionally private (`publish_to: none`) |
+| `zuraffa_browser` | intentionally private (`publish_to: none`) |
+| `zuraffa_intents` | ❌ not published yet — **this package is ready** |
+| `zuraffa_permissions` (+4 federated) | ❌ not published yet — blocked (see below) |
+
+Note: the `zuraffa` core dependency is already satisfied on pub.dev — the earlier
+"core must be published first" concern is resolved. The path-dependency blockers
+below are purely dev-time overrides that must be dropped from the publish path.
+
+Ecosystem-wide checklist: `~/Developer/zuraffa/PUB_DEV_CHECKLIST.md`.
+
 ---
 
 ## zuraffa_intents
@@ -73,7 +91,8 @@ None.
 2. ❌ **Path dependency on `zuraffa`**
    - Current: `zuraffa: ^6.1.0` from path
    - Required: `zuraffa: ^6.1.0` from pub.dev
-   - **Blocker:** zuraffa core package must be published first
+   - **Resolved concern:** `zuraffa` 6.2.1 is already on pub.dev — only the
+     dev-time override needs dropping from the publish path
 
 #### Warnings (should fix)
 3. ⚠️ **Missing homepage/repository in pubspec.yaml**
@@ -160,7 +179,7 @@ None.
 
 Due to dependency chain, packages must be published in this order:
 
-1. **zuraffa** (core) — external dependency, must exist on pub.dev first
+1. **zuraffa** (core) — ✅ already on pub.dev (6.2.1, published 2026-09-07)
 2. **zuraffa_permissions_platform_interface** — no external deps beyond zuraffa
 3. **zuraffa_permissions_android** — depends on platform_interface
 4. **zuraffa_permissions_ios** — depends on platform_interface
