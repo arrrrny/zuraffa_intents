@@ -695,9 +695,6 @@ void main() {
         'android:',
         'ios:',
         'macos:',
-        'linux:',
-        'windows:',
-        'web:',
       ]) {
         expect(
           lines.any((l) => l.trim() == platform),
@@ -707,7 +704,6 @@ void main() {
       }
       expect(lines, contains('        pluginClass: ZuraffaIntentsPlugin'));
       expect(lines, contains('        package: dev.zuraffa.zuraffa_intents'));
-      expect(lines, contains('        pluginClass: ZuraffaIntentsWeb'));
     });
 
     test('U37: every podspec/Package.swift/fileName path declared by '
@@ -718,7 +714,6 @@ void main() {
         'macos/zuraffa_intents.podspec',
         'ios/zuraffa_intents/Package.swift',
         'macos/zuraffa_intents/Package.swift',
-        'lib/src/platform/web/zuraffa_intents_web.dart',
       ]) {
         expect(File(path).existsSync(), isTrue, reason: '$path must exist');
       }
@@ -824,20 +819,12 @@ void main() {
         ).readAsStringSync(),
         contains('class ZuraffaIntentsPlugin'),
       );
-      expect(
-        File('linux/zuraffa_intents.cc').readAsStringSync(),
-        contains('ZuraffaIntentsPlugin'),
-      );
-      expect(
-        File('windows/zuraffa_intents.cpp').readAsStringSync(),
-        contains('ZuraffaIntentsPlugin'),
-      );
 
       // No leftover source-plugin identifiers anywhere in the native trees
       // (case-insensitive; the rebrand was systematic).
       final nativeExtensions = ['.kt', '.java', '.swift', '.cc', '.cpp', '.h'];
       final offenders = <String>[];
-      for (final dir in ['android', 'ios', 'macos', 'linux', 'windows']) {
+      for (final dir in ['android', 'ios', 'macos']) {
         final root = Directory(dir);
         if (!root.existsSync()) continue;
         for (final entity in root.listSync(recursive: true)) {

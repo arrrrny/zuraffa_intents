@@ -17,9 +17,6 @@ behaviors; deliberate-mutant matrices 0 SURVIVED on both).
 | Android  | ✅ full | Kotlin plugin (`ZuraffaIntentsPlugin`) — share-sheet intents, shortcuts |
 | iOS      | ✅ full | Swift plugin (SPM + CocoaPods) — URL-scheme shares, INSendMessageIntent donation |
 | macOS    | ✅ full | Swift plugin (SPM + CocoaPods) — same wire contract |
-| Linux    | ⚠️ stub | C++ plugin class, no share receive (matches the source plugin) |
-| Windows  | ⚠️ stub | C++ plugin class, no share receive (matches the source plugin) |
-| Web      | ⚠️ stub | registration only — receiving requires an app-level PWA `share_target` manifest |
 
 ## Getting started
 

@@ -19,6 +19,9 @@
 - Native implementations ported from the proven `zikzak_share_handler`
   sources: Android (Kotlin + Pigeon Java), iOS/macOS (Swift, SPM
   `Package.swift` **and** CocoaPods podspecs — the source shipped only a
-  dangling podspec reference), Linux/Windows plugin stubs, web registration.
+  dangling podspec reference).
+- Platform support: Android, iOS, macOS only. Linux/Windows/web stubs removed
+  to focus on proven mobile+desktop platforms where share intents have OS-level
+  support.
 - Publish-ready: BSD-3 license, migration README, `flutter pub publish
   --dry-run` clean.

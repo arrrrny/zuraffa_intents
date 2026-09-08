@@ -29,13 +29,6 @@ flutter:
       macos:
         pluginClass: ZuraffaIntentsPlugin
         podspec: macos/zuraffa_intents.podspec
-      linux:
-        pluginClass: ZuraffaIntentsPlugin
-      windows:
-        pluginClass: ZuraffaIntentsPlugin
-      web:
-        pluginClass: ZuraffaIntentsWeb
-        fileName: src/platform/web/zuraffa_intents_web.dart
 
 dependencies:
   flutter:
