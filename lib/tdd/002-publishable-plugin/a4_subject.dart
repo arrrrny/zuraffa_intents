@@ -8,4 +8,5 @@ library;
 import 'package:zuraffa_intents/src/platform/method_channel/method_channel_share_intent_port.dart';
 
 /// Subject for behavior A4: the method-channel driver under test.
-MethodChannelShareIntentPort subject_a4() => MethodChannelShareIntentPort(isAppleLikeUriPath: () => true);
+MethodChannelShareIntentPort subject_a4() =>
+    MethodChannelShareIntentPort(isAppleLikeUriPath: () => true);

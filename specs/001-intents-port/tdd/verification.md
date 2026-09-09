@@ -85,7 +85,7 @@ Generated fresh by `zfa tdd verify --feature 001-intents-port`.
 
 - runner_command: `dart run mutation_test`
 - exit_code: 0
-- elapsed_seconds: 786
+- elapsed_seconds: 772
 - report_path: `/Users/arrrrny/Developer/zuraffa_intents/.dart_tool/zfa/tdd-verify-report/mutation-test-report.md`
 - preflight_scope_ran (bug #924, per-behavior):
   - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/001-intents-port/a1_test.dart`
@@ -130,4 +130,4 @@ Generated fresh by `zfa tdd verify --feature 001-intents-port`.
 - subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/001-intents-port/u6_subject.dart` 3282bc2c0e38e42d8751c0dbe72a6d49bd759521fafe91190ca4ef553673beaa
 - subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/001-intents-port/u7_subject.dart` 028f35143436254c194ad4bd3cdeda881037206b01a44b1ab0a18f0ad42ca22b
 - subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/001-intents-port/u8_subject.dart` 154078d75df2fda85e0f6195af92f879baa91e81246cee48812ecc3df43a0dc5
-- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/001-intents-port/u9_subject.dart` a970090b446a2f7fb1d56064a56bb62b73f9e0ffbf449fe5678fe93b97a0eb7d
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/001-intents-port/u9_subject.dart` f5240b9d826707ad26ba8ce608412a196480bd388e5f7c505632d8b38706bba0

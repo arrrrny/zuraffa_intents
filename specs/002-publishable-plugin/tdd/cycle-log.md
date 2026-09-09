@@ -1392,3 +1392,163 @@ Expected: not <Instance of 'UnimplementedError'>
 - prev-hash: 55d17435583e7e277129a248fe6946b024ddda46c3617d15a51ca7bb98902958
 - hash: 54fd61e76056d66c57ea93e1a8e695bf6c2fe893ace69ab3de1f5e0b2453c920
 
+## Cycle: U2 (error)
+
+- behavior: U2
+- kind: error
+- outcome: subject-drift
+- criterion: FR-002, sharedAttachmentWireMap.sharedAttachmentWireMap, sharedMediaWireMap.sharedMediaWireMap
+- test: test/
+- command: `/Users/arrrrny/.local/bin/zfa tdd make U2 --feature 002-publishable-plugin --project /Users/arrrrny/Developer/zuraffa_intents --suite-baseline /Users/arrrrny/Developer/zuraffa_intents/specs/002-publishable-plugin/tdd/run-baseline.json`
+- exit: 1
+- at: 2026-09-09T20:41:33.843799Z
+- output:
+```
+zfa tdd make: behavior U2
+   feature: 002-publishable-plugin
+   test: /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart
+zfa tdd make: behavior "U2" — the target test already passes, but the subject file at /Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u2_subject.dart no longer matches the shape the certified green evidence captured (issue #1036): a skip here would certify green on a subject the red evidence never exercised — the born-green placeholder class.
+   certified green evidence subject-hash: 933fe1f412d2ef12d58efe2bdd4560d158eec9f8cad65162b1b82cb79957c5fa
+   current subject-hash: 1341c9197aa2555c0ffee99699aadd90a86f65ded5e21237c51a640f2830e516
+--> fix: restore the subject to its certified shape (git checkout /Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u2_subject.dart), or — when the subject was hand-implemented and the passing test genuinely exercises it — re-certify the transition with `zfa tdd verify-red U2 --re-certify` (issue #1162), then re-run make.
+make: behavior=U2 outcome=subject-drift feature=002-publishable-plugin
+```
+
+- schema: 1
+- prev-hash: 2adde2df6bcdbec9776f5ea238e7f5d0443d62fb82973b16d6d4824e76af5009
+- hash: 31f7cef4665d7bf248b43af43b0e6f151414fcb1a6d2497617ffe45ae529d2c1
+
+## Cycle: U2 (green)
+
+- behavior: U2
+- kind: green
+- evidence: issue #1162 re-certification — the subject was hand-implemented after the certified red; this green evidence binds the NEW subject shape with the passing transcript
+- subject-hash: 1341c9197aa2555c0ffee99699aadd90a86f65ded5e21237c51a640f2830e516
+- criterion: FR-002, sharedAttachmentWireMap.sharedAttachmentWireMap, sharedMediaWireMap.sharedMediaWireMap
+- test: /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart
+- command: `flutter test /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart --plain-name "Wire-map fidelity — `sharedAttachmentWireMap` MUST produce"`
+- exit: 0
+- at: 2026-09-09T20:42:19.456323Z
+- output:
+```
+Resolving dependencies...
+Downloading packages...
+  ansi_escape_codes 2.2.1 (4.0.1 available)
+  gql_dedupe_link 2.0.4-alpha+1715521079596 (4.0.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  test_api 0.7.12 (0.7.14 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+00:00 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:01 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:02 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:03 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:04 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:04 +0: U2 (FR-002, wire maps) U2 — Wire-map fidelity — `sharedAttachmentWireMap` MUST produce                                                                                                       
+00:04 +1: U2 (FR-002, wire maps) U2 — Wire-map fidelity — `sharedAttachmentWireMap` MUST produce                                                                                                       
+00:04 +1: All tests passed!
+```
+- generation:
+  (none)
+- suite: baseline=0 guard=0 new=(none)
+
+- schema: 1
+- prev-hash: 31f7cef4665d7bf248b43af43b0e6f151414fcb1a6d2497617ffe45ae529d2c1
+- hash: 5c0efcba80aff014b13ad4083eb09f687bfaecde052f596305b92b2f8f95ab2e
+
+## Cycle: U2 (green)
+
+- behavior: U2
+- kind: green
+- subject-hash: 1341c9197aa2555c0ffee99699aadd90a86f65ded5e21237c51a640f2830e516
+- criterion: FR-002, sharedAttachmentWireMap.sharedAttachmentWireMap, sharedMediaWireMap.sharedMediaWireMap
+- test: /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart
+- command: `flutter test /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart --plain-name "Wire-map fidelity — `sharedAttachmentWireMap` MUST produce"`
+- exit: 0
+- at: 2026-09-09T20:42:42.823682Z
+- output:
+```
+Resolving dependencies...
+Downloading packages...
+  ansi_escape_codes 2.2.1 (4.0.1 available)
+  gql_dedupe_link 2.0.4-alpha+1715521079596 (4.0.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  test_api 0.7.12 (0.7.14 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies!
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+00:00 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:01 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:02 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:03 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:04 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart                                                                                                
+00:04 +0: U2 (FR-002, wire maps) U2 — Wire-map fidelity — `sharedAttachmentWireMap` MUST produce                                                                                                       
+00:04 +1: U2 (FR-002, wire maps) U2 — Wire-map fidelity — `sharedAttachmentWireMap` MUST produce                                                                                                       
+00:04 +1: All tests passed!
+```
+- generation:
+  (none)
+- suite: baseline=0 guard=0 new=(none)
+
+- schema: 1
+- prev-hash: 5c0efcba80aff014b13ad4083eb09f687bfaecde052f596305b92b2f8f95ab2e
+- hash: c8efe5d411172e992baebea992a1e4ae60f786732d7848efb062aa9b05742711
+
+## Cycle: 002-publishable-plugin-refactor (refactor)
+
+- behavior: 002-publishable-plugin-refactor
+- kind: refactor
+- criterion: FR-007
+- test: test/
+- command: `flutter test "test/tdd/002-publishable-plugin/a4_test.dart"`
+- exit: 0
+- at: 2026-09-09T20:43:52.365281Z
+- output:
+```
+preflight: green
+re-proof: green
+re-proof verdict: green (exit 0)
+re-proof retries: 0
+re-proof output tail (stdout+stderr, truncated):
+00:00 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a4_test.dart                                                                                                
+00:01 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a4_test.dart                                                                                                
+00:02 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a4_test.dart                                                                                                
+00:03 +0: loading /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a4_test.dart                                                                                                
+00:03 +0: A4 (AC-4) A4 — the decoded `SharedAttachment` paths are `Uri.decodeFull`-expanded;                                                                                                           
+00:04 +0: A4 (AC-4) A4 — the decoded `SharedAttachment` paths are `Uri.decodeFull`-expanded;                                                                                                           
+00:04 +1: A4 (AC-4) A4 — the decoded `SharedAttachment` paths are `Uri.decodeFull`-expanded;                                                                                                           
+00:04 +1: All tests passed!
+re-proof: scoped (1 covering test(s) for 1 changed file(s); spec 069 T001 — the full gate runs at feature completion + nightly)
+receipts refreshed: 1 receipted artifact(s) re-hashed (sanctioned refactor provenance, issue #1311)
+applied: 3 action(s), 1 with file changes.
+```
+actions:
+- action: build
+  command: `/Users/arrrrny/.local/bin/zfa build`
+  exit: 0
+  changed: (none)
+- action: format
+  command: `dart format lib/`
+  exit: 0
+  changed: lib/tdd/002-publishable-plugin/a4_subject.dart
+- action: fix
+  command: `dart fix --apply lib/`
+  exit: 0
+  changed: (none)
+
+- schema: 1
+- prev-hash: dc7be12521a169439a6b13fa010d044af88ba450bdc023115ff88a1d574e3d66
+- hash: d39cde5043abcecd3dcf260b3a1111c83db12ad27fb04a9195cd2664d645a37f
+
+## Two-cycle run: 002-publishable-plugin
+
+- feature: 002-publishable-plugin
+- engine-receipt: 04-engine-receipt.json (verdict: green)
+- skin-receipt: 04-skin-receipt.json (verdict: green)
+- at: 2026-09-09T20:43:52.439338Z
+

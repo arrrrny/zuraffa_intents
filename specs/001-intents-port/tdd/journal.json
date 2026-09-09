@@ -402,6 +402,226 @@
         "U9"
       ],
       "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "engine",
+      "phase": "drive",
+      "started_at": "2026-09-09T20:41:15.401568Z",
+      "finished_at": "2026-09-09T20:41:15.439083Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9"
+      ],
+      "counts": {
+        "total": 17,
+        "pending": 0,
+        "red": 0,
+        "green": 0,
+        "done": 17
+      },
+      "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "skin",
+      "phase": "drive",
+      "started_at": "2026-09-09T20:41:15.442411Z",
+      "finished_at": "2026-09-09T20:41:15.469807Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-skin-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [],
+      "counts": {
+        "total": 0,
+        "pending": 0,
+        "red": 0,
+        "green": 0,
+        "done": 0
+      },
+      "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "meta",
+      "phase": "aggregate",
+      "started_at": "2026-09-09T20:41:15.397003Z",
+      "finished_at": "2026-09-09T20:41:15.474078Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-engine-receipt.json",
+        "tdd/04-skin-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9"
+      ],
+      "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "meta",
+      "phase": "prove",
+      "started_at": "2026-09-09T21:12:30.520017Z",
+      "finished_at": "2026-09-09T21:12:30.558008Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-engine-receipt.json",
+        "tdd/04-skin-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "baseline",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9"
+      ],
+      "stopped_at": null,
+      "fingerprints": {
+        "A1": {
+          "subject": "f0561331f2bd00c7bb570709c9efd487a7ce7717c14d22c15e062d78696172ad",
+          "test": "6f152b12e714d0a686d0567fe832f629c9f64da7c141c1b54cdf037207995dfb"
+        },
+        "A2": {
+          "subject": "4b66034e513b5f3c77fed21a0fa7238f912cc6bd70425eaedd75243723e7c5c5",
+          "test": "3090115eca07a66e0539463fee5d765e2d2fcaadf22c1cbbdd9e5f9e9c2a0dfe"
+        },
+        "A3": {
+          "subject": "78adc91146e6d3c3eef44b998c7245e3d60268a60488447d647ce0fc1c180762",
+          "test": "2e3646e97126694272af705040682615903853424602a042280509c2d59608a0"
+        },
+        "A4": {
+          "subject": "5e357d65dbb808669687752f5ad40924b9e3116b7a31d4f524ff9486a2c84c8f",
+          "test": "8294cdfdb5f0c8e7e546336588cc2723de42863abe9340046a299d4a411713d3"
+        },
+        "A5": {
+          "subject": "7c0dce1d15339b8ead212f9244f94995cec0683653e0fd147d3abd6fa05d1f57",
+          "test": "594db0391ef5f32d8c5e792d859f613d8b59f0a2a4f47f7fcf3fcf2062aa334c"
+        },
+        "A6": {
+          "subject": "96ea1ff5195c8ee082cf2a4faded934f77f048bdfe683e428f930cafb44da862",
+          "test": "14152aef5cdacc99c87a6886a7fc6d25c8af643afea49821249679f0e6cda543"
+        },
+        "A7": {
+          "subject": "380cd12cd5d5c2ed87a179748322ae9a168bf79333ea2c296404826f44a09328",
+          "test": "01149c9f33792feaf607695821615df1af2f144930673e0f6a22fbea3f5401ed"
+        },
+        "A8": {
+          "subject": "1beaeb65fd87c431fbd3900017d3341583a01cd4d78c0d9ede8e73ff3a12bc94",
+          "test": "11fbc7d06b647347c6638c7d0ab699ab8b5ac6486df4b4e163cd144ba7618fcb"
+        },
+        "U1": {
+          "subject": "65725f6960ebc78ed2746c606397dabbe052511395340eaf2f756b1afe5d2f28",
+          "test": "4a85c16adcbb8292ba4d6c29b4976843be4cc1250fabc92be5c3476358f97ddf"
+        },
+        "U2": {
+          "subject": "ab82d0fa254a0c23347d1b38aebdea2b3ccd3cf0b83f2e741bd5f97ad2ca6c69",
+          "test": "be11b8b4a0d84592bedbb33530b38571eea1697141744b39274f8fa14bf73af4"
+        },
+        "U3": {
+          "subject": "d0f34ffee061ca33debb799c7134f85649481fd0514e6e2533bdba253aa1ff87",
+          "test": "f222b4d6cd2d004dd88c14b468fc6f9b0dc234479e7d649956db2863e48aa4f7"
+        },
+        "U4": {
+          "subject": "e288cb6959e1152e47f7b0be456d9722ae9bca11e61b938034679d304eb0067e",
+          "test": "ddbe8cc675259638e470a0258475ace77669de9cb607c62e1db1196cc69dc5e3"
+        },
+        "U5": {
+          "subject": "6cbfd983650c6c4cf2928f125d183632b5998c61e949da92fb561999bf46cd1c",
+          "test": "7e5dbdc175cb08df3d84252ab3eddddb35887cb56dd6875fbc5e1a28b626a050"
+        },
+        "U6": {
+          "subject": "3282bc2c0e38e42d8751c0dbe72a6d49bd759521fafe91190ca4ef553673beaa",
+          "test": "1f5ca25c8589835183cb382af4381f75604d5d0ab8338c98cb7483c668f52c1e"
+        },
+        "U7": {
+          "subject": "028f35143436254c194ad4bd3cdeda881037206b01a44b1ab0a18f0ad42ca22b",
+          "test": "c289380fcb2487dff1eefdc4d0a608eff6604c71b0636f1b4caecf3cdc5d2fa4"
+        },
+        "U8": {
+          "subject": "154078d75df2fda85e0f6195af92f879baa91e81246cee48812ecc3df43a0dc5",
+          "test": "702908fd6f66e8eb252759955b90ebba37ea70a28d1a76808a25c74100ed15b9"
+        },
+        "U9": {
+          "subject": "f5240b9d826707ad26ba8ce608412a196480bd388e5f7c505632d8b38706bba0",
+          "test": "c294e4ed06ff09eb40e2068d9af850ecfd3a33d45f3c685a76e3be27ea251c39"
+        }
+      }
     }
   ]
 }

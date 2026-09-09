@@ -88,7 +88,7 @@ Generated fresh by `zfa tdd verify --feature 002-publishable-plugin`.
 
 - runner_command: `dart run mutation_test`
 - exit_code: 0
-- elapsed_seconds: 90
+- elapsed_seconds: 146
 - report_path: `/Users/arrrrny/Developer/zuraffa_intents/.dart_tool/zfa/tdd-verify-report/mutation-test-report.md`
 - preflight_scope_ran (bug #924, per-behavior):
   - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a1_test.dart`
@@ -121,7 +121,7 @@ Generated fresh by `zfa tdd verify --feature 002-publishable-plugin`.
 - subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a1_subject.dart` 659c9911170296eaca92edc590a99b41e72f480d48d66c31dae47f46c06f385b
 - subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a2_subject.dart` c45eb0f47e71b8ecce150c9835213a393c9139d5a8a392a5c14bff8d6d4305cd
 - subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a3_subject.dart` e304db1908133a5f62cee14a6b58d91893763f91bf1d000b80b6cd5570e1ff24
-- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a4_subject.dart` 363b7b8264d5a7a3a7128a62031c689103eba48af50360f2943c5cfadac36253
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a4_subject.dart` c897311870caa207a9955dd537beba47710e65de9527ce18f297cbbf73214d78
 - subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a5_subject.dart` 4d035bd868d2b63b1087730385d8eb4b7ce723ddd8f7c692a0260f06ec438fb1
 - subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a6_subject.dart` 8fddd4659b3395916e4679c1b70a5c8958020209295987b7d2f8e04119b660c4
 - subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a7_subject.dart` 7742dc04f9b03de0ac0b3bb1c1311d74e779ba1f81853c9031d62d4dbaf528a8

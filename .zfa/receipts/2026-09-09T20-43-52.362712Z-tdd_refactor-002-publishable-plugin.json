@@ -1,0 +1,30 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd refactor",
+  "target": "002-publishable-plugin",
+  "repro": "zfa tdd refactor",
+  "at": "2026-09-09T20:43:52.362712Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "sanctioned": true,
+    "refactor": true,
+    "passes": [
+      "build",
+      "format",
+      "fix"
+    ],
+    "feature": "002-publishable-plugin"
+  },
+  "files": [
+    {
+      "path": "lib/tdd/002-publishable-plugin/a4_subject.dart",
+      "action": "update",
+      "sha256": "c897311870caa207a9955dd537beba47710e65de9527ce18f297cbbf73214d78",
+      "bytes": 472,
+      "snapshot": "// GENERATED STUB — hand step (A4: composition deferred; zuraffa#1420 workaround).\n//\n// behavior_id: A4\n// source_criterion: AC-4\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'package:zuraffa_intents/src/platform/method_channel/method_channel_share_intent_port.dart';\n\n/// Subject for behavior A4: the method-channel driver under test.\nMethodChannelShareIntentPort subject_a4() =>\n    MethodChannelShareIntentPort(isAppleLikeUriPath: () => true);\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}
