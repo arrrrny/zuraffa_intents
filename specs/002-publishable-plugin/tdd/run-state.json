@@ -1,0 +1,24 @@
+{
+  "feature": "002-publishable-plugin",
+  "behavior_states": {
+    "U2": "pending",
+    "A6": "done",
+    "A7": "done",
+    "A8": "done",
+    "U1": "done",
+    "U3": "done",
+    "U4": "done",
+    "U5": "done",
+    "U6": "done",
+    "U7": "done",
+    "U8": "done",
+    "U9": "done",
+    "U10": "done",
+    "A1": "done",
+    "A2": "done",
+    "A3": "done",
+    "A4": "done",
+    "A5": "done"
+  },
+  "dropped": []
+}

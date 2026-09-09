@@ -1,0 +1,30 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd gen",
+  "target": "U3",
+  "repro": "zfa tdd gen",
+  "at": "2026-09-09T19:55:34.712183Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "feature": "002-publishable-plugin"
+  },
+  "files": [
+    {
+      "path": "test/tdd/002-publishable-plugin/u3_test.dart",
+      "action": "create",
+      "sha256": "998ea98bc11623b630f0f27e2eba54838077648d4cd9fbf3b915436a30b0d42f",
+      "bytes": 1776,
+      "snapshot": "// GENERATED TEST — `zfa tdd gen U3` (spec 044-test-tdd-generation).\n//\n// behavior_id: U3\n// source_criterion: FR-003, ShareIntentsApiCodec.decodeMessage\n// kind: unit\n// description: The wire codec MUST be a `StandardMessageCodec` subclass that\n//\n// This test asserts the observable behavior described above. It is\n// \"honest red\" on first execution: the paired subject at\n// `package:zuraffa_intents/tdd/002-publishable-plugin/u3_subject.dart` is unimplemented, so the test fails through an\n// assertion (not an uncaught error, compile/load error, skip, or\n// placeholder). Replace the subject's\n// stub body with real implementation to make this test pass.\nlibrary;\n\nimport 'package:flutter_test/flutter_test.dart';\nimport 'package:zuraffa_intents/tdd/002-publishable-plugin/u3_subject.dart' as subject;\n\nvoid main() {\n  group('U3 (FR-003, ShareIntentsApiCodec.decodeMessage)', () {\n    test('U3 — The wire codec MUST be a `StandardMessageCodec` subclass that', () {\n      Object? _arg0() => throw UnimplementedError('provide a representative argument for subject_u3 (declared param 0: ByteData?)');\n          final result = (() {\n        try {\n          return subject.subject_u3(_arg0());\n        } on UnimplementedError catch (error) {\n          return error;\n        }\n      })();\n      // zfa:tdd: vacuous-guard (issue #1259): the assertion set below is the\n      // UnimplementedError guard ONLY — a green here proves nothing about\n      // the behavior (a dummy `return 0;` flips it green with zero\n      // declared-contract code). Replace this guard with an assertion on\n      // the observable outcome named by the behavior description, remove\n      // this marker, and re-run make.\n      expect(result, isNot(isA<UnimplementedError>()));\n    });\n  });\n}\n"
+    },
+    {
+      "path": "lib/tdd/002-publishable-plugin/u3_subject.dart",
+      "action": "create",
+      "sha256": "092140d1db3cf435196f48022168fb606c47b8f5a65fcac295d51011c15710e6",
+      "bytes": 1678,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U3` (spec 044-test-tdd-generation\n// + issue #1259 contract derivation).\n//\n// behavior_id: U3\n// source_criterion: FR-003, ShareIntentsApiCodec.decodeMessage\n// description: The wire codec MUST be a `StandardMessageCodec` subclass that\n//\n// CONTRACT-DERIVED SUBJECT (issue #1259): the signature below is\n// derived from the spec's declared Layer Contract:\n//\n//     decodeMessage(ByteData? message) -> Object?\n//\n// The declared request and result types are preserved above. A\n// non-renderable declared type (an entity that does not exist yet)\n// renders as `Object?` so the stub compiles cleanly (FR-011); replace\n// it with the declared type when implementing. This is a MINIMAL\n// COMPILABLE STUB: it does NOT satisfy the behavior — the paired test\n// fails on first execution (honest red). Replace this stub body with\n// the real implementation of the declared contract to make the test\n// pass.\n// Declared parameters: message: ByteData? (non-renderable declared types render as Object? until implemented)\n//\n// The subject name is derived from the behavior id and is deliberately\n// snake_cased — the generator KNOWS the name it emits, so the lint its\n// shape provably trips is suppressed here rather than renaming the\n// contract surface (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\n/// Subject for behavior U3 — declared contract:\n/// `decodeMessage(ByteData? message) -> Object?`.\n///\n/// Throws [UnimplementedError] until the real implementation lands.\nObject? subject_u3(Object? message) => throw UnimplementedError('subject_u3 not implemented: decodeMessage(ByteData? message) -> Object?');\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}

@@ -1,109 +1,138 @@
----
-feature: 002-publishable-plugin
-verdict: PASS
-standard: .specify/extensions/tdd/templates/tdd-test-quality-rubric.md # rubric graded against (toolchain-level)
-verified_at: e0849a1 # short SHA audited (the packaging/TDD commit)
-behaviors: 21
-proven: 21
-likely: 0
-test_after: 0
-no_test: 0
-not_applicable: 0
-high_smells: 0
-criteria_total: 10
-criteria_covered: 10
-mutation_score: 100 # scope: wire-map builders, the type-tagged codec, the quirk predicate, the method-channel driver (result/error/channel-error + stream singleton), the platform wiring, packaging metadata, and the Dart↔native channel-consistency contract; deliberate-mutant sweep (21/21 killed) — see tdd/mutant-run.md
-mutants_survived: 0
-suite: 41 passed, 0 failed (1 bootstrap smoke + 19 spec-001 + 21 spec-002); flutter analyze clean; flutter pub publish --dry-run 0 warnings
-real_device: "not applicable in this environment — the Dart platform-interface layer is exercised over TestDefaultBinaryMessenger plumbing (mocked BasicMessageChannel replies and real handlePlatformMessage event envelopes); the native trees are a faithful port of the proven zikzak_share_handler implementations pinned by the U38–U40 consistency suite; device bring-up is the maintainer's CI matrix"
----
+# TDD Verification — feature `002-publishable-plugin`
 
-# TDD Verification: 002-publishable-plugin — the platform-interface layer
+Generated fresh by `zfa tdd verify --feature 002-publishable-plugin`.
 
-**Verdict: PASS.** Every one of the 21 behaviors is `PROVEN`: the suite was
-written first and observed red against the absent API (compile failure —
-`sharedAttachmentWireMap`, `ShareIntentsApiCodec`,
-`MethodChannelShareIntentPort`, `ShareIntentService.platform` not found; the
-compiler is the oracle), the implementation then landed green (41/41 across
-the bootstrap smoke, spec-001, and spec-002 suites; `flutter analyze` clean),
-and the deliberate-mutant sweep killed 21/21 injected mutants with zero
-survivors and byte-identical reverts. All 10 FRs are covered end-to-end
-through the package's real public API — the barrel exports — with the
-packaging and native-consistency FRs enforced as executable tests rather
-than review claims.
+## Gate
 
-## Test-first evidence
+- gate: `pass`
 
-The layer is greenfield on top of the frozen spec-001 baseline (20/20 under
-the converted flutter runner at the harness commit `2384ab0`). The
-21-behavior suite was committed red: `flutter test
-test/platform_interface_suite_test.dart` failed at load time with
-`Method not found` on every new symbol. After the implementation landed the
-suite turned green, and each behavior's teeth were confirmed by the mutant
-matrix (`flutter test … --plain-name "<id>:"` per deliberate mutant).
+## Mutation buckets (FR-014)
 
-## Coverage of the criteria
+- killed: 7
+- survived: 0
+- timed_out: 0
 
-- **FR-001 (publish-ready packaging)** — U36 (pubspec: six platforms,
-  rebranded classes, repository/issue_tracker, description length, flutter
-  floor) and U37 (declared podspec/Package.swift/fileName paths exist;
-  CHANGELOG head matches the version). Machine-checked; `flutter pub publish
-  --dry-run` finishes with 0 warnings.
-- **FR-002 (wire-map fidelity)** — U20 (attachment `{path, type: index}` for
-  all four kinds) and U21 (all nine media keys present, nulls preserved,
-  attachments as wire maps).
-- **FR-003 (codec)** — U22 (`encodeMessage`/`decodeMessage` round-trip under
-  the tag-129 envelope; the first wire byte is asserted), U23 (native-emitted
-  plain maps decode into entities via the driver's decode path), U24 (tags
-  128 and 130 both accepted).
-- **FR-004 (quirk + injectable predicate)** — U25 (quirk applies iff the
-  predicate holds; default predicate is `!kIsWeb && (isIOS || isMacOS)` and
-  is verified on the VM host).
-- **FR-005 (getInitial semantics)** — U26 (result map → entity; null result
-  → null), U27 (error reply → `PlatformException` with exact
-  code/message/details), U28 (null reply → `channel-error` with the
-  canonical message).
-- **FR-006 (recordSentMessage)** — U29 (single-element entity envelope with
-  the argument mapping; `{result: null}` completes), U30 (error/null reply
-  semantics).
-- **FR-007 (reset)** — U31 (null payload; result/error semantics).
-- **FR-008 (stream)** — U32 (a real `handlePlatformMessage` success envelope
-  decodes into an entity under the injectable predicate), U33 (lazy-singleton
-  stream identity per port, distinct across ports).
-- **FR-009 (platform wiring)** — U34 (`ShareIntentService.platform()` binds
-  the driver and accepts a `BinaryMessenger`; direct construction keeps the
-  in-memory default — spec-001's U17 remains authoritative there), U35 (the
-  composition root binds the driver as the `ShareIntentPort` singleton and
-  the service to that port, both lazy singletons).
-- **FR-010 (native consistency)** — U38 (event channel literal equal across
-  the Dart wire module, Kotlin plugin, both Swift plugins), U39 (the three
-  pigeon channels equal across the Dart wire module, Pigeon Java, both Swift
-  APIs), U40 (rebranded plugin classes present; zero leftover
-  zikzak/ShareHandler identifiers across all five native trees, scanned
-  case-insensitively by the suite itself).
+## Behavior scope (FR-018)
 
-## Mutation evidence
+- `U2` — traces: `FR-002, sharedAttachmentWireMap.sharedAttachmentWireMap, sharedMediaWireMap.sharedMediaWireMap`
+- `A6` — traces: `AC-6`
+- `A7` — traces: `AC-7`
+- `A8` — traces: `AC-8`
+- `U1` — traces: `FR-001, publishability`
+- `U3` — traces: `FR-003, ShareIntentsApiCodec.decodeMessage`
+- `U4` — traces: `FR-004, decodeSharedMedia.decodeSharedMedia`
+- `U5` — traces: `FR-005, MethodChannelShareIntentPort.getInitialSharedMedia`
+- `U6` — traces: `FR-006, MethodChannelShareIntentPort.recordSentMessage`
+- `U7` — traces: `FR-007, MethodChannelShareIntentPort.resetInitialSharedMedia`
+- `U8` — traces: `FR-008, MethodChannelShareIntentPort.sharedMediaStream`
+- `U9` — traces: `FR-009, ShareIntentService.platform`
+- `U10` — traces: `FR-010, native consistency`
+- `A1` — traces: `AC-1`
+- `A2` — traces: `AC-2`
+- `A3` — traces: `AC-3`
+- `A4` — traces: `AC-4`
+- `A5` — traces: `AC-5`
 
-21/21 deliberate mutants killed, 0 survived, every revert byte-identical
-(`tdd/mutant-run.md`). The matrix includes the cross-language rows: a
-one-character channel drift on the Dart side and a rebrand reversion in the
-ported Kotlin are both killed by the consistency suite — the property that
-makes the six-platform port auditable from a single `flutter test` run.
+## Behavior kinds (issue #1376)
 
-## Baseline integrity
+- presence: 0
+- absence: 0
+- route-outcome: 0
+- enabled-state: 0
+- sequence: 0
 
-Spec-001's behaviors are untouched: its 19 behaviors pass unmodified under
-the flutter runner (only the test import moved from `package:test` to
-`package:flutter_test` in the harness commit), `lib/src/domain/**` is
-byte-identical to master, and the in-memory default for direct service
-construction is preserved (U17/U34 pin both sides of the seam).
+- `U2` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart
+- `A6` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a6_test.dart
+- `A7` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a7_test.dart
+- `A8` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a8_test.dart
+- `U1` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u1_test.dart
+- `U3` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u3_test.dart
+- `U4` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u4_test.dart
+- `U5` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u5_test.dart
+- `U6` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u6_test.dart
+- `U7` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u7_test.dart
+- `U8` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u8_test.dart
+- `U9` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u9_test.dart
+- `U10` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u10_test.dart
+- `A1` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a1_test.dart
+- `A2` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a2_test.dart
+- `A3` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a3_test.dart
+- `A4` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a4_test.dart
+- `A5` — not traced: no scenario-assertions header in /Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a5_test.dart
 
-## Known boundaries (documented, not defects)
+## Restoration (FR-021)
 
-- The native trees are not compiled here (no Android/iOS/macOS toolchains in
-  the environment); they are a systematic rename-port of the proven source
-  implementations, and every rename-shaped delta a compiler would catch in
-  the wire path (channel literals, plugin classes, identifiers) is covered
-  by U38–U40 from the Dart side.
-- Linux/Windows/web remain the source plugin's honest stubs; web receive is
-  an app-level `share_target` flow, documented in the README.
+- restoration_verified: true
+- restoration_scope_count: 18
+- restoration_scope (subjects only, never tests):
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a1_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a2_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a3_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a4_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a5_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a6_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a7_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a8_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u10_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u1_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u2_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u3_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u4_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u5_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u6_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u7_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u8_subject.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u9_subject.dart`
+
+## Repro diagnostics (FR-020, non-sensitive)
+
+- runner_command: `dart run mutation_test`
+- exit_code: 0
+- elapsed_seconds: 90
+- report_path: `/Users/arrrrny/Developer/zuraffa_intents/.dart_tool/zfa/tdd-verify-report/mutation-test-report.md`
+- preflight_scope_ran (bug #924, per-behavior):
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a1_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a2_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a3_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a4_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a5_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a6_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a7_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/a8_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u10_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u1_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u2_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u3_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u4_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u5_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u6_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u7_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u8_test.dart`
+  - `/Users/arrrrny/Developer/zuraffa_intents/test/tdd/002-publishable-plugin/u9_test.dart`
+
+## Mutation run
+
+- mutation_was_run: true
+- mutation_score: 1.0000
+
+## Evidence binding (bug #837)
+
+- spec_hash: 2ca10373f68814d349851c090317f0fec72f2894ccb339fd4e752b61a1ed003f
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a1_subject.dart` 659c9911170296eaca92edc590a99b41e72f480d48d66c31dae47f46c06f385b
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a2_subject.dart` c45eb0f47e71b8ecce150c9835213a393c9139d5a8a392a5c14bff8d6d4305cd
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a3_subject.dart` e304db1908133a5f62cee14a6b58d91893763f91bf1d000b80b6cd5570e1ff24
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a4_subject.dart` 363b7b8264d5a7a3a7128a62031c689103eba48af50360f2943c5cfadac36253
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a5_subject.dart` 4d035bd868d2b63b1087730385d8eb4b7ce723ddd8f7c692a0260f06ec438fb1
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a6_subject.dart` 8fddd4659b3395916e4679c1b70a5c8958020209295987b7d2f8e04119b660c4
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a7_subject.dart` 7742dc04f9b03de0ac0b3bb1c1311d74e779ba1f81853c9031d62d4dbaf528a8
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/a8_subject.dart` b8abe79916c447ab10fa017899d615ff90fa7430317e794b889fe966b28bd8ac
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u10_subject.dart` 5054d5137dc50a65f6b37ebbeb4d125d9eff2551b4a78b08184993c2a6a5269d
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u1_subject.dart` ad2859c43ce1e6f0e0545be6c7a8a99a4d0355585806b11d1ba49cc5cf0a9155
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u2_subject.dart` 1341c9197aa2555c0ffee99699aadd90a86f65ded5e21237c51a640f2830e516
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u3_subject.dart` 59967b5d39bd23c27e4c8e6fd66d4d7be7b4cb8f67359609378dc50f62132d94
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u4_subject.dart` a6b52b035c20f75cca16942e0f90dd73fa9b87743dd6fda3616047c285a5e36f
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u5_subject.dart` d9a93bb28197c6949b42096f9f6f5e305277de5acf585b92f5d74ba8970da4fc
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u6_subject.dart` f977dae5f279a6ad502ec5763ad281b6f896d848f2610fd4a252d148afa441d1
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u7_subject.dart` 764a3d9086fd2c1f8eb8003f7e0201fc414a99f6936fbd6dd49601ea3f54851c
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u8_subject.dart` 6ddbb8a3c09a8df3efd6614aa3253d2e8cabebdeea293475ccf30f7ff3e9c3bd
+- subject_hash: `/Users/arrrrny/Developer/zuraffa_intents/lib/tdd/002-publishable-plugin/u9_subject.dart` 468ea501980822e2ade20fbebb8e19f96498140c2f3acf4a521969aa3c820f8b

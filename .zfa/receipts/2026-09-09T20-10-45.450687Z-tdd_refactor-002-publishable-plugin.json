@@ -1,0 +1,65 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd refactor",
+  "target": "002-publishable-plugin",
+  "repro": "zfa tdd refactor",
+  "at": "2026-09-09T20:10:45.450687Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "sanctioned": true,
+    "refactor": true,
+    "passes": [
+      "build",
+      "format",
+      "fix"
+    ],
+    "feature": "002-publishable-plugin"
+  },
+  "files": [
+    {
+      "path": "lib/tdd/002-publishable-plugin/a7_subject.dart",
+      "action": "update",
+      "sha256": "7742dc04f9b03de0ac0b3bb1c1311d74e779ba1f81853c9031d62d4dbaf528a8",
+      "bytes": 591,
+      "snapshot": "// GENERATED STUB — hand step (A7: composition deferred; zuraffa#1420 workaround).\n//\n// behavior_id: A7\n// source_criterion: AC-7\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'package:zuraffa_intents/src/platform/wire/share_intents_wire.dart';\n\n/// Subject for behavior A7: the Dart-side channel literals under test.\nMap<String, String> subject_a7() => {\n  'event': kSharedMediaStreamChannel,\n  'getInitialSharedMedia': kGetInitialSharedMediaChannel,\n  'recordSentMessage': kRecordSentMessageChannel,\n  'resetInitialSharedMedia': kResetInitialSharedMediaChannel,\n};\n"
+    },
+    {
+      "path": "lib/tdd/002-publishable-plugin/u10_subject.dart",
+      "action": "update",
+      "sha256": "5054d5137dc50a65f6b37ebbeb4d125d9eff2551b4a78b08184993c2a6a5269d",
+      "bytes": 597,
+      "snapshot": "// GENERATED STUB — hand step (U10:hand, issue #1308 seam).\n//\n// behavior_id: U10\n// source_criterion: FR-010, native consistency\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'package:zuraffa_intents/src/platform/wire/share_intents_wire.dart';\n\n/// Subject for behavior U10: the Dart wire literals the natives must carry.\nMap<String, String> subject_u10() => {\n  'event': kSharedMediaStreamChannel,\n  'getInitialSharedMedia': kGetInitialSharedMediaChannel,\n  'recordSentMessage': kRecordSentMessageChannel,\n  'resetInitialSharedMedia': kResetInitialSharedMediaChannel,\n};\n"
+    },
+    {
+      "path": "lib/tdd/002-publishable-plugin/u1_subject.dart",
+      "action": "update",
+      "sha256": "ad2859c43ce1e6f0e0545be6c7a8a99a4d0355585806b11d1ba49cc5cf0a9155",
+      "bytes": 457,
+      "snapshot": "// GENERATED STUB — hand step (U1:hand, issue #1308 seam).\n//\n// behavior_id: U1\n// source_criterion: FR-001, publishability\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'dart:io';\n\n/// Subject for behavior U1: the publish metadata.\nMap<String, String> subject_u1() => {\n  'pubspec': File('pubspec.yaml').readAsStringSync(),\n  'changelog': File('CHANGELOG.md').readAsStringSync(),\n  'license': File('LICENSE').readAsStringSync(),\n};\n"
+    },
+    {
+      "path": "lib/tdd/002-publishable-plugin/u2_subject.dart",
+      "action": "update",
+      "sha256": "1341c9197aa2555c0ffee99699aadd90a86f65ded5e21237c51a640f2830e516",
+      "bytes": 1068,
+      "snapshot": "// GENERATED STUB — hand step (U2:hand, issue #1308 seam).\n//\n// behavior_id: U2\n// source_criterion: FR-002, sharedAttachmentWireMap.sharedAttachmentWireMap, sharedMediaWireMap.sharedMediaWireMap\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'package:zuraffa_intents/src/domain/entities/enums/shared_attachment_type.dart';\nimport 'package:zuraffa_intents/src/domain/entities/shared_attachment/shared_attachment.dart';\nimport 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';\n\n/// Subject for behavior U2: the attachment wire-map fixture.\nSharedAttachment attachment_u2() =>\n    SharedAttachment(path: '/tmp/a.png', type: SharedAttachmentType.image);\n\n/// Subject for behavior U2: the media wire-map fixture.\nSharedMedia media_u2() => SharedMedia(\n  attachments: [\n    SharedAttachment(path: '/tmp/a.png', type: SharedAttachmentType.image),\n  ],\n  recipientIdentifiers: const ['user-1', null],\n  content: 'hello',\n);\n\n/// Subject for behavior U2: the minimal media fixture.\nSharedMedia minimal_u2() => SharedMedia();\n"
+    },
+    {
+      "path": "lib/tdd/002-publishable-plugin/u4_subject.dart",
+      "action": "update",
+      "sha256": "a6b52b035c20f75cca16942e0f90dd73fa9b87743dd6fda3616047c285a5e36f",
+      "bytes": 714,
+      "snapshot": "// GENERATED STUB — hand step (U4:hand, issue #1308 seam).\n//\n// behavior_id: U4\n// source_criterion: FR-004, decodeSharedMedia.decodeSharedMedia\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\n/// Subject for behavior U4: a native wire map whose attachment path\n/// arrives percent-encoded (the Apple share-sheet shape).\nMap<Object?, Object?> encoded_u4() => <Object?, Object?>{\n  'attachments': [\n    <Object?, Object?>{'path': 'file:///var/mobile/pic%20name.jpg', 'type': 0},\n  ],\n  'recipientIdentifiers': null,\n  'conversationIdentifier': null,\n  'content': 'quirk',\n  'speakableGroupName': null,\n  'serviceName': null,\n  'senderIdentifier': null,\n  'imageFilePath': null,\n  'subject': null,\n};\n"
+    },
+    {
+      "path": "lib/tdd/002-publishable-plugin/u8_subject.dart",
+      "action": "update",
+      "sha256": "6ddbb8a3c09a8df3efd6614aa3253d2e8cabebdeea293475ccf30f7ff3e9c3bd",
+      "bytes": 498,
+      "snapshot": "// GENERATED STUB — hand step (U8:hand, issue #1308 seam).\n//\n// behavior_id: U8\n// source_criterion: FR-008, MethodChannelShareIntentPort.sharedMediaStream\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'package:zuraffa_intents/src/platform/method_channel/method_channel_share_intent_port.dart';\n\n/// Subject for behavior U8: the method-channel driver under test.\nMethodChannelShareIntentPort subject_u8() =>\n    MethodChannelShareIntentPort(isAppleLikeUriPath: () => true);\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}

@@ -8,6 +8,11 @@ One per acceptance criterion in `spec.md`.
 
 | id | behavior | traces | state |
 | -- | -------- | ------ | ----- |
+| A1 | a `{result: <wire map>}` reply decodes into the | AC-1 | PENDING |
+| A2 | the payload is the single-element `[SharedMedia]` | AC-2 | PENDING |
+| A3 | it completes on `{result: null}` and | AC-3 | PENDING |
+| A4 | the decoded `SharedAttachment` paths are `Uri.decodeFull`-expanded; | AC-4 | PENDING |
+| A5 | each receives every post-subscription native | AC-5 | PENDING |
 | A6 | each yields the identical lazy-singleton instance | AC-6 | PENDING |
 | A7 | the three pigeon channel literals and the event | AC-7 | PENDING |
 | A8 | `pubspec.yaml` declares the plugin for exactly android, ios, | AC-8 | PENDING |

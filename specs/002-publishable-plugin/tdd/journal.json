@@ -1,0 +1,325 @@
+{
+  "schema": 1,
+  "feature": "002-publishable-plugin",
+  "entries": [
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "engine",
+      "phase": "drive",
+      "started_at": "2026-09-09T19:49:15.047503Z",
+      "finished_at": "2026-09-09T19:51:23.591769Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "stopped_at=U2:hand",
+        "hand-step=U2:hand — replace _arg0() in test/tdd/002-publishable-plugin/u2_test.dart with a representative SharedAttachment — then re-run zfa tdd make U2 (issue #1323)"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [
+        "U2"
+      ],
+      "counts": {
+        "total": 1,
+        "pending": 0,
+        "red": 1,
+        "green": 0,
+        "done": 0
+      },
+      "stopped_at": "U2:hand"
+    },
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "meta",
+      "phase": "aggregate",
+      "started_at": "2026-09-09T19:49:15.042746Z",
+      "finished_at": "2026-09-09T19:51:23.595372Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "engine lane stopped at U2:hand",
+        "engine lane result=stopped — fail fast, no skin step spawned"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [],
+      "stopped_at": null
+    },
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "meta",
+      "phase": "reset",
+      "started_at": "2026-09-09T19:53:32.367135Z",
+      "finished_at": "2026-09-09T19:53:32.367135Z",
+      "gate_state": "not_assessed",
+      "receipts": [],
+      "violations": [],
+      "refs": {
+        "engine_receipt": null,
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "reset",
+      "behaviors": [
+        "U2"
+      ],
+      "stopped_at": null
+    },
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "engine",
+      "phase": "drive",
+      "started_at": "2026-09-09T19:55:13.115635Z",
+      "finished_at": "2026-09-09T19:55:18.979058Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "stopped_at=U2:hand",
+        "hand-step=U2:hand — replace _arg0() in test/tdd/002-publishable-plugin/u2_test.dart with a representative SharedAttachment — then re-run zfa tdd make U2 (issue #1323)"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [
+        "U2"
+      ],
+      "counts": {
+        "total": 1,
+        "pending": 0,
+        "red": 1,
+        "green": 0,
+        "done": 0
+      },
+      "stopped_at": "U2:hand"
+    },
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "meta",
+      "phase": "aggregate",
+      "started_at": "2026-09-09T19:55:13.112346Z",
+      "finished_at": "2026-09-09T19:55:18.980431Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "engine lane stopped at U2:hand",
+        "engine lane result=stopped — fail fast, no skin step spawned"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [],
+      "stopped_at": null
+    },
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "engine",
+      "phase": "drive",
+      "started_at": "2026-09-09T20:09:25.267482Z",
+      "finished_at": "2026-09-09T20:10:45.470799Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [
+        "U2"
+      ],
+      "counts": {
+        "total": 1,
+        "pending": 0,
+        "red": 0,
+        "green": 0,
+        "done": 1
+      },
+      "stopped_at": null
+    },
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "skin",
+      "phase": "drive",
+      "started_at": "2026-09-09T20:10:45.472204Z",
+      "finished_at": "2026-09-09T20:10:45.491977Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-skin-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9",
+        "U10"
+      ],
+      "counts": {
+        "total": 12,
+        "pending": 0,
+        "red": 0,
+        "green": 0,
+        "done": 12
+      },
+      "stopped_at": null
+    },
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "meta",
+      "phase": "aggregate",
+      "started_at": "2026-09-09T20:09:25.264016Z",
+      "finished_at": "2026-09-09T20:10:45.493983Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-engine-receipt.json",
+        "tdd/04-skin-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [
+        "U2",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9",
+        "U10"
+      ],
+      "stopped_at": null
+    },
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "skin",
+      "phase": "drive",
+      "started_at": "2026-09-09T20:10:55.582211Z",
+      "finished_at": "2026-09-09T20:10:55.599207Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-skin-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9",
+        "U10"
+      ],
+      "counts": {
+        "total": 12,
+        "pending": 0,
+        "red": 0,
+        "green": 0,
+        "done": 12
+      },
+      "stopped_at": null
+    },
+    {
+      "feature": "002-publishable-plugin",
+      "cycle": "skin",
+      "phase": "drive",
+      "started_at": "2026-09-09T20:14:59.455784Z",
+      "finished_at": "2026-09-09T20:14:59.471065Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-skin-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9",
+        "U10"
+      ],
+      "counts": {
+        "total": 17,
+        "pending": 0,
+        "red": 0,
+        "green": 0,
+        "done": 17
+      },
+      "stopped_at": null
+    }
+  ]
+}

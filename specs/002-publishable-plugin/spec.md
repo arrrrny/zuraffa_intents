@@ -282,7 +282,10 @@ drift-proof plugin.
 | -- | -- | -- |
 | SharedAttachment | `path: String`, `type: SharedAttachmentType` | a device file carried inside a share; wire form `{path, type: <index>}` (spec-001) |
 | SharedMedia | `attachments: List<SharedAttachment>?`, `recipientIdentifiers: List<String?>?`, `conversationIdentifier: String?`, `content: String?`, `speakableGroupName: String?`, `serviceName: String?`, `senderIdentifier: String?`, `imageFilePath: String?`, `subject: String?` | the share payload carrier on the wire — method-channel replies, event-channel pushes, and sent-message records |
-| PlatformException | `code: String`, `message: String?`, `details: Object?` | the pigeon error envelope shape surfaced verbatim from the method channels |
+
+(The pigeon error envelope is Flutter's own `PlatformException(code, message,
+details)` surfaced verbatim — deliberately NOT a domain entity; declaring it
+one makes the loop scaffold a dead duplicate of an SDK type.)
 
 ## Lanes *(include when the feature splits engine vs. skin)*
 

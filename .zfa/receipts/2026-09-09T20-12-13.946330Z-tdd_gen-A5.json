@@ -1,0 +1,30 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd gen",
+  "target": "A5",
+  "repro": "zfa tdd gen",
+  "at": "2026-09-09T20:12:13.946330Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "feature": "002-publishable-plugin"
+  },
+  "files": [
+    {
+      "path": "test/tdd/002-publishable-plugin/a5_test.dart",
+      "action": "create",
+      "sha256": "b13165b04dc2f6edcacadc77ffffe792d35fe500cbb37b9836f91c78657ce473",
+      "bytes": 1142,
+      "snapshot": "// GENERATED TEST — `zfa tdd gen A5` (spec 044-test-tdd-generation).\n//\n// behavior_id: A5\n// source_criterion: AC-5\n// kind: acceptance\n// description: each receives every post-subscription native\n//\n// This test asserts the observable behavior described above. It is\n// \"honest red\" on first execution: the paired subject at\n// `package:zuraffa_intents/tdd/002-publishable-plugin/a5_subject.dart` is unimplemented, so the test fails through an\n// assertion (not an uncaught error, compile/load error, skip, or\n// placeholder). Replace the subject's\n// stub body with real implementation to make this test pass.\nlibrary;\n\nimport 'package:flutter_test/flutter_test.dart';\nimport 'package:zuraffa_intents/tdd/002-publishable-plugin/a5_subject.dart' as subject;\n\nvoid main() {\n  group('A5 (AC-5)', () {\n    test('A5 — each receives every post-subscription native', () {\n      final Object? result = (() {\n        try {\n          subject.subject_a5();\n          return null;\n        } on UnimplementedError catch (error) {\n          return error;\n        }\n      })();\n      expect(result, isNot(isA<UnimplementedError>()));\n    });\n  });\n}\n"
+    },
+    {
+      "path": "lib/tdd/002-publishable-plugin/a5_subject.dart",
+      "action": "create",
+      "sha256": "d5355c0b7ea74225a27169d31a9c2d529ed37d2195eefb6dd6a064a89a748cdd",
+      "bytes": 1129,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen A5` (spec 044-test-tdd-generation).\n//\n// behavior_id: A5\n// source_criterion: AC-5\n// description: each receives every post-subscription native\n//\n// This is a MINIMAL COMPILABLE acceptance-scenario stub. It compiles\n// cleanly (FR-011) but does NOT satisfy the behavior described above —\n// the paired test will fail on first execution with an assertion-level\n// failure (honest red). The acceptance subject intentionally does NOT\n// reference any entity/use case/repository (FR-004): it stands alone.\n// Replace this stub body with real implementation to make the test pass.\n//\n// The subject name is derived from the behavior id (`subject_a1`) and is\n// deliberately snake_cased — the generator KNOWS the name it emits, so\n// the lint its shape provably trips is suppressed here rather than\n// renaming the contract surface (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\n/// Scenario runner for behavior A5.\n///\n/// Throws [UnimplementedError] until the real implementation lands.\nvoid subject_a5() => throw UnimplementedError('subject_a5 not implemented');\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}

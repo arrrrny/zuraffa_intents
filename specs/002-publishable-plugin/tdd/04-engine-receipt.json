@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "feature": "002-publishable-plugin",
+  "lane": "engine",
+  "verdict": "green",
+  "result": "complete",
+  "behaviors": [
+    "U2"
+  ],
+  "counts": {
+    "total": 1,
+    "pending": 0,
+    "red": 0,
+    "green": 0,
+    "done": 1
+  },
+  "stopped_at": null,
+  "at": "2026-09-09T20:10:45.469746Z"
+}
