@@ -8,7 +8,7 @@ import 'package:zuraffa_intents/src/platform/wire/share_intents_wire.dart';
 import 'package:zuraffa_intents/tdd/002-publishable-plugin/u2_subject.dart' as subject;
 
 void main() {
-  group('U2 (FR-002, sharedAttachmentWireMap.sharedAttachmentWireMap, sharedMediaWireMap.sharedMediaWireMap)', () {
+  group('U2 (FR-002, wire maps)', () {
     test('U2 — Wire-map fidelity — `sharedAttachmentWireMap` MUST produce', () {
       expect(
         sharedAttachmentWireMap(subject.attachment_u2()),
