@@ -49,8 +49,7 @@ SharedMedia _encodedMedia() => SharedMedia(
 /// Whether this test host is an apple-like URI path platform (iOS/macOS).
 /// The default predicate decodes percent-encoded paths on these hosts;
 /// assertions that compare decoded vs raw paths must branch on this.
-final bool _isAppleLikeHost =
-    !kIsWeb && (Platform.isIOS || Platform.isMacOS);
+final bool _isAppleLikeHost = !kIsWeb && (Platform.isIOS || Platform.isMacOS);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -691,11 +690,7 @@ void main() {
         greaterThanOrEqualTo(descriptionLine.length),
       );
 
-      for (final platform in [
-        'android:',
-        'ios:',
-        'macos:',
-      ]) {
+      for (final platform in ['android:', 'ios:', 'macos:']) {
         expect(
           lines.any((l) => l.trim() == platform),
           isTrue,
@@ -847,61 +842,58 @@ void main() {
       );
     });
 
-    test(
-      'U41: native SharedMedia payload key set matches sharedMediaWireMap '
-      '(every Dart wire key is present in each native toMap/toDictionary)',
-      () {
-        const expected = <String>{
-          'attachments',
-          'recipientIdentifiers',
-          'conversationIdentifier',
-          'content',
-          'speakableGroupName',
-          'serviceName',
-          'senderIdentifier',
-          'imageFilePath',
-          'subject',
-        };
+    test('U41: native SharedMedia payload key set matches sharedMediaWireMap '
+        '(every Dart wire key is present in each native toMap/toDictionary)', () {
+      const expected = <String>{
+        'attachments',
+        'recipientIdentifiers',
+        'conversationIdentifier',
+        'content',
+        'speakableGroupName',
+        'serviceName',
+        'senderIdentifier',
+        'imageFilePath',
+        'subject',
+      };
 
-        final javaMessages = File(
-          'android/src/main/java/dev/zuraffa/zuraffa_intents/Messages.java',
-        ).readAsStringSync();
-        for (final key in expected) {
-          expect(
-            javaMessages,
-            contains('toMapResult.put("$key"'),
-            reason:
-                'Android Messages.java SharedMedia.toMap() must emit '
-                '"$key"',
-          );
-        }
+      final javaMessages = File(
+        'android/src/main/java/dev/zuraffa/zuraffa_intents/Messages.java',
+      ).readAsStringSync();
+      for (final key in expected) {
+        expect(
+          javaMessages,
+          contains('toMapResult.put("$key"'),
+          reason:
+              'Android Messages.java SharedMedia.toMap() must emit '
+              '"$key"',
+        );
+      }
 
-        final iosModels = File(
-          'ios/zuraffa_intents/Sources/zuraffa_intents_models/SharedModels.swift',
-        ).readAsStringSync();
-        for (final key in expected) {
-          expect(
-            iosModels,
-            contains('"$key":'),
-            reason:
-                'iOS SharedModels.swift SharedMedia.toDictionary() must '
-                'emit "$key"',
-          );
-        }
+      final iosModels = File(
+        'ios/zuraffa_intents/Sources/zuraffa_intents_models/SharedModels.swift',
+      ).readAsStringSync();
+      for (final key in expected) {
+        expect(
+          iosModels,
+          contains('"$key":'),
+          reason:
+              'iOS SharedModels.swift SharedMedia.toDictionary() must '
+              'emit "$key"',
+        );
+      }
 
-        final macosModels = File(
-          'macos/zuraffa_intents/Sources/zuraffa_intents_models/SharedModels.swift',
-        ).readAsStringSync();
-        for (final key in expected) {
-          expect(
-            macosModels,
-            contains('"$key":'),
-            reason:
-                'macOS SharedModels.swift SharedMedia.toDictionary() must '
-                'emit "$key"',
-          );
-        }
-      },
-    );
+      final macosModels = File(
+        'macos/zuraffa_intents/Sources/zuraffa_intents_models/SharedModels.swift',
+      ).readAsStringSync();
+      for (final key in expected) {
+        expect(
+          macosModels,
+          contains('"$key":'),
+          reason:
+              'macOS SharedModels.swift SharedMedia.toDictionary() must '
+              'emit "$key"',
+        );
+      }
+    });
   });
 }

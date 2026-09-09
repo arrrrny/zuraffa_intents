@@ -5,7 +5,8 @@ library;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';
-import 'package:zuraffa_intents/tdd/002-publishable-plugin/u8_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/002-publishable-plugin/u8_subject.dart'
+    as subject;
 
 void main() {
   group('U8 (FR-008, MethodChannelShareIntentPort.sharedMediaStream)', () {
@@ -31,7 +32,10 @@ void main() {
       final eventBytes = const StandardMethodCodec().encodeSuccessEnvelope(
         <Object?, Object?>{
           'attachments': [
-            <Object?, Object?>{'path': 'file:///var/mobile/pic%20name.jpg', 'type': 0},
+            <Object?, Object?>{
+              'path': 'file:///var/mobile/pic%20name.jpg',
+              'type': 0,
+            },
           ],
           'recipientIdentifiers': null,
           'conversationIdentifier': null,
@@ -52,9 +56,11 @@ void main() {
 
       expect(received.length, 1);
       expect(received.single.content, 'live share');
-      expect(received.single.attachments!.single.path,
-          'file:///var/mobile/pic name.jpg',
-          reason: 'the apple-like predicate decodes percent-encoded paths');
+      expect(
+        received.single.attachments!.single.path,
+        'file:///var/mobile/pic name.jpg',
+        reason: 'the apple-like predicate decodes percent-encoded paths',
+      );
 
       // The stream is a per-port lazy singleton.
       expect(identical(port.sharedMediaStream, port.sharedMediaStream), isTrue);

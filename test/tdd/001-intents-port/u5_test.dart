@@ -16,7 +16,8 @@ library;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zuraffa_intents/src/domain/entities/shared_attachment/shared_attachment.dart';
 import 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';
-import 'package:zuraffa_intents/tdd/001-intents-port/u5_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/001-intents-port/u5_subject.dart'
+    as subject;
 
 void main() {
   group('U5 (FR-005, SharedMedia)', () {
@@ -32,26 +33,37 @@ void main() {
       final base = result as SharedMedia;
       expect(base.content, 'original');
       expect(base.speakableGroupName, 'Mom');
-      expect(
-        base.attachments!.map((a) => (a.path, a.type.name)).toList(),
-        [('/tmp/a.png', 'image')],
-      );
+      expect(base.attachments!.map((a) => (a.path, a.type.name)).toList(), [
+        ('/tmp/a.png', 'image'),
+      ]);
 
       final withAttachments = base.copyWith(
         attachments: [
-          SharedAttachment(path: '/tmp/other.png', type: subject.attachmentType()),
+          SharedAttachment(
+            path: '/tmp/other.png',
+            type: subject.attachmentType(),
+          ),
         ],
       );
       final replacement = base.copyWith(
         attachments: (base.attachments ?? const []).toList(),
       );
-      expect(replacement.attachments, base.attachments,
-          reason: 'an equal replacement list substitutes wholesale');
-      expect(withAttachments.attachments!.single.path, '/tmp/other.png',
-          reason: 'a new attachments list replaces wholesale, never merges');
+      expect(
+        replacement.attachments,
+        base.attachments,
+        reason: 'an equal replacement list substitutes wholesale',
+      );
+      expect(
+        withAttachments.attachments!.single.path,
+        '/tmp/other.png',
+        reason: 'a new attachments list replaces wholesale, never merges',
+      );
       expect(withAttachments.attachments, isNot(base.attachments));
-      expect(withAttachments.content, base.content,
-          reason: 'untouched fields survive');
+      expect(
+        withAttachments.content,
+        base.content,
+        reason: 'untouched fields survive',
+      );
 
       final withContent = base.copyWith(content: 'hello');
       expect(withContent.content, 'hello');
@@ -61,12 +73,18 @@ void main() {
       final twin = SharedMedia.fromJson(
         SharedMedia(content: 'original', speakableGroupName: 'Mom').toJson(),
       );
-      expect(base.copyWith(), base,
-          reason: 'scalar-field equality: identical scalar arguments => equal');
+      expect(
+        base.copyWith(),
+        base,
+        reason: 'scalar-field equality: identical scalar arguments => equal',
+      );
       expect(base.hashCode, base.copyWith().hashCode);
       expect(base, isNot(withContent));
-      expect(base.copyWith(), isNot(twin),
-          reason: 'different scalar fields => unequal');
+      expect(
+        base.copyWith(),
+        isNot(twin),
+        reason: 'different scalar fields => unequal',
+      );
     });
   });
 }

@@ -4,7 +4,8 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zuraffa_intents/tdd/002-publishable-plugin/a6_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/002-publishable-plugin/a6_subject.dart'
+    as subject;
 import 'package:zuraffa_intents/zuraffa_intents.dart';
 
 void main() {
@@ -12,10 +13,16 @@ void main() {
     test('A6 — each yields the identical lazy-singleton instance', () {
       final getIt = subject.subject_a6();
       registerShareIntentDependencies(getIt);
-      expect(identical(getIt<ShareIntentPort>(), getIt<ShareIntentPort>()),
-          isTrue, reason: 'port is a lazy singleton');
-      expect(identical(getIt<ShareIntentService>(), getIt<ShareIntentService>()),
-          isTrue, reason: 'service is a lazy singleton');
+      expect(
+        identical(getIt<ShareIntentPort>(), getIt<ShareIntentPort>()),
+        isTrue,
+        reason: 'port is a lazy singleton',
+      );
+      expect(
+        identical(getIt<ShareIntentService>(), getIt<ShareIntentService>()),
+        isTrue,
+        reason: 'service is a lazy singleton',
+      );
       expect(getIt<ShareIntentPort>(), isA<MethodChannelShareIntentPort>());
       expect(getIt<ShareIntentService>().port, same(getIt<ShareIntentPort>()));
       getIt.reset();

@@ -14,20 +14,24 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zuraffa_intents/tdd/001-intents-port/a5_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/001-intents-port/a5_subject.dart'
+    as subject;
 
 void main() {
   group('A5 (AC-5)', () {
-    test('A5 — exactly two records exist in call order and the second carries', () {
-      final Object? result = (() {
-        try {
-          subject.subject_a5();
-          return null;
-        } on UnimplementedError catch (error) {
-          return error;
-        }
-      })();
-      expect(result, isNot(isA<UnimplementedError>()));
-    });
+    test(
+      'A5 — exactly two records exist in call order and the second carries',
+      () {
+        final Object? result = (() {
+          try {
+            subject.subject_a5();
+            return null;
+          } on UnimplementedError catch (error) {
+            return error;
+          }
+        })();
+        expect(result, isNot(isA<UnimplementedError>()));
+      },
+    );
   });
 }

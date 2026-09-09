@@ -5,7 +5,8 @@ library;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';
-import 'package:zuraffa_intents/tdd/002-publishable-plugin/a5_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/002-publishable-plugin/a5_subject.dart'
+    as subject;
 
 void main() {
   group('A5 (AC-5)', () {
@@ -51,17 +52,24 @@ void main() {
       }
 
       await push('share-1');
-      expect(first.single.content, 'share-1',
-          reason: 'every listener receives every share');
+      expect(
+        first.single.content,
+        'share-1',
+        reason: 'every listener receives every share',
+      );
       expect(second.single.content, 'share-1');
 
       final late_ = <SharedMedia>[];
       final sub3 = port.sharedMediaStream.listen(late_.add);
       await push('share-2');
-      expect(late_.map((m) => m.content), ['share-2'],
-          reason: 'no pre-subscription replay');
-      expect(identical(port.sharedMediaStream, port.sharedMediaStream), isTrue,
-          reason: 'lazy singleton stream instance');
+      expect(late_.map((m) => m.content), [
+        'share-2',
+      ], reason: 'no pre-subscription replay');
+      expect(
+        identical(port.sharedMediaStream, port.sharedMediaStream),
+        isTrue,
+        reason: 'lazy singleton stream instance',
+      );
 
       await sub1.cancel();
       await sub2.cancel();

@@ -14,7 +14,8 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zuraffa_intents/tdd/001-intents-port/a3_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/001-intents-port/a3_subject.dart'
+    as subject;
 
 void main() {
   group('A3 (AC-3)', () {

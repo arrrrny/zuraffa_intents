@@ -14,7 +14,8 @@ library;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zuraffa_intents/src/domain/entities/enums/shared_attachment_type.dart';
 import 'package:zuraffa_intents/src/domain/entities/shared_attachment/shared_attachment.dart';
-import 'package:zuraffa_intents/tdd/001-intents-port/u3_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/001-intents-port/u3_subject.dart'
+    as subject;
 
 void main() {
   group('U3 (FR-003, SharedAttachment)', () {

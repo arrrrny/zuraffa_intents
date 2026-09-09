@@ -6,7 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';
 import 'package:zuraffa_intents/src/platform/wire/share_intents_wire.dart';
-import 'package:zuraffa_intents/tdd/002-publishable-plugin/a2_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/002-publishable-plugin/a2_subject.dart'
+    as subject;
 
 void main() {
   group('A2 (AC-2)', () {

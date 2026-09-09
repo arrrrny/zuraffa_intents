@@ -12,37 +12,54 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zuraffa_intents/tdd/001-intents-port/u7_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/001-intents-port/u7_subject.dart'
+    as subject;
 
 void main() {
   group('U7 (FR-007, ShareIntentPort.sharedMediaStream)', () {
-    test('U7 — `recordSentMessage` MUST preserve the plugin\'s argument', () async {
-      final port = subject.subject_u7();
+    test(
+      'U7 — `recordSentMessage` MUST preserve the plugin\'s argument',
+      () async {
+        final port = subject.subject_u7();
 
-      await port.recordSentMessage(
-        conversationIdentifier: 'conv-9',
-        conversationName: 'Mom',
-        conversationImageFilePath: '/tmp/mom.png',
-        serviceName: 'iMessage',
-      );
-      await port.recordSentMessage(conversationIdentifier: 'conv-10', conversationName: 'Dad');
+        await port.recordSentMessage(
+          conversationIdentifier: 'conv-9',
+          conversationName: 'Mom',
+          conversationImageFilePath: '/tmp/mom.png',
+          serviceName: 'iMessage',
+        );
+        await port.recordSentMessage(
+          conversationIdentifier: 'conv-10',
+          conversationName: 'Dad',
+        );
 
-      final records = port.sentMessageRecords;
-      expect(records.length, 2, reason: 'one record per call, in call order');
+        final records = port.sentMessageRecords;
+        expect(records.length, 2, reason: 'one record per call, in call order');
 
-      final full = records[0];
-      expect(full.conversationIdentifier, 'conv-9');
-      expect(full.speakableGroupName, 'Mom',
-          reason: 'conversationName maps to speakableGroupName');
-      expect(full.imageFilePath, '/tmp/mom.png',
-          reason: 'conversationImageFilePath maps to imageFilePath');
-      expect(full.serviceName, 'iMessage');
+        final full = records[0];
+        expect(full.conversationIdentifier, 'conv-9');
+        expect(
+          full.speakableGroupName,
+          'Mom',
+          reason: 'conversationName maps to speakableGroupName',
+        );
+        expect(
+          full.imageFilePath,
+          '/tmp/mom.png',
+          reason: 'conversationImageFilePath maps to imageFilePath',
+        );
+        expect(full.serviceName, 'iMessage');
 
-      final minimal = records[1];
-      expect(minimal.conversationIdentifier, 'conv-10');
-      expect(minimal.speakableGroupName, 'Dad');
-      expect(minimal.imageFilePath, isNull, reason: 'omitted optionals are null');
-      expect(minimal.serviceName, isNull);
-    });
+        final minimal = records[1];
+        expect(minimal.conversationIdentifier, 'conv-10');
+        expect(minimal.speakableGroupName, 'Dad');
+        expect(
+          minimal.imageFilePath,
+          isNull,
+          reason: 'omitted optionals are null',
+        );
+        expect(minimal.serviceName, isNull);
+      },
+    );
   });
 }

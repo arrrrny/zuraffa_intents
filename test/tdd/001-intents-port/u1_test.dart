@@ -12,16 +12,19 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zuraffa_intents/tdd/001-intents-port/u1_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/001-intents-port/u1_subject.dart'
+    as subject;
 
 void main() {
   group('U1 (FR-001, SharedAttachmentType)', () {
     test('U1 — `SharedAttachmentType` MUST expose exactly the four share', () {
       final values = subject.subject_u1();
-      expect(
-        values.map((t) => t.name).toList(),
-        ['image', 'video', 'audio', 'file'],
-      );
+      expect(values.map((t) => t.name).toList(), [
+        'image',
+        'video',
+        'audio',
+        'file',
+      ]);
       for (var i = 0; i < values.length; i++) {
         expect(
           values[i].index,

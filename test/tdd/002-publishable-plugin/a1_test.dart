@@ -6,7 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';
 import 'package:zuraffa_intents/src/platform/wire/share_intents_wire.dart';
-import 'package:zuraffa_intents/tdd/002-publishable-plugin/a1_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/002-publishable-plugin/a1_subject.dart'
+    as subject;
 
 void main() {
   group('A1 (AC-1)', () {
@@ -23,7 +24,10 @@ void main() {
         channel,
         (message) async => <Object?, Object?>{
           'result': sharedMediaWireMap(
-            SharedMedia(content: 'boot share', conversationIdentifier: 'conv-9'),
+            SharedMedia(
+              content: 'boot share',
+              conversationIdentifier: 'conv-9',
+            ),
           ),
         },
       );
@@ -33,7 +37,9 @@ void main() {
       expect(result.conversationIdentifier, 'conv-9');
 
       binding.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(
-        channel, (message) async => <Object?, Object?>{'result': null});
+        channel,
+        (message) async => <Object?, Object?>{'result': null},
+      );
       expect(await port.getInitialSharedMedia(), isNull);
 
       binding.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(
@@ -48,17 +54,27 @@ void main() {
       );
       await expectLater(
         port.getInitialSharedMedia(),
-        throwsA(isA<PlatformException>()
-            .having((e) => e.code, 'code', 'NATIVE_ERR')
-            .having((e) => e.message, 'message', 'donating failed')
-            .having((e) => e.details, 'details', 42)),
+        throwsA(
+          isA<PlatformException>()
+              .having((e) => e.code, 'code', 'NATIVE_ERR')
+              .having((e) => e.message, 'message', 'donating failed')
+              .having((e) => e.details, 'details', 42),
+        ),
       );
 
-      binding.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(channel, null);
+      binding.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(
+        channel,
+        null,
+      );
       await expectLater(
         port.getInitialSharedMedia(),
-        throwsA(isA<PlatformException>()
-            .having((e) => e.code, 'code', 'channel-error')),
+        throwsA(
+          isA<PlatformException>().having(
+            (e) => e.code,
+            'code',
+            'channel-error',
+          ),
+        ),
       );
     });
   });

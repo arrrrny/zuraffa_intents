@@ -1,3 +1,11 @@
+## 1.0.1
+
+- **Built on the published `zuraffa` framework (^6.2.2)** — fleet-wide
+  constraint sync.
+- **Relicensed BSD-3-Clause → MIT** to match the Zuraffa fleet standard.
+- Spec re-certification: full zfa TDD cycle re-run on both specs
+  (spec-001 19 behaviors, spec-002 18 behaviors, mutation 1.0).
+
 ## 1.0.0
 
 - Initial release: the incoming-share seam for the Zuraffa ecosystem.

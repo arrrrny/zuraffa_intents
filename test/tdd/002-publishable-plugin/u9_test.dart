@@ -5,7 +5,8 @@ library;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:zuraffa_intents/src/share_intent_service.dart';
-import 'package:zuraffa_intents/tdd/002-publishable-plugin/u9_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/002-publishable-plugin/u9_subject.dart'
+    as subject;
 import 'package:zuraffa_intents/zuraffa_intents.dart';
 
 void main() {
@@ -17,7 +18,8 @@ void main() {
       expect(platformDriven.port, isA<MethodChannelShareIntentPort>());
       expect(
         ShareIntentService.platform(
-          binaryMessenger: TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger,
+          binaryMessenger:
+              TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger,
         ).port,
         isA<MethodChannelShareIntentPort>(),
       );
@@ -28,8 +30,10 @@ void main() {
       // registerShareIntentDependencies binds lazy singletons.
       final getIt = GetIt.asNewInstance();
       registerShareIntentDependencies(getIt);
-      expect(identical(getIt<ShareIntentService>(), getIt<ShareIntentService>()),
-          isTrue);
+      expect(
+        identical(getIt<ShareIntentService>(), getIt<ShareIntentService>()),
+        isTrue,
+      );
       expect(getIt<ShareIntentService>().port, same(getIt<ShareIntentPort>()));
       getIt.reset();
     });

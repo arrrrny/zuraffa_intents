@@ -5,7 +5,8 @@ library;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zuraffa_intents/src/platform/wire/share_intents_wire.dart';
-import 'package:zuraffa_intents/tdd/002-publishable-plugin/a3_subject.dart' as subject;
+import 'package:zuraffa_intents/tdd/002-publishable-plugin/a3_subject.dart'
+    as subject;
 
 void main() {
   group('A3 (AC-3)', () {
@@ -42,9 +43,11 @@ void main() {
       );
       await expectLater(
         port.resetInitialSharedMedia(),
-        throwsA(isA<PlatformException>()
-            .having((e) => e.code, 'code', 'RESET_ERR')
-            .having((e) => e.message, 'message', 'reset failed')),
+        throwsA(
+          isA<PlatformException>()
+              .having((e) => e.code, 'code', 'RESET_ERR')
+              .having((e) => e.message, 'message', 'reset failed'),
+        ),
       );
     });
   });
