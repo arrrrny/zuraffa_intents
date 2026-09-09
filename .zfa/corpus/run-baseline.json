@@ -1,0 +1,1 @@
+{"command":"flutter test","exitCode":1,"failedTests":["/Users/arrrrny/Developer/zuraffa_intents/test/tdd/001-intents-port/a1_test.dart: A1 (AC-1) A1 — both reads return the"],"capturedAt":"2026-09-09T18:21:55.883801Z","parseable":true,"dependency_fingerprint":"01ffb2a5fd3617c5d708f5674209200bcec6b8b487633ba2e41eaf33a1631a92"}

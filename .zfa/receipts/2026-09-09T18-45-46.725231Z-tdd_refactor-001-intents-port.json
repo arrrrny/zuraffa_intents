@@ -1,0 +1,44 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd refactor",
+  "target": "001-intents-port",
+  "repro": "zfa tdd refactor",
+  "at": "2026-09-09T18:45:46.725231Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "sanctioned": true,
+    "refactor": true,
+    "passes": [
+      "build",
+      "format",
+      "fix"
+    ],
+    "feature": "001-intents-port"
+  },
+  "files": [
+    {
+      "path": "lib/tdd/001-intents-port/u3_subject.dart",
+      "action": "update",
+      "sha256": "d0f34ffee061ca33debb799c7134f85649481fd0514e6e2533bdba253aa1ff87",
+      "bytes": 883,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U3` (spec 044-test-tdd-generation).\n//\n// behavior_id: U3\n// source_criterion: FR-003, SharedAttachment\n// description: `SharedAttachment` MUST round-trip `toJson` → `fromJson`\n//\n// Hand-delta (arrrrny/zuraffa#1420 workaround): implemented against the\n// real entity surface — the behavior's observable outcome is the JSON\n// round trip.\n//\n// The subject name is derived from the behavior id (`subject_u3`) and is\n// deliberately snake_cased (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'package:zuraffa_intents/src/domain/entities/enums/shared_attachment_type.dart';\nimport 'package:zuraffa_intents/src/domain/entities/shared_attachment/shared_attachment.dart';\n\n/// Subject for behavior U3.\nSharedAttachment subject_u3() =>\n    SharedAttachment(path: '/tmp/clip.mp4', type: SharedAttachmentType.video);\n"
+    },
+    {
+      "path": "lib/tdd/001-intents-port/u4_subject.dart",
+      "action": "update",
+      "sha256": "e288cb6959e1152e47f7b0be456d9722ae9bca11e61b938034679d304eb0067e",
+      "bytes": 1514,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U4` (spec 044-test-tdd-generation).\n//\n// behavior_id: U4\n// source_criterion: FR-004, SharedMedia\n// description: `SharedMedia` MUST be an immutable entity with the plugin's\n//\n// Hand-delta (arrrrny/zuraffa#1420 workaround): implemented against the\n// real entity surface — a fully-populated carrier (nested attachments +\n// a null element inside recipientIdentifiers) and a minimal instance.\n//\n// The subject name is derived from the behavior id (`subject_u4`) and is\n// deliberately snake_cased (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'package:zuraffa_intents/src/domain/entities/enums/shared_attachment_type.dart';\nimport 'package:zuraffa_intents/src/domain/entities/shared_attachment/shared_attachment.dart';\nimport 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';\n\n/// Subject for behavior U4: the fully-populated carrier.\nSharedMedia subject_u4() => SharedMedia(\n  attachments: [\n    SharedAttachment(path: '/tmp/a.png', type: SharedAttachmentType.image),\n    SharedAttachment(path: '/tmp/b.mp4', type: SharedAttachmentType.video),\n  ],\n  recipientIdentifiers: const ['user-1', null],\n  conversationIdentifier: 'conv-9',\n  content: 'https://zuraffa.dev',\n  speakableGroupName: 'Mom',\n  serviceName: 'iMessage',\n  senderIdentifier: '+1 555 0100',\n  imageFilePath: '/tmp/sender.png',\n  subject: 'Hello',\n);\n\n/// The minimal carrier: every optional absent.\nSharedMedia minimal_u4() => SharedMedia();\n"
+    },
+    {
+      "path": "lib/tdd/001-intents-port/u5_subject.dart",
+      "action": "update",
+      "sha256": "6cbfd983650c6c4cf2928f125d183632b5998c61e949da92fb561999bf46cd1c",
+      "bytes": 1206,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U5` (spec 044-test-tdd-generation).\n//\n// behavior_id: U5\n// source_criterion: FR-005, SharedMedia\n// description: `SharedMedia.copyWith` MUST replace only the given fields\n//\n// Hand-delta (arrrrny/zuraffa#1420 workaround): implemented against the\n// real entity surface — the behavior's observable outcomes live on\n// SharedMedia.copyWith/equality.\n//\n// The subject name is derived from the behavior id (`subject_u5`) and is\n// deliberately snake_cased (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'package:zuraffa_intents/src/domain/entities/enums/shared_attachment_type.dart';\nimport 'package:zuraffa_intents/src/domain/entities/shared_attachment/shared_attachment.dart';\nimport 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';\n\n/// Subject for behavior U5: the base carrier.\nSharedMedia subject_u5() => SharedMedia(\n  attachments: [\n    SharedAttachment(path: '/tmp/a.png', type: SharedAttachmentType.image),\n  ],\n  content: 'original',\n  speakableGroupName: 'Mom',\n);\n\n/// A vocabulary kind for the replacement list under test.\nSharedAttachmentType attachmentType() => SharedAttachmentType.file;\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}

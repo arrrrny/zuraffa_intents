@@ -1,0 +1,407 @@
+{
+  "schema": 1,
+  "feature": "001-intents-port",
+  "entries": [
+    {
+      "feature": "001-intents-port",
+      "cycle": "engine",
+      "phase": "drive",
+      "started_at": "2026-09-09T18:17:23.510184Z",
+      "finished_at": "2026-09-09T18:17:23.710827Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "stopped_at=A1:verify-red",
+        "step_error=A1:verify-red outcome=runner-error exit=1"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "runner-error",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9"
+      ],
+      "counts": {
+        "total": 17,
+        "pending": 17,
+        "red": 0,
+        "green": 0,
+        "done": 0
+      },
+      "stopped_at": "A1:verify-red",
+      "error": {
+        "behavior": "A1",
+        "step": "verify-red",
+        "outcome": "runner-error",
+        "exit_code": 1,
+        "command": "/Users/arrrrny/.local/bin/zfa tdd verify-red A1 --feature 001-intents-port --project /Users/arrrrny/Developer/zuraffa_intents",
+        "output": "zfa tdd verify-red: behavior A1\n   feature: 001-intents-port\n   test: /Users/arrrrny/Developer/zuraffa_intents/test/tdd/001-intents-port/a1_test.dart\n   command: flutter test {file} --plain-name \"{name}\"\n   runner exit: -1\n   classification: runner-error\nverify-red: behavior=A1 classification=runner-error certified=false feature=001-intents-port\n\nzfa tdd verify-red: classification runner-error — the runner did not execute exactly the target test; check the tdd-profile `single` command and the toolchain, then re-run `zfa tdd verify-red <behavior-id>`\n   no evidence written"
+      }
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "meta",
+      "phase": "aggregate",
+      "started_at": "2026-09-09T18:17:23.507813Z",
+      "finished_at": "2026-09-09T18:17:23.712080Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "engine lane stopped at A1:verify-red",
+        "engine lane result=runner-error — fail fast, no skin step spawned"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "runner-error",
+      "behaviors": [],
+      "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "engine",
+      "phase": "drive",
+      "started_at": "2026-09-09T18:21:49.305684Z",
+      "finished_at": "2026-09-09T18:27:04.810530Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "stopped_at=U1:make"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9"
+      ],
+      "counts": {
+        "total": 17,
+        "pending": 8,
+        "red": 6,
+        "green": 0,
+        "done": 3
+      },
+      "stopped_at": "U1:make"
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "meta",
+      "phase": "aggregate",
+      "started_at": "2026-09-09T18:21:49.301483Z",
+      "finished_at": "2026-09-09T18:27:04.812590Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "engine lane stopped at U1:make",
+        "engine lane result=stopped — fail fast, no skin step spawned"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [],
+      "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "engine",
+      "phase": "drive",
+      "started_at": "2026-09-09T18:33:39.796819Z",
+      "finished_at": "2026-09-09T18:36:59.015227Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "stopped_at=U2:make"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9"
+      ],
+      "counts": {
+        "total": 17,
+        "pending": 7,
+        "red": 1,
+        "green": 5,
+        "done": 4
+      },
+      "stopped_at": "U2:make"
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "meta",
+      "phase": "aggregate",
+      "started_at": "2026-09-09T18:33:39.792374Z",
+      "finished_at": "2026-09-09T18:36:59.016958Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "engine lane stopped at U2:make",
+        "engine lane result=stopped — fail fast, no skin step spawned"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [],
+      "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "engine",
+      "phase": "drive",
+      "started_at": "2026-09-09T18:45:01.729601Z",
+      "finished_at": "2026-09-09T18:45:51.959460Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "stopped_at=U6:hand",
+        "hand-step=U6:hand — replace the zfa:tdd: vacuous-guard guard at test/tdd/001-intents-port/u6_test.dart with an assertion on the observable outcome, remove the marker, then re-run make (issue #1308)"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9"
+      ],
+      "counts": {
+        "total": 17,
+        "pending": 3,
+        "red": 1,
+        "green": 5,
+        "done": 8
+      },
+      "stopped_at": "U6:hand"
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "meta",
+      "phase": "aggregate",
+      "started_at": "2026-09-09T18:45:01.722729Z",
+      "finished_at": "2026-09-09T18:45:51.961854Z",
+      "gate_state": "red",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [
+        "engine lane stopped at U6:hand",
+        "engine lane result=stopped — fail fast, no skin step spawned"
+      ],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "stopped",
+      "behaviors": [],
+      "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "engine",
+      "phase": "drive",
+      "started_at": "2026-09-09T18:50:08.710277Z",
+      "finished_at": "2026-09-09T18:54:52.527574Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-engine-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": null,
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9"
+      ],
+      "counts": {
+        "total": 17,
+        "pending": 0,
+        "red": 0,
+        "green": 0,
+        "done": 17
+      },
+      "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "skin",
+      "phase": "drive",
+      "started_at": "2026-09-09T18:54:52.537202Z",
+      "finished_at": "2026-09-09T18:54:52.589539Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-skin-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [],
+      "counts": {
+        "total": 0,
+        "pending": 0,
+        "red": 0,
+        "green": 0,
+        "done": 0
+      },
+      "stopped_at": null
+    },
+    {
+      "feature": "001-intents-port",
+      "cycle": "meta",
+      "phase": "aggregate",
+      "started_at": "2026-09-09T18:50:08.705548Z",
+      "finished_at": "2026-09-09T18:54:52.595239Z",
+      "gate_state": "green",
+      "receipts": [
+        "tdd/04-engine-receipt.json",
+        "tdd/04-skin-receipt.json"
+      ],
+      "violations": [],
+      "refs": {
+        "engine_receipt": "tdd/04-engine-receipt.json",
+        "skin_receipt": "tdd/04-skin-receipt.json",
+        "contract_schema": null
+      },
+      "result": "complete",
+      "behaviors": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7",
+        "A8",
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8",
+        "U9"
+      ],
+      "stopped_at": null
+    }
+  ]
+}
