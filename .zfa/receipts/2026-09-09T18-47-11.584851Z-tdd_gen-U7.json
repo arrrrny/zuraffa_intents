@@ -1,0 +1,29 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd gen",
+  "target": "U7",
+  "repro": "zfa tdd gen",
+  "at": "2026-09-09T18:47:11.584851Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "feature": "001-intents-port"
+  },
+  "files": [
+    {
+      "path": "test/tdd/001-intents-port/u7_test.dart",
+      "action": "create",
+      "sha256": "b120765116abd66557abe2e9a8143378419a958ba0005688165fd162cbf92541",
+      "bytes": 1607,
+      "snapshot": "// GENERATED TEST — `zfa tdd gen U7` (spec 044-test-tdd-generation).\n//\n// behavior_id: U7\n// source_criterion: FR-007, ShareIntentPort.sharedMediaStream\n// kind: unit\n// description: `recordSentMessage` MUST preserve the plugin's argument\n//\n// This test asserts the observable behavior described above. It is\n// \"honest red\" on first execution: the paired subject at\n// `package:zuraffa_intents/tdd/001-intents-port/u7_subject.dart` is unimplemented, so the test fails through an\n// assertion (not an uncaught error, compile/load error, skip, or\n// placeholder). Replace the subject's\n// stub body with real implementation to make this test pass.\nlibrary;\n\nimport 'package:flutter_test/flutter_test.dart';\nimport 'package:zuraffa_intents/tdd/001-intents-port/u7_subject.dart' as subject;\n\nvoid main() {\n  group('U7 (FR-007, ShareIntentPort.sharedMediaStream)', () {\n    test('U7 — `recordSentMessage` MUST preserve the plugin\\'s argument', () {\n      final result = (() {\n        try {\n          return subject.subject_u7();\n        } on UnimplementedError catch (error) {\n          return error;\n        }\n      })();\n      // zfa:tdd: vacuous-guard (issue #1259): the assertion set below is the\n      // UnimplementedError guard ONLY — a green here proves nothing about\n      // the behavior (a dummy `return 0;` flips it green with zero\n      // declared-contract code). Replace this guard with an assertion on\n      // the observable outcome named by the behavior description, remove\n      // this marker, and re-run make.\n      expect(result, isNot(isA<UnimplementedError>()));\n    });\n  });\n}\n"
+    },
+    {
+      "path": "lib/tdd/001-intents-port/u7_subject.dart",
+      "action": "create",
+      "sha256": "43517498019cd1bbc37fee3d718d3d5736a73e24b7ec22d74554acb0c8d0508a",
+      "bytes": 1542
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}

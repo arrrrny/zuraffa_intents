@@ -1,0 +1,30 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd gen",
+  "target": "U6",
+  "repro": "zfa tdd gen",
+  "at": "2026-09-09T18:45:46.822977Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "feature": "001-intents-port"
+  },
+  "files": [
+    {
+      "path": "test/tdd/001-intents-port/u6_test.dart",
+      "action": "create",
+      "sha256": "aeef6d374b20daaae464d054d6d43b0caf86d62bd62e03004a6237aab43c41eb",
+      "bytes": 1612,
+      "snapshot": "// GENERATED TEST — `zfa tdd gen U6` (spec 044-test-tdd-generation).\n//\n// behavior_id: U6\n// source_criterion: FR-006, ShareIntentPort.sharedMediaStream\n// kind: unit\n// description: The initial-share lifecycle on `ShareIntentPort` MUST work\n//\n// This test asserts the observable behavior described above. It is\n// \"honest red\" on first execution: the paired subject at\n// `package:zuraffa_intents/tdd/001-intents-port/u6_subject.dart` is unimplemented, so the test fails through an\n// assertion (not an uncaught error, compile/load error, skip, or\n// placeholder). Replace the subject's\n// stub body with real implementation to make this test pass.\nlibrary;\n\nimport 'package:flutter_test/flutter_test.dart';\nimport 'package:zuraffa_intents/tdd/001-intents-port/u6_subject.dart' as subject;\n\nvoid main() {\n  group('U6 (FR-006, ShareIntentPort.sharedMediaStream)', () {\n    test('U6 — The initial-share lifecycle on `ShareIntentPort` MUST work', () {\n      final result = (() {\n        try {\n          return subject.subject_u6();\n        } on UnimplementedError catch (error) {\n          return error;\n        }\n      })();\n      // zfa:tdd: vacuous-guard (issue #1259): the assertion set below is the\n      // UnimplementedError guard ONLY — a green here proves nothing about\n      // the behavior (a dummy `return 0;` flips it green with zero\n      // declared-contract code). Replace this guard with an assertion on\n      // the observable outcome named by the behavior description, remove\n      // this marker, and re-run make.\n      expect(result, isNot(isA<UnimplementedError>()));\n    });\n  });\n}\n"
+    },
+    {
+      "path": "lib/tdd/001-intents-port/u6_subject.dart",
+      "action": "create",
+      "sha256": "bfe2bee6ce2c7e44d5b88bc18d95d0e4001949f7e17f3d10183cfcaf8a31cf62",
+      "bytes": 1545,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U6` (spec 044-test-tdd-generation\n// + issue #1259 contract derivation).\n//\n// behavior_id: U6\n// source_criterion: FR-006, ShareIntentPort.sharedMediaStream\n// description: The initial-share lifecycle on `ShareIntentPort` MUST work\n//\n// CONTRACT-DERIVED SUBJECT (issue #1259): the signature below is\n// derived from the spec's declared Layer Contract:\n//\n//     sharedMediaStream() -> Stream<SharedMedia>\n//\n// The declared request and result types are preserved above. A\n// non-renderable declared type (an entity that does not exist yet)\n// renders as `Object?` so the stub compiles cleanly (FR-011); replace\n// it with the declared type when implementing. This is a MINIMAL\n// COMPILABLE STUB: it does NOT satisfy the behavior — the paired test\n// fails on first execution (honest red). Replace this stub body with\n// the real implementation of the declared contract to make the test\n// pass.\n//\n// The subject name is derived from the behavior id and is deliberately\n// snake_cased — the generator KNOWS the name it emits, so the lint its\n// shape provably trips is suppressed here rather than renaming the\n// contract surface (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\n/// Subject for behavior U6 — declared contract:\n/// `sharedMediaStream() -> Stream<SharedMedia>`.\n///\n/// Throws [UnimplementedError] until the real implementation lands.\nObject? subject_u6() => throw UnimplementedError('subject_u6 not implemented: sharedMediaStream() -> Stream<SharedMedia>');\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}

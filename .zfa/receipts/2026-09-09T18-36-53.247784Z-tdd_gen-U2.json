@@ -1,0 +1,30 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd gen",
+  "target": "U2",
+  "repro": "zfa tdd gen",
+  "at": "2026-09-09T18:36:53.247784Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "feature": "001-intents-port"
+  },
+  "files": [
+    {
+      "path": "test/tdd/001-intents-port/u2_test.dart",
+      "action": "create",
+      "sha256": "fda4d1e96ad72972fceed89befffde8fd5f4bd12451c2e972632c03c26b02ebf",
+      "bytes": 1170,
+      "snapshot": "// GENERATED TEST — `zfa tdd gen U2` (spec 044-test-tdd-generation).\n//\n// behavior_id: U2\n// source_criterion: FR-002, SharedAttachment\n// kind: unit\n// description: `SharedAttachment` MUST be an immutable entity carrying the\n//\n// This test asserts the observable behavior described above. It is\n// \"honest red\" on first execution: the paired subject at\n// `package:zuraffa_intents/tdd/001-intents-port/u2_subject.dart` is unimplemented, so the test fails through an\n// assertion (not an uncaught error, compile/load error, skip, or\n// placeholder). Replace the subject's\n// stub body with real implementation to make this test pass.\nlibrary;\n\nimport 'package:flutter_test/flutter_test.dart';\nimport 'package:zuraffa_intents/tdd/001-intents-port/u2_subject.dart' as subject;\n\nvoid main() {\n  group('U2 (FR-002, SharedAttachment)', () {\n    test('U2 — `SharedAttachment` MUST be an immutable entity carrying the', () {\n      final result = (() {\n        try {\n          return subject.subject_u2();\n        } on UnimplementedError catch (error) {\n          return error;\n        }\n      })();\n      expect(result, isNot(isA<UnimplementedError>()));\n    });\n  });\n}\n"
+    },
+    {
+      "path": "lib/tdd/001-intents-port/u2_subject.dart",
+      "action": "create",
+      "sha256": "0ea4ba65d065710a70365b0e4eb4948a18c4dea2307bc478b408f334bc512a1f",
+      "bytes": 1015,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U2` (spec 044-test-tdd-generation).\n//\n// behavior_id: U2\n// source_criterion: FR-002, SharedAttachment\n// description: `SharedAttachment` MUST be an immutable entity carrying the\n//\n// This is a MINIMAL COMPILABLE STUB. It compiles cleanly (FR-011) but\n// does NOT satisfy the behavior described above — the paired test will\n// fail on first execution with an assertion-level failure (honest red).\n// Replace this stub body with real implementation to make the test pass.\n//\n// The subject name is derived from the behavior id (`subject_u1`) and is\n// deliberately snake_cased — the generator KNOWS the name it emits, so\n// the lint its shape provably trips is suppressed here rather than\n// renaming the contract surface (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\n/// Subject for behavior U2.\n///\n/// Throws [UnimplementedError] until the real implementation lands.\nint subject_u2() => throw UnimplementedError('subject_u2 not implemented');\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}

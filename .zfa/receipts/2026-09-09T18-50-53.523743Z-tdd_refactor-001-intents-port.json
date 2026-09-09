@@ -1,0 +1,30 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd refactor",
+  "target": "001-intents-port",
+  "repro": "zfa tdd refactor",
+  "at": "2026-09-09T18:50:53.523743Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "sanctioned": true,
+    "refactor": true,
+    "passes": [
+      "build",
+      "format",
+      "fix"
+    ],
+    "feature": "001-intents-port"
+  },
+  "files": [
+    {
+      "path": "lib/tdd/001-intents-port/u9_subject.dart",
+      "action": "update",
+      "sha256": "a970090b446a2f7fb1d56064a56bb62b73f9e0ffbf449fe5678fe93b97a0eb7d",
+      "bytes": 1661,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U9` (spec 044-test-tdd-generation\n// + issue #1259 contract derivation).\n//\n// behavior_id: U9\n// source_criterion: FR-009, ShareIntentService.sharedMediaStream\n//\n// Hand step (U9:hand): the subject exposes the real facade plus the\n// test's throwing port and a scoped composition root.\n//\n// The subject name is derived from the behavior id (`subject_u9`) and is\n// deliberately snake_cased (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\nimport 'package:get_it/get_it.dart';\nimport 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';\nimport 'package:zuraffa_intents/src/share_intent_service.dart';\n\n/// Subject for behavior U9: the facade over the in-memory port.\nShareIntentService subject_u9() =>\n    ShareIntentService(port: InMemoryShareIntentAdapter());\n\n/// A port whose every operation throws [error] — the verbatim probe.\nShareIntentPort throwingPort(Object error) => _ThrowingPort(error);\n\n/// The composition root under test.\nvoid register(GetIt getIt) => registerShareIntentDependencies(getIt);\n\nclass _ThrowingPort implements ShareIntentPort {\n  _ThrowingPort(this.error);\n\n  final Object error;\n\n  @override\n  Future<SharedMedia?> getInitialSharedMedia() => Future.error(error);\n\n  @override\n  Future<void> recordSentMessage({\n    required String conversationIdentifier,\n    required String conversationName,\n    String? conversationImageFilePath,\n    String? serviceName,\n  }) => Future.error(error);\n\n  @override\n  Future<void> resetInitialSharedMedia() => Future.error(error);\n\n  @override\n  Stream<SharedMedia> get sharedMediaStream => throw error;\n}\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}

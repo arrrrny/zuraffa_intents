@@ -1,0 +1,30 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd gen",
+  "target": "U4",
+  "repro": "zfa tdd gen",
+  "at": "2026-09-09T18:38:20.809679Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "feature": "001-intents-port"
+  },
+  "files": [
+    {
+      "path": "test/tdd/001-intents-port/u4_test.dart",
+      "action": "create",
+      "sha256": "b0a79dc4d58776c56b869dae1993ba11c6affa8e31c37f80fdae2b6119794008",
+      "bytes": 1161,
+      "snapshot": "// GENERATED TEST — `zfa tdd gen U4` (spec 044-test-tdd-generation).\n//\n// behavior_id: U4\n// source_criterion: FR-004, SharedMedia\n// kind: unit\n// description: `SharedMedia` MUST be an immutable entity with the plugin's\n//\n// This test asserts the observable behavior described above. It is\n// \"honest red\" on first execution: the paired subject at\n// `package:zuraffa_intents/tdd/001-intents-port/u4_subject.dart` is unimplemented, so the test fails through an\n// assertion (not an uncaught error, compile/load error, skip, or\n// placeholder). Replace the subject's\n// stub body with real implementation to make this test pass.\nlibrary;\n\nimport 'package:flutter_test/flutter_test.dart';\nimport 'package:zuraffa_intents/tdd/001-intents-port/u4_subject.dart' as subject;\n\nvoid main() {\n  group('U4 (FR-004, SharedMedia)', () {\n    test('U4 — `SharedMedia` MUST be an immutable entity with the plugin\\'s', () {\n      final result = (() {\n        try {\n          return subject.subject_u4();\n        } on UnimplementedError catch (error) {\n          return error;\n        }\n      })();\n      expect(result, isNot(isA<UnimplementedError>()));\n    });\n  });\n}\n"
+    },
+    {
+      "path": "lib/tdd/001-intents-port/u4_subject.dart",
+      "action": "create",
+      "sha256": "c852896fabb7477b1e325476d026592ef760f629f867cee06716615c181bd870",
+      "bytes": 1010,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U4` (spec 044-test-tdd-generation).\n//\n// behavior_id: U4\n// source_criterion: FR-004, SharedMedia\n// description: `SharedMedia` MUST be an immutable entity with the plugin's\n//\n// This is a MINIMAL COMPILABLE STUB. It compiles cleanly (FR-011) but\n// does NOT satisfy the behavior described above — the paired test will\n// fail on first execution with an assertion-level failure (honest red).\n// Replace this stub body with real implementation to make the test pass.\n//\n// The subject name is derived from the behavior id (`subject_u1`) and is\n// deliberately snake_cased — the generator KNOWS the name it emits, so\n// the lint its shape provably trips is suppressed here rather than\n// renaming the contract surface (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\n/// Subject for behavior U4.\n///\n/// Throws [UnimplementedError] until the real implementation lands.\nint subject_u4() => throw UnimplementedError('subject_u4 not implemented');\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}

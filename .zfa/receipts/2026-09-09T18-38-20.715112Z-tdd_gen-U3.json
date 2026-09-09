@@ -1,0 +1,30 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd gen",
+  "target": "U3",
+  "repro": "zfa tdd gen",
+  "at": "2026-09-09T18:38:20.715112Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "feature": "001-intents-port"
+  },
+  "files": [
+    {
+      "path": "test/tdd/001-intents-port/u3_test.dart",
+      "action": "create",
+      "sha256": "d90fd29f7d5b2855286795dfe6e7a8e945fcdcd904a0cac0523a2c4b9288b291",
+      "bytes": 1168,
+      "snapshot": "// GENERATED TEST — `zfa tdd gen U3` (spec 044-test-tdd-generation).\n//\n// behavior_id: U3\n// source_criterion: FR-003, SharedAttachment\n// kind: unit\n// description: `SharedAttachment` MUST round-trip `toJson` → `fromJson`\n//\n// This test asserts the observable behavior described above. It is\n// \"honest red\" on first execution: the paired subject at\n// `package:zuraffa_intents/tdd/001-intents-port/u3_subject.dart` is unimplemented, so the test fails through an\n// assertion (not an uncaught error, compile/load error, skip, or\n// placeholder). Replace the subject's\n// stub body with real implementation to make this test pass.\nlibrary;\n\nimport 'package:flutter_test/flutter_test.dart';\nimport 'package:zuraffa_intents/tdd/001-intents-port/u3_subject.dart' as subject;\n\nvoid main() {\n  group('U3 (FR-003, SharedAttachment)', () {\n    test('U3 — `SharedAttachment` MUST round-trip `toJson` → `fromJson`', () {\n      final result = (() {\n        try {\n          return subject.subject_u3();\n        } on UnimplementedError catch (error) {\n          return error;\n        }\n      })();\n      expect(result, isNot(isA<UnimplementedError>()));\n    });\n  });\n}\n"
+    },
+    {
+      "path": "lib/tdd/001-intents-port/u3_subject.dart",
+      "action": "create",
+      "sha256": "a2eda41633f73b7c35ce088a48a509415f3f51786a5f72a5f09759a2e01df1c4",
+      "bytes": 1014,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U3` (spec 044-test-tdd-generation).\n//\n// behavior_id: U3\n// source_criterion: FR-003, SharedAttachment\n// description: `SharedAttachment` MUST round-trip `toJson` → `fromJson`\n//\n// This is a MINIMAL COMPILABLE STUB. It compiles cleanly (FR-011) but\n// does NOT satisfy the behavior described above — the paired test will\n// fail on first execution with an assertion-level failure (honest red).\n// Replace this stub body with real implementation to make the test pass.\n//\n// The subject name is derived from the behavior id (`subject_u1`) and is\n// deliberately snake_cased — the generator KNOWS the name it emits, so\n// the lint its shape provably trips is suppressed here rather than\n// renaming the contract surface (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\n/// Subject for behavior U3.\n///\n/// Throws [UnimplementedError] until the real implementation lands.\nint subject_u3() => throw UnimplementedError('subject_u3 not implemented');\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}
