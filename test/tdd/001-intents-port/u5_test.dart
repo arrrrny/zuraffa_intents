@@ -14,6 +14,7 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:zuraffa_intents/src/domain/entities/shared_attachment/shared_attachment.dart';
 import 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';
 import 'package:zuraffa_intents/tdd/001-intents-port/u5_subject.dart' as subject;
 
@@ -38,8 +39,7 @@ void main() {
 
       final withAttachments = base.copyWith(
         attachments: [
-          ...?base.attachments,
-          ...base.attachments ?? const [],
+          SharedAttachment(path: '/tmp/other.png', type: subject.attachmentType()),
         ],
       );
       final replacement = base.copyWith(
@@ -47,9 +47,9 @@ void main() {
       );
       expect(replacement.attachments, base.attachments,
           reason: 'an equal replacement list substitutes wholesale');
-      expect(withAttachments.attachments!.length,
-          2 * (base.attachments?.length ?? 0),
-          reason: 'a new attachments list replaces, never merges');
+      expect(withAttachments.attachments!.single.path, '/tmp/other.png',
+          reason: 'a new attachments list replaces wholesale, never merges');
+      expect(withAttachments.attachments, isNot(base.attachments));
       expect(withAttachments.content, base.content,
           reason: 'untouched fields survive');
 

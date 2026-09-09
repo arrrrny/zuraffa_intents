@@ -14,11 +14,8 @@ library;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:zuraffa_intents/src/data/intents/in_memory_share_intent_adapter.dart';
-import 'package:zuraffa_intents/src/domain/entities/shared_media/shared_media.dart';
-import 'package:zuraffa_intents/src/domain/intents/share_intent_port.dart';
-import 'package:zuraffa_intents/src/share_intent_service.dart';
 import 'package:zuraffa_intents/tdd/001-intents-port/u9_subject.dart' as subject;
+import 'package:zuraffa_intents/zuraffa_intents.dart';
 
 void main() {
   group('U9 (FR-009, ShareIntentService.sharedMediaStream)', () {
@@ -62,7 +59,7 @@ void main() {
 
       // The composition root registers a lazy singleton.
       final getIt = GetIt.asNewInstance();
-      subject.register(getIt);
+      registerShareIntentDependencies(getIt);
       final resolved1 = getIt<ShareIntentService>();
       final resolved2 = getIt<ShareIntentService>();
       expect(identical(resolved1, resolved2), isTrue,

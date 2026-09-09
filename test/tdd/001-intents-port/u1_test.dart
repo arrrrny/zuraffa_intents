@@ -12,7 +12,6 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zuraffa_intents/src/domain/entities/enums/shared_attachment_type.dart';
 import 'package:zuraffa_intents/tdd/001-intents-port/u1_subject.dart' as subject;
 
 void main() {
