@@ -1,0 +1,30 @@
+{
+  "schema": "proof.v1",
+  "command": "tdd gen",
+  "target": "U6",
+  "repro": "zfa tdd gen",
+  "at": "2026-09-09T19:55:34.754436Z",
+  "generator_version": "6.2.2",
+  "input": {
+    "feature": "002-publishable-plugin"
+  },
+  "files": [
+    {
+      "path": "test/tdd/002-publishable-plugin/u6_test.dart",
+      "action": "create",
+      "sha256": "40f14da9def6887b42d699deb281d902a7f33cf93689d6daa662079ba4c7142d",
+      "bytes": 1238,
+      "snapshot": "// GENERATED TEST — `zfa tdd gen U6` (spec 044-test-tdd-generation).\n//\n// behavior_id: U6\n// source_criterion: FR-006, MethodChannelShareIntentPort.recordSentMessage\n// kind: unit\n// description: `recordSentMessage` MUST send the single-element envelope\n//\n// This test asserts the observable behavior described above. It is\n// \"honest red\" on first execution: the paired subject at\n// `package:zuraffa_intents/tdd/002-publishable-plugin/u6_subject.dart` is unimplemented, so the test fails through an\n// assertion (not an uncaught error, compile/load error, skip, or\n// placeholder). Replace the subject's\n// stub body with real implementation to make this test pass.\nlibrary;\n\nimport 'package:flutter_test/flutter_test.dart';\nimport 'package:zuraffa_intents/tdd/002-publishable-plugin/u6_subject.dart' as subject;\n\nvoid main() {\n  group('U6 (FR-006, MethodChannelShareIntentPort.recordSentMessage)', () {\n    test('U6 — `recordSentMessage` MUST send the single-element envelope', () {\n      final result = (() {\n        try {\n          return subject.subject_u6();\n        } on UnimplementedError catch (error) {\n          return error;\n        }\n      })();\n      expect(result, isNot(isA<UnimplementedError>()));\n    });\n  });\n}\n"
+    },
+    {
+      "path": "lib/tdd/002-publishable-plugin/u6_subject.dart",
+      "action": "create",
+      "sha256": "90213f7b04838cf91584e81122b96bc61d47e3fab91fe82227220d9bb8b71062",
+      "bytes": 1043,
+      "snapshot": "// GENERATED STUB — `zfa tdd gen U6` (spec 044-test-tdd-generation).\n//\n// behavior_id: U6\n// source_criterion: FR-006, MethodChannelShareIntentPort.recordSentMessage\n// description: `recordSentMessage` MUST send the single-element envelope\n//\n// This is a MINIMAL COMPILABLE STUB. It compiles cleanly (FR-011) but\n// does NOT satisfy the behavior described above — the paired test will\n// fail on first execution with an assertion-level failure (honest red).\n// Replace this stub body with real implementation to make the test pass.\n//\n// The subject name is derived from the behavior id (`subject_u1`) and is\n// deliberately snake_cased — the generator KNOWS the name it emits, so\n// the lint its shape provably trips is suppressed here rather than\n// renaming the contract surface (issue #1035).\n// ignore_for_file: non_constant_identifier_names\nlibrary;\n\n/// Subject for behavior U6.\n///\n/// Throws [UnimplementedError] until the real implementation lands.\nint subject_u6() => throw UnimplementedError('subject_u6 not implemented');\n"
+    }
+  ],
+  "receipt_version": 1,
+  "min_core_version": "6.0.0",
+  "generated_against_core": "6.2.2"
+}
