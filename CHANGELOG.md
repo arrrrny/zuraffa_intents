@@ -1,3 +1,9 @@
+## 1.0.2
+
+- Widen `zuraffa` to `^7.0.0` — the package imports no zuraffa symbols
+  (constraint-only change, no code changes); keeps the fleet resolvable on
+  zuraffa 7 without an override.
+
 ## 1.0.1
 
 - **Built on the published `zuraffa` framework (^6.2.2)** — fleet-wide
