@@ -1,3 +1,8 @@
+## 1.0.3
+
+- Constraint-only refresh: `get_it` `^9.3.0`, `build_runner` `^2.16.2`,
+  `mutation_test` `^1.8.1`. No code changes.
+
 ## 1.0.2
 
 - Widen `zuraffa` to `^7.0.0` — the package imports no zuraffa symbols
