@@ -122,5 +122,10 @@ flutter analyze
 flutter pub publish --dry-run
 ```
 
+CI runs the suite on **Linux and macOS** (`.github/workflows/test.yml`):
+`defaultIsAppleLikeUriPath()` takes the Apple branch on macOS and the
+non-Apple branch on Linux, so both halves of the platform-conditional
+logic are exercised before every release (issue #4).
+
 Evidence chain per spec: `specs/<id>/spec.md`, `tasks.md`, and
 `tdd/{test-list,cycle-log,mutant-run,verification}.md`.
