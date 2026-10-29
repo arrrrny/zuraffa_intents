@@ -17,7 +17,7 @@ import 'package:zuraffa_intents/zuraffa_intents.dart';
 /// phase.
 const Rect _anchor = Rect.fromLTWH(8, 16, 120, 48);
 
-/// A hand-rolled scripted sender port: records sendText/sendFiles
+/// A hand-rolled scripted sender port: records shareText/shareFiles
 /// arguments and returns a scripted result (or throws a scripted error).
 /// No mocking library.
 class ScriptedShareSenderPort implements ShareSenderPort {
@@ -28,7 +28,7 @@ class ScriptedShareSenderPort implements ShareSenderPort {
   ShareSendResult result = ShareSendResult.success;
 
   @override
-  Future<ShareSendResult> sendText({
+  Future<ShareSendResult> shareText({
     required String text,
     String? subject,
     Rect? anchor,
@@ -42,7 +42,7 @@ class ScriptedShareSenderPort implements ShareSenderPort {
   }
 
   @override
-  Future<ShareSendResult> sendFiles({
+  Future<ShareSendResult> shareFiles({
     required List<String> files,
     String? subject,
     Map<String, String>? mimeHints,
@@ -85,11 +85,11 @@ void main() {
   group(
     'InMemoryShareSenderAdapter records sends exactly as passed (FR-4, US5)',
     () {
-      test('S1: sendText records text, subject, and anchor verbatim and '
+      test('S1: shareText records text, subject, and anchor verbatim and '
           'resolves success with no platform channel', () async {
         final adapter = InMemoryShareSenderAdapter();
 
-        final result = await adapter.sendText(
+        final result = await adapter.shareText(
           text: 'go.zuzu.dev/scan/abc',
           subject: 'Scan result',
           anchor: _anchor,
@@ -105,11 +105,11 @@ void main() {
       });
 
       test(
-        'S2: sendText without optionals records null subject and anchor',
+        'S2: shareText without optionals records null subject and anchor',
         () async {
           final adapter = InMemoryShareSenderAdapter();
 
-          await adapter.sendText(text: 'plain text');
+          await adapter.shareText(text: 'plain text');
 
           expect(adapter.records.single.text, 'plain text');
           expect(adapter.records.single.subject, isNull);
@@ -117,11 +117,11 @@ void main() {
         },
       );
 
-      test('S3: sendFiles records paths, MIME hints, subject, and anchor '
+      test('S3: shareFiles records paths, MIME hints, subject, and anchor '
           'verbatim', () async {
         final adapter = InMemoryShareSenderAdapter();
 
-        final result = await adapter.sendFiles(
+        final result = await adapter.shareFiles(
           files: ['/tmp/qr.png', '/tmp/receipt.pdf'],
           subject: 'Documents',
           mimeHints: const {'/tmp/receipt.pdf': 'application/pdf'},
@@ -142,11 +142,11 @@ void main() {
         expect(adapter.records.single.text, isNull);
       });
 
-      test('S4: sendFiles without optionals records null subject and anchor '
+      test('S4: shareFiles without optionals records null subject and anchor '
           'and empty hints', () async {
         final adapter = InMemoryShareSenderAdapter();
 
-        await adapter.sendFiles(files: ['/tmp/pic.jpg']);
+        await adapter.shareFiles(files: ['/tmp/pic.jpg']);
 
         expect(adapter.records.single.files, ['/tmp/pic.jpg']);
         expect(adapter.records.single.mimeHints, isEmpty);
@@ -159,9 +159,9 @@ void main() {
         () async {
           final adapter = InMemoryShareSenderAdapter();
 
-          await adapter.sendText(text: 'first');
-          await adapter.sendFiles(files: ['/tmp/a.png']);
-          await adapter.sendText(text: 'third');
+          await adapter.shareText(text: 'first');
+          await adapter.shareFiles(files: ['/tmp/a.png']);
+          await adapter.shareText(text: 'third');
 
           expect(adapter.records.map((record) => record.text), [
             'first',
@@ -178,7 +178,7 @@ void main() {
         final files = ['/tmp/a.png'];
         final hints = {'/tmp/a.png': 'image/png'};
 
-        await adapter.sendFiles(files: files, mimeHints: hints);
+        await adapter.shareFiles(files: files, mimeHints: hints);
         files.clear();
         hints.clear();
 
@@ -195,8 +195,8 @@ void main() {
 
       expect(service.senderPort, isA<InMemoryShareSenderAdapter>());
 
-      final textResult = await service.sendText(text: 'hello');
-      final filesResult = await service.sendFiles(files: ['/tmp/a.png']);
+      final textResult = await service.shareText(text: 'hello');
+      final filesResult = await service.shareFiles(files: ['/tmp/a.png']);
 
       expect(textResult, ShareSendResult.success);
       expect(filesResult, ShareSendResult.success);
@@ -213,12 +213,12 @@ void main() {
       final service = ShareIntentService(senderPort: port);
 
       port.result = ShareSendResult.failure;
-      final failure = await service.sendText(
+      final failure = await service.shareText(
         text: 'link',
         subject: 'subject',
         anchor: _anchor,
       );
-      final filesFailure = await service.sendFiles(
+      final filesFailure = await service.shareFiles(
         files: ['/tmp/a.png'],
         mimeHints: const {'/tmp/a.png': 'image/png'},
       );
@@ -258,14 +258,14 @@ void main() {
   });
 
   group('SharePlusShareSenderPort driver (FR-3, FR-6 — no device)', () {
-    test('S11: sendText forwards text, subject, and anchor in the '
+    test('S11: shareText forwards text, subject, and anchor in the '
         'ShareParams and maps completion to success', () async {
       final platform = ScriptedSharePlatform();
       final driver = SharePlusShareSenderPort(
         sharePlus: SharePlus.custom(platform),
       );
 
-      final result = await driver.sendText(
+      final result = await driver.shareText(
         text: 'go.zuzu.dev/scan/abc',
         subject: 'Scan result',
         anchor: _anchor,
@@ -278,14 +278,14 @@ void main() {
       expect(platform.recordedParams.single.sharePositionOrigin, _anchor);
     });
 
-    test('S12: sendFiles forwards paths as XFiles with the MIME hints '
+    test('S12: shareFiles forwards paths as XFiles with the MIME hints '
         'attached, plus subject and anchor', () async {
       final platform = ScriptedSharePlatform();
       final driver = SharePlusShareSenderPort(
         sharePlus: SharePlus.custom(platform),
       );
 
-      final result = await driver.sendFiles(
+      final result = await driver.shareFiles(
         files: ['/tmp/qr.png', '/tmp/receipt.pdf'],
         subject: 'Documents',
         mimeHints: const {'/tmp/receipt.pdf': 'application/pdf'},
@@ -306,14 +306,14 @@ void main() {
       expect(params.sharePositionOrigin, _anchor);
     });
 
-    test('S13: sendFiles without hints forces no MIME type — share_plus '
+    test('S13: shareFiles without hints forces no MIME type — share_plus '
         'keeps its own extension lookup', () async {
       final platform = ScriptedSharePlatform();
       final driver = SharePlusShareSenderPort(
         sharePlus: SharePlus.custom(platform),
       );
 
-      await driver.sendFiles(files: ['/tmp/pic.jpg']);
+      await driver.shareFiles(files: ['/tmp/pic.jpg']);
 
       expect(platform.recordedParams.single.files!.single.mimeType, isNull);
     });
@@ -329,7 +329,7 @@ void main() {
         sharePlus: SharePlus.custom(platform),
       );
 
-      final result = await driver.sendText(text: 'link');
+      final result = await driver.shareText(text: 'link');
 
       expect(result, ShareSendResult.failure);
     });
@@ -342,7 +342,7 @@ void main() {
         sharePlus: SharePlus.custom(platform),
       );
 
-      final result = await driver.sendFiles(files: const <String>[]);
+      final result = await driver.shareFiles(files: const <String>[]);
 
       expect(result, ShareSendResult.failure);
     });
@@ -356,10 +356,10 @@ void main() {
 
       final dismissedResult = await SharePlusShareSenderPort(
         sharePlus: SharePlus.custom(dismissed),
-      ).sendText(text: 'link');
+      ).shareText(text: 'link');
       final unavailableResult = await SharePlusShareSenderPort(
         sharePlus: SharePlus.custom(unavailable),
-      ).sendFiles(files: ['/tmp/a.png']);
+      ).shareFiles(files: ['/tmp/a.png']);
 
       expect(dismissedResult, ShareSendResult.success);
       expect(unavailableResult, ShareSendResult.success);

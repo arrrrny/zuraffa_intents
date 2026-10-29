@@ -16,7 +16,7 @@
 /// final boot = await intents.getInitialSharedMedia();
 /// if (boot != null) await intents.resetInitialSharedMedia();
 /// intents.sharedMediaStream.listen(handleShare);
-/// final sent = await intents.sendText(
+/// final sent = await intents.shareText(
 ///     text: 'go.zuzu.dev/scan/abc',
 ///     subject: 'Scan result');
 /// ```

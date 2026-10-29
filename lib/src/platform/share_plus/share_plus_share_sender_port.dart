@@ -30,7 +30,7 @@ class SharePlusShareSenderPort implements ShareSenderPort {
   final SharePlus _sharePlus;
 
   @override
-  Future<ShareSendResult> sendText({
+  Future<ShareSendResult> shareText({
     required String text,
     String? subject,
     Rect? anchor,
@@ -41,7 +41,7 @@ class SharePlusShareSenderPort implements ShareSenderPort {
   }
 
   @override
-  Future<ShareSendResult> sendFiles({
+  Future<ShareSendResult> shareFiles({
     required List<String> files,
     String? subject,
     Map<String, String>? mimeHints,

@@ -20,14 +20,14 @@ export 'platform/wire/share_intents_wire.dart';
 /// The app-facing share-intent facade: the boot-time initial share, the
 /// live share stream, and sent-message share-suggestion recording —
 /// over the registered [ShareIntentPort] — plus the outbound send seam
-/// ([sendText]/[sendFiles]) over the registered [ShareSenderPort].
+/// ([shareText]/[shareFiles]) over the registered [ShareSenderPort].
 ///
 /// ```dart
 /// final intents = ShareIntentService.platform();
 /// final boot = await intents.getInitialSharedMedia();
 /// if (boot != null) await intents.resetInitialSharedMedia();
 /// intents.sharedMediaStream.listen(handleShare);
-/// final sent = await intents.sendText(
+/// final sent = await intents.shareText(
 ///     text: 'go.zuzu.dev/scan/abc',
 ///     subject: 'Scan result');
 /// ```
@@ -92,24 +92,24 @@ class ShareIntentService {
   /// over the registered [ShareSenderPort]. Success says the surface was
   /// presented; failure is the one error path (the send contract
   /// resolves instead of throwing).
-  Future<ShareSendResult> sendText({
+  Future<ShareSendResult> shareText({
     required String text,
     String? subject,
     Rect? anchor,
   }) {
-    return senderPort.sendText(text: text, subject: subject, anchor: anchor);
+    return senderPort.shareText(text: text, subject: subject, anchor: anchor);
   }
 
   /// Presents the native share surface for [files] — the outbound seam
   /// over the registered [ShareSenderPort], with the same one-error-path
-  /// outcome as [sendText].
-  Future<ShareSendResult> sendFiles({
+  /// outcome as [shareText].
+  Future<ShareSendResult> shareFiles({
     required List<String> files,
     String? subject,
     Map<String, String>? mimeHints,
     Rect? anchor,
   }) {
-    return senderPort.sendFiles(
+    return senderPort.shareFiles(
       files: files,
       subject: subject,
       mimeHints: mimeHints,

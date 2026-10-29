@@ -47,11 +47,11 @@ class InMemoryShareSenderAdapter implements ShareSenderPort {
   /// share the one timeline.
   final List<ShareSendRecord> _records = [];
 
-  /// Everything recorded through [sendText]/[sendFiles], in call order.
+  /// Everything recorded through [shareText]/[shareFiles], in call order.
   List<ShareSendRecord> get records => List.unmodifiable(_records);
 
   @override
-  Future<ShareSendResult> sendText({
+  Future<ShareSendResult> shareText({
     required String text,
     String? subject,
     Rect? anchor,
@@ -61,7 +61,7 @@ class InMemoryShareSenderAdapter implements ShareSenderPort {
   }
 
   @override
-  Future<ShareSendResult> sendFiles({
+  Future<ShareSendResult> shareFiles({
     required List<String> files,
     String? subject,
     Map<String, String>? mimeHints,

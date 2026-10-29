@@ -34,7 +34,7 @@ abstract class ShareSenderPort {
   /// pass the sending widget's rect on iPad; omit it on other devices
   /// and whenever no widget context exists (the platform default
   /// presentation is used).
-  Future<ShareSendResult> sendText({
+  Future<ShareSendResult> shareText({
     required String text,
     String? subject,
     Rect? anchor,
@@ -44,8 +44,8 @@ abstract class ShareSenderPort {
   /// offered to the receiving apps. [mimeHints] maps a file path to the
   /// MIME type the share should declare for it (the platform infers one
   /// from the extension; an explicit hint wins where they disagree);
-  /// [subject] and [anchor] behave exactly as in [sendText].
-  Future<ShareSendResult> sendFiles({
+  /// [subject] and [anchor] behave exactly as in [shareText].
+  Future<ShareSendResult> shareFiles({
     required List<String> files,
     String? subject,
     Map<String, String>? mimeHints,

@@ -20,7 +20,7 @@ behaviors; deliberate-mutant matrices 0 SURVIVED on both).
 | iOS      | ✅ full | Swift plugin (SPM + CocoaPods) — URL-scheme shares, INSendMessageIntent donation |
 | macOS    | ✅ full | Swift plugin (SPM + CocoaPods) — same wire contract |
 
-Outbound sends (`sendText`/`sendFiles`) are covered on all three platforms —
+Outbound sends (`shareText`/`shareFiles`) are covered on all three platforms —
 they ride `share_plus`, kept as an internal implementation detail of this
 package: apps that adopt the send API can drop their own `share_plus`
 dependency.
@@ -80,7 +80,7 @@ producer role (`storeInitial`, `emit`, `sentMessageRecords`).
 ## Sending out (the share sheet)
 
 The send side mirrors the receiving seam: `ShareIntentService` exposes
-`sendText`/`sendFiles` over the `ShareSenderPort`. The result is the
+`shareText`/`shareFiles` over the `ShareSenderPort`. The result is the
 `ShareSendResult` outcome — `success` says the native share surface was
 presented, `failure` is the one error path (a failed channel, an unsupported
 platform, rejected arguments: a send never throws).
@@ -90,7 +90,7 @@ final intents = ShareIntentService.platform();
 
 // Text with an optional subject; `anchor` is the iPad popover rect
 // (the macOS picker anchors to it too; other devices ignore it).
-await intents.sendText(
+await intents.shareText(
   text: 'go.zuzu.dev/scan/abc',
   subject: 'Scan result',
   anchor: senderRect,
@@ -98,7 +98,7 @@ await intents.sendText(
 
 // Files with optional per-path MIME hints (the platform infers one
 // from the extension otherwise).
-await intents.sendFiles(
+await intents.shareFiles(
   files: ['/tmp/qr.png', '/tmp/receipt.pdf'],
   mimeHints: {'/tmp/receipt.pdf': 'application/pdf'},
 );
