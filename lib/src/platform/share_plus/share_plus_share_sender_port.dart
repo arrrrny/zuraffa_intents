@@ -1,5 +1,6 @@
 import 'dart:ui' show Rect;
 
+import 'package:flutter/foundation.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../domain/outbound/share_sender_port.dart';
@@ -62,7 +63,18 @@ class SharePlusShareSenderPort implements ShareSenderPort {
     try {
       await _sharePlus.share(params);
       return ShareSendResult.success;
-    } catch (_) {
+    } catch (error, stackTrace) {
+      assert(() {
+        FlutterError.reportError(
+          FlutterErrorDetails(
+            exception: error,
+            stack: stackTrace,
+            library: 'zuraffa_intents',
+            context: ErrorDescription('while presenting the share surface'),
+          ),
+        );
+        return true;
+      }());
       return ShareSendResult.failure;
     }
   }

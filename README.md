@@ -10,7 +10,7 @@ facade.
 rebuilt on the Zuraffa port/adapter architecture and produced entirely under
 the repo's zfa TDD discipline (spec-001: the pure-Dart contract, 19
 behaviors; spec-002: the platform-interface layer + native ports, 22
-behaviors; spec-003: the outbound send port, 16 behaviors; deliberate-mutant
+behaviors; spec-003: the outbound send port, 17 behaviors; deliberate-mutant
 matrices 0 SURVIVED on both).
 
 ## Platform support
@@ -159,7 +159,7 @@ resolved as `<packageName>.MainActivity`.
 
 ```bash
 flutter pub get
-flutter test                 # 58 behaviors (spec-001: 19, spec-002: 22, spec-003: 16, bootstrap: 1)
+flutter test                 # 59 behaviors (spec-001: 19, spec-002: 22, spec-003: 17, bootstrap: 1)
 flutter analyze
 flutter pub publish --dry-run
 ```

@@ -66,3 +66,15 @@
       README install guides in the same change — never out of family
       (`PUBLISH.md`). The release itself is not part of this PR; no
       version bump ships here.
+
+## 6. Review fixes (PR #10 review round)
+
+- [x] 6.1 `SharePlusShareSenderPort._present`: report the swallowed failure
+      cause in debug builds (assert-wrapped `FlutterError.reportError`);
+      release builds keep the silent one-error-path contract (FR-003).
+- [x] 6.2 S15 tightened — the scripted `ArgumentError` was dead code
+      (`SharePlus.share` validates params before the `SharePlatform` seam),
+      so the test now exercises the real validation error and asserts the
+      seam was never reached; S17 added for the spec.md empty-text edge case
+      (`shareText(text: '')` → failure). Suite: 94/94, spec-003 behaviors
+      16 → 17 (README counts updated).

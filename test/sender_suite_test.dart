@@ -336,8 +336,9 @@ void main() {
 
     test('S15: even argument errors (empty files) resolve to the failure '
         'result — one error path for callers', () async {
-      final platform = ScriptedSharePlatform()
-        ..error = ArgumentError('files provided, but cannot be empty');
+      // SharePlus.share validates params before the platform seam — this
+      // exercises the driver's real ArgumentError mapping.
+      final platform = ScriptedSharePlatform();
       final driver = SharePlusShareSenderPort(
         sharePlus: SharePlus.custom(platform),
       );
@@ -345,6 +346,7 @@ void main() {
       final result = await driver.shareFiles(files: const <String>[]);
 
       expect(result, ShareSendResult.failure);
+      expect(platform.recordedParams, isEmpty);
     });
 
     test('S16: the outcome is not a delivery receipt — a dismissed or '
@@ -363,6 +365,21 @@ void main() {
 
       expect(dismissedResult, ShareSendResult.success);
       expect(unavailableResult, ShareSendResult.success);
+    });
+
+    test('S17: the empty-text edge case resolves to the failure result — '
+        'one error path for callers', () async {
+      // SharePlus.share rejects empty text before the platform seam — the
+      // spec.md Edge Cases entry lands on the same error path.
+      final platform = ScriptedSharePlatform();
+      final driver = SharePlusShareSenderPort(
+        sharePlus: SharePlus.custom(platform),
+      );
+
+      final result = await driver.shareText(text: '');
+
+      expect(result, ShareSendResult.failure);
+      expect(platform.recordedParams, isEmpty);
     });
   });
 }

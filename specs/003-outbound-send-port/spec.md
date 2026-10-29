@@ -4,7 +4,7 @@
 
 **Feature Branch**: `003-outbound-send-port`
 
-**Created**: 2026-10-30
+**Created**: 2026-10-29
 
 **Status**: Approved (brownfield: `zuraffa_intents` grows the send side —
 outbound text/file sharing behind the same port/adapter architecture the
