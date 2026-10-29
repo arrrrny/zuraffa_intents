@@ -1,8 +1,10 @@
 # zuraffa_intents
 
-The incoming-share seam for the Zuraffa ecosystem: receive shared text/media
-(a boot-time initial share plus a live stream while the app runs) and record
-sent messages so the OS share menu can suggest conversations.
+The inter-app share seam for the Zuraffa ecosystem: receive shared text/media
+(a boot-time initial share plus a live stream while the app runs), record
+sent messages so the OS share menu can suggest conversations, and send
+text/files out through the native share surface — both directions over one
+facade.
 
 `zuraffa_intents` is the drop-in replacement for `zikzak_share_handler`,
 rebuilt on the Zuraffa port/adapter architecture and produced entirely under
@@ -18,11 +20,16 @@ behaviors; deliberate-mutant matrices 0 SURVIVED on both).
 | iOS      | ✅ full | Swift plugin (SPM + CocoaPods) — URL-scheme shares, INSendMessageIntent donation |
 | macOS    | ✅ full | Swift plugin (SPM + CocoaPods) — same wire contract |
 
+Outbound sends (`sendText`/`sendFiles`) are covered on all three platforms —
+they ride `share_plus`, kept as an internal implementation detail of this
+package: apps that adopt the send API can drop their own `share_plus`
+dependency.
+
 ## Getting started
 
 ```yaml
 dependencies:
-  zuraffa_intents: ^1.0.0
+  zuraffa_intents: ^7.3.0
 ```
 
 ```dart
@@ -69,6 +76,40 @@ final intents = getIt<ShareIntentService>();
 `ShareIntentService()` (direct construction) keeps binding the pure-Dart
 `InMemoryShareIntentAdapter` — the test/dev driver that plays the platform's
 producer role (`storeInitial`, `emit`, `sentMessageRecords`).
+
+## Sending out (the share sheet)
+
+The send side mirrors the receiving seam: `ShareIntentService` exposes
+`sendText`/`sendFiles` over the `ShareSenderPort`. The result is the
+`ShareSendResult` outcome — `success` says the native share surface was
+presented, `failure` is the one error path (a failed channel, an unsupported
+platform, rejected arguments: a send never throws).
+
+```dart
+final intents = ShareIntentService.platform();
+
+// Text with an optional subject; `anchor` is the iPad popover rect
+// (the macOS picker anchors to it too; other devices ignore it).
+await intents.sendText(
+  text: 'go.zuzu.dev/scan/abc',
+  subject: 'Scan result',
+  anchor: senderRect,
+);
+
+// Files with optional per-path MIME hints (the platform infers one
+// from the extension otherwise).
+await intents.sendFiles(
+  files: ['/tmp/qr.png', '/tmp/receipt.pdf'],
+  mimeHints: {'/tmp/receipt.pdf': 'application/pdf'},
+);
+```
+
+The outcome is deliberately **not a delivery receipt**: what the user does
+inside the share surface is not observable across platforms, so the port
+does not pretend to know it. Direct construction keeps binding the pure-Dart
+`InMemoryShareSenderAdapter` — every send resolves success and lands in
+`records` (text, subject, files, MIME hints, anchor) so package and app
+tests assert in pure Dart, with no platform channel.
 
 ## Migrating from zikzak_share_handler
 
@@ -117,7 +158,7 @@ resolved as `<packageName>.MainActivity`.
 
 ```bash
 flutter pub get
-flutter test                 # 42 behaviors (spec-001: 19, spec-002: 22, bootstrap: 1)
+flutter test                 # 42 behaviors (spec-001: 19, spec-002: 22, bootstrap: 1) + the spec-1205 send suite
 flutter analyze
 flutter pub publish --dry-run
 ```
