@@ -30,7 +30,7 @@ dependency.
 
 ```yaml
 dependencies:
-  zuraffa_intents: ^7.3.0
+  zuraffa_intents: ^7.3.2
 ```
 
 ```dart
