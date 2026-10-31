@@ -1,3 +1,19 @@
+## 7.3.2 - 2026-10-31
+
+- **Outbound send port (spec 1205, issue #9, PR #10)**: `ShareSenderPort`
+  + `ShareSendResult` in `lib/src/domain/outbound/`, `InMemoryShareSenderAdapter`
+  in `lib/src/data/outbound/`, and the `share_plus`-wrapping
+  `SharePlusShareSenderPort` platform driver in `lib/src/platform/share_plus/`.
+  `ShareIntentService` exposes `shareText`/`shareFiles` (optional subject,
+  per-path MIME hints, optional iPad anchor rect) over the same facade and
+  construction pattern as the receiving seam; the outcome is the share surface
+  being presented, not a delivery receipt, and the one error path resolves
+  failure instead of throwing. `share_plus` is now an internal implementation
+  detail of this package.
+- Mono-version fleet alignment: the whole zuraffa family ships at 7.3.2.
+- `zuraffa` dependency constraint unified to ^7.3.2; README install guide
+  refreshed to 7.3.2.
+
 ## 7.3.0 - 2026-10-28
 
 - Mono-version fleet alignment: the whole zuraffa family ships at 7.3.0 together with the core.

@@ -1,7 +1,7 @@
 name: zuraffa_intents_example
 description: "A fully working share-intents demo: receive the boot-time initial share, follow the live share stream, and record sent-message suggestions on android, ios and macos."
 publish_to: 'none'
-version: 7.3.0
+version: 7.3.2
 
 environment:
   sdk: ^3.13.2
@@ -25,3 +25,6 @@ flutter:
 # still transitively pull the abandoned minio (xml 6.x) resolve cleanly.
 dependency_overrides:
   xml: 7.1.0
+
+  zuraffa:
+    path: ../../zuraffa
