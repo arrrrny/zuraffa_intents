@@ -1,3 +1,7 @@
+## 7.3.6 - 2026-11-02
+
+- Mono-version fleet alignment to 7.3.6; internal dependencies refreshed; xml override 7.1.0.
+
 ## 7.3.2 - 2026-10-31
 
 - **Outbound send port (spec 1205, issue #9, PR #10)**: `ShareSenderPort`
