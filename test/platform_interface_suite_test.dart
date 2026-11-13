@@ -895,5 +895,54 @@ void main() {
         );
       }
     });
+
+    test(
+      'U42: the macOS plugin implements the lifecycle-delegate open-URL '
+      'selector handleOpen(_:) and routes it through handleUrl (issue #11)',
+      () {
+        final macosPlugin = File(
+          'macos/zuraffa_intents/Sources/zuraffa_intents/ZuraffaIntentsPlugin.swift',
+        ).readAsStringSync();
+
+        // The plugin registers itself as a lifecycle delegate ...
+        expect(
+          macosPlugin,
+          contains('registrar.addApplicationDelegate(instance)'),
+        );
+
+        // ... and FlutterAppDelegate fans open-URL events out to lifecycle
+        // delegates through the Objective-C selector handleOpenURLs:, which
+        // imports into Swift as handleOpen(_:). Without it the whole macOS
+        // receive path (scheme URLs and file:// shares, cold-start buffer and
+        // live stream alike) is dead code.
+        const selector = 'func handleOpen(_ urls: [URL]) -> Bool';
+        final start = macosPlugin.indexOf(selector);
+        expect(
+          start,
+          greaterThanOrEqualTo(0),
+          reason:
+              'macOS receive path is unreachable: FlutterAppDelegate calls '
+              'handleOpen(_:) on registered lifecycle delegates, never '
+              'application(_:open urls:)',
+        );
+
+        final body = macosPlugin.substring(
+          start,
+          macosPlugin.indexOf('\n    }', start),
+        );
+        expect(
+          body,
+          contains('hasMatchingSchemePrefix(url: url)'),
+          reason: 'handleOpen(_:) must reuse the scheme/file prefix guard',
+        );
+        expect(
+          body,
+          contains('handleUrl(url: url, setInitialData: true)'),
+          reason:
+              'handleOpen(_:) must reuse the payload machinery and keep '
+              'the cold-start buffer getInitialSharedMedia() reads',
+        );
+      },
+    );
   });
 }

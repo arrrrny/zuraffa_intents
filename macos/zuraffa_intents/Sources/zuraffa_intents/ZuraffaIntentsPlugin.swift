@@ -54,6 +54,17 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         return true
     }
 
+    public func handleOpen(_ urls: [URL]) -> Bool {
+        var handled = false
+        for url in urls {
+            if hasMatchingSchemePrefix(url: url) {
+                handled = true
+                _ = handleUrl(url: url, setInitialData: true)
+            }
+        }
+        return handled
+    }
+
     public func application(_ application: NSApplication, open urls: [URL]) {
         for url in urls {
             if hasMatchingSchemePrefix(url: url) {
