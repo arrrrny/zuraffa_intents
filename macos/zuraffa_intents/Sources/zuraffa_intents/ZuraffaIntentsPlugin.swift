@@ -57,32 +57,49 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     /// FlutterAppDelegate fans application:openURLs: events out to plugin
     /// lifecycle delegates through the handleOpenURLs: selector (see
     /// FlutterAppDelegate.mm in the engine), which imports into Swift as
-    /// handleOpen(_:). The NSApplicationDelegate methods below are never
+    /// handleOpenURLs(_:). The NSApplicationDelegate methods below are never
     /// delivered to a plugin delegate — this is the one that fires (#11).
-    public func handleOpen(_ urls: [URL]) -> Bool {
+    /// setInitialData: true keeps the cold-start buffer intact: on a cold
+    /// launch the URL arrives before Dart subscribes, so initialMedia is the
+    /// only delivery (the live eventSink?(map) fires either way).
+    @objc(handleOpenURLs:)
+    public func handleOpenURLs(_ urls: [URL]) -> Bool {
         var handled = false
         for url in urls {
             if hasMatchingSchemePrefix(url: url) {
-                if handleUrl(url: url, setInitialData: false) {
+                if handleUrl(url: url, setInitialData: true) {
                     handled = true
                 }
             }
+        }
+        if !handled {
+            latestMedia = nil
         }
         return handled
     }
 
     public func application(_ application: NSApplication, open urls: [URL]) {
+        var handled = false
         for url in urls {
             if hasMatchingSchemePrefix(url: url) {
-                _ = handleUrl(url: url, setInitialData: true)
+                if handleUrl(url: url, setInitialData: true) {
+                    handled = true
+                }
             }
+        }
+        if !handled {
+            latestMedia = nil
         }
     }
 
     public func application(_ sender: NSApplication, openFile filename: String) -> Bool {
         let url = URL(fileURLWithPath: filename)
         if hasMatchingSchemePrefix(url: url) {
-            return handleUrl(url: url, setInitialData: false)
+            let handled = handleUrl(url: url, setInitialData: false)
+            if !handled {
+                latestMedia = nil
+            }
+            return handled
         }
         return false
     }
@@ -91,13 +108,20 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         for filename in filenames {
             let url = URL(fileURLWithPath: filename)
             if hasMatchingSchemePrefix(url: url) {
-                return handleUrl(url: url, setInitialData: false)
+                let handled = handleUrl(url: url, setInitialData: false)
+                if !handled {
+                    latestMedia = nil
+                }
+                return handled
             }
         }
         return false
     }
 
-    public func applicationDidFinishLaunching(_ notification: Notification) {
+    /// The lifecycle registrar forwards the applicationDidFinishLaunching
+    /// notification as handleDidFinishLaunching: (FlutterAppLifecycleDelegate),
+    /// not the NSApplicationDelegate spelling — that method would never run.
+    public func handleDidFinishLaunching(_ notification: Notification) {
         if let userDefaults = notification.userInfo?[
             NSApplication.launchUserNotificationUserInfoKey] as? [AnyHashable: Any]
         {
@@ -153,7 +177,6 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                 return true
             }
         }
-        latestMedia = nil
         return false
     }
 
@@ -181,6 +204,13 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         initialMedia = nil
     }
 }
+
+// `addApplicationDelegate(_:)` takes NSObject<FlutterAppLifecycleDelegate>*
+// (FlutterPluginRegistrarMacOS.h) and FlutterAppDelegate probes the ObjC
+// selector handleOpenURLs: — declaring the conformance makes the compiler
+// verify the handle* methods above against the protocol instead of relying
+// on memory.
+extension ZuraffaIntentsPlugin: FlutterAppLifecycleDelegate {}
 
 extension URL {
     var queryDictionary: [String: String]? {
