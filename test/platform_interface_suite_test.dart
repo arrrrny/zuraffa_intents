@@ -932,6 +932,11 @@ void main() {
         );
         expect(
           body,
+          isNot(contains('func application(')),
+          reason: 'body slice must stay inside handleOpen(_:)',
+        );
+        expect(
+          body,
           contains('hasMatchingSchemePrefix(url: url)'),
           reason: 'handleOpen(_:) must reuse the scheme/file prefix guard',
         );
