@@ -166,7 +166,7 @@ resolved as `<packageName>.MainActivity`.
 - **Channels**: result/error/channel-error pigeon semantics; EventChannel
   lazy-singleton stream.
 - **Consistency**: the Dart channel literals and the ported native files are
-  pinned equal by the suite — drift is a failing test (U38–U41).
+  pinned equal by the suite — drift is a failing test (U38–U42).
 
 ## Development
 
