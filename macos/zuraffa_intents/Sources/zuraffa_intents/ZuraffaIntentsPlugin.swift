@@ -54,6 +54,23 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         return true
     }
 
+    /// FlutterAppDelegate fans application:openURLs: events out to plugin
+    /// lifecycle delegates through the handleOpenURLs: selector (see
+    /// FlutterAppDelegate.mm in the engine), which imports into Swift as
+    /// handleOpen(_:). The NSApplicationDelegate methods below are never
+    /// delivered to a plugin delegate — this is the one that fires (#11).
+    public func handleOpen(_ urls: [URL]) -> Bool {
+        var handled = false
+        for url in urls {
+            if hasMatchingSchemePrefix(url: url) {
+                if handleUrl(url: url, setInitialData: false) {
+                    handled = true
+                }
+            }
+        }
+        return handled
+    }
+
     public func application(_ application: NSApplication, open urls: [URL]) {
         for url in urls {
             if hasMatchingSchemePrefix(url: url) {
