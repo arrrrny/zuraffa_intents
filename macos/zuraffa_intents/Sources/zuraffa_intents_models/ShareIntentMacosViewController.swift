@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import os
 import UniformTypeIdentifiers
 
 @available(macOS 11.0, *)
@@ -7,6 +8,13 @@ import UniformTypeIdentifiers
 open class ShareIntentMacosViewController: NSViewController {
     static var hostAppBundleIdentifier = ""
     static var appGroupId = ""
+    // Diagnostics go through os_log/Logger, not print: a production app
+    // extension's stdout is never captured, so print calls vanish — Logger
+    // records under the extension's subsystem where Console.app and
+    // sysdiagnoses can actually read them.
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "zuraffa_intents",
+        category: "share-intake")
     let sharedKey = "ShareKey"
     var sharedText: [String] = []
     let urlContentType = UTType.url.identifier
@@ -36,7 +44,7 @@ open class ShareIntentMacosViewController: NSViewController {
         } else {
             ShareIntentMacosViewController.appGroupId =
                 "group.\(ShareIntentMacosViewController.hostAppBundleIdentifier)"
-            print(
+            Self.logger.error(
                 "[zuraffa_intents] AppGroupId missing or empty in Info.plist — the group.<bundle-id> fallback is iOS-shaped and will not resolve on macOS (App Group ids need the Team ID prefix)"
             )
         }
@@ -103,9 +111,14 @@ open class ShareIntentMacosViewController: NSViewController {
             // through as text. Route real file URLs through the same App
             // Group copy — a raw sender path must never cross into the host.
             if item.isFileURL {
-                if let destinationURL = copySharedFile(at: item) {
+                if let copiedURL = copySharedFile(at: item) {
+                    let destinationURL = dedupFileName(for: copiedURL)
                     sharedAttachments.append(
                         SharedAttachment.init(path: destinationURL.absoluteString, type: .file))
+                } else {
+                    Self.logger.error(
+                        "[zuraffa_intents] file share dropped: the App Group copy of \(item.lastPathComponent, privacy: .public) failed — the host will not see this attachment"
+                    )
                 }
             } else {
                 sharedText.append(item.absoluteString)
@@ -120,7 +133,10 @@ open class ShareIntentMacosViewController: NSViewController {
         // coordinated copy the extension is guaranteed to read, and the
         // returned URL is only valid inside this completion handler — so the
         // copy into the App Group container happens here, before the block
-        // returns and the temporary URL disappears.
+        // returns and the temporary URL disappears. The completion runs on
+        // an arbitrary queue, so the copy seam is nonisolated and touches
+        // only FileManager and static state; the usedFileNames dedup waits
+        // for the actor body below.
         let copiedURL: URL? = try await withCheckedThrowingContinuation {
             (continuation: CheckedContinuation<URL?, Error>) in
             attachment.loadFileRepresentation(forTypeIdentifier: fileURLType) {
@@ -133,28 +149,52 @@ open class ShareIntentMacosViewController: NSViewController {
                     continuation.resume(returning: nil)
                     return
                 }
-                continuation.resume(returning: self.copySharedFile(at: tempURL))
+                // Name the copy after the sender-preferred name: the temp
+                // URL's lastPathComponent is a system-generated name, not
+                // the original file name.
+                continuation.resume(returning: self.copySharedFile(at: tempURL, preferredName: attachment.suggestedName))
             }
         }
 
-        if let destinationURL = copiedURL {
+        if let copiedURL = copiedURL {
+            // Back on the actor: dedup the name against the names this
+            // session already used, before the attachment is recorded.
+            let destinationURL = dedupFileName(for: copiedURL)
             sharedAttachments.append(
                 SharedAttachment.init(path: destinationURL.absoluteString, type: .file))
+        } else {
+            Self.logger.error(
+                "[zuraffa_intents] file share dropped: the App Group copy failed (container unresolvable or copy error) — the host will not see this attachment"
+            )
         }
     }
 
     /// Copies a shared file into the App Group container while the extension
     /// still holds the provider's transient sandbox grant, returning the
     /// copied URL — or nil when the container or the copy is unavailable.
-    func copySharedFile(at sourceURL: URL) -> URL? {
-        let fileName = getFileName(from: sourceURL, type: .file)
-        guard let destinationURL = getNewFileUrl(fileName: fileName) else {
+    ///
+    /// `nonisolated` because `loadFileRepresentation` invokes this from a
+    /// `@Sendable` completion on an arbitrary queue: it touches only
+    /// FileManager and static state. The `usedFileNames` dedup stays on the
+    /// actor — `dedupFileName(for:)` runs after the copy, before the
+    /// attachment is recorded.
+    nonisolated func copySharedFile(at sourceURL: URL) -> URL? {
+        copySharedFile(at: sourceURL, preferredName: nil)
+    }
+
+    nonisolated func copySharedFile(at sourceURL: URL, preferredName: String?) -> URL? {
+        let fileName = getFileName(from: sourceURL, preferredName: preferredName, type: .file)
+        guard let proposedURL = getNewFileUrl(fileName: fileName) else {
             return nil
         }
+        // Never overwrite an existing file: a same-named share earlier in
+        // this session is only renamed after the copy (on the actor), so
+        // replacing the destination here would destroy it.
+        let destinationURL = uniqueDestination(for: proposedURL)
         return copyFile(at: sourceURL, to: destinationURL) ? destinationURL : nil
     }
 
-    public func getNewFileUrl(fileName: String) -> URL? {
+    public nonisolated func getNewFileUrl(fileName: String) -> URL? {
         // On macOS the App Group identifier must carry the Team ID prefix
         // (e.g. "2D3QTPZG5J.group.dev.zuzu.zuraffa") and both the host app
         // and this extension must list it in their
@@ -167,8 +207,8 @@ open class ShareIntentMacosViewController: NSViewController {
                 forSecurityApplicationGroupIdentifier:
                     ShareIntentMacosViewController.appGroupId)
         else {
-            print(
-                "[zuraffa_intents] cannot resolve App Group container for \"\(ShareIntentMacosViewController.appGroupId)\" — set AppGroupId in Info.plist to the team-prefixed macOS group id and add the com.apple.security.application-groups entitlement"
+            Self.logger.error(
+                "[zuraffa_intents] cannot resolve App Group container for \"\(ShareIntentMacosViewController.appGroupId, privacy: .public)\" — set AppGroupId in Info.plist to the team-prefixed macOS group id and add the com.apple.security.application-groups entitlement"
             )
             return nil
         }
@@ -216,12 +256,48 @@ open class ShareIntentMacosViewController: NSViewController {
         }
     }
 
-    func getFileName(from url: URL, type: SharedAttachmentType) -> String {
-        var name = url.lastPathComponent
+    /// Derives the destination name from the sender-preferred name when the
+    /// provider vends one, falling back to the source URL's own name. Pure
+    /// and nonisolated — the `usedFileNames` dedup happens on the actor.
+    nonisolated func getFileName(
+        from url: URL,
+        preferredName: String?,
+        type: SharedAttachmentType
+    ) -> String {
+        var name = preferredName ?? url.lastPathComponent
         if name.isEmpty {
             name = UUID().uuidString + "." + getExtension(from: url, type: type)
         }
+        return name
+    }
 
+    /// First destination path free in the App Group container for the
+    /// proposed file name, appending " (n)" before the extension when the
+    /// name is taken. FileManager-only — safe to call from the copy seam.
+    nonisolated func uniqueDestination(for proposedURL: URL) -> URL {
+        let directory = proposedURL.deletingLastPathComponent()
+        let baseName = proposedURL.lastPathComponent
+        let nameWithoutExtension = (baseName as NSString).deletingPathExtension
+        let fileExtension = (baseName as NSString).pathExtension
+        var destination = proposedURL
+        var counter = 1
+        while FileManager.default.fileExists(atPath: destination.path) {
+            destination = directory.appendingPathComponent(
+                fileExtension.isEmpty
+                    ? "\(nameWithoutExtension) (\(counter))"
+                    : "\(nameWithoutExtension) (\(counter)).\(fileExtension)")
+            counter += 1
+        }
+        return destination
+    }
+
+    /// Dedups the copied file's name against the names this session already
+    /// handed to the host, renaming the copy when the name was already used.
+    /// Runs on the actor AFTER the copy and BEFORE the attachment is
+    /// recorded — the nonisolated copy seam cannot touch `usedFileNames`
+    /// because it runs on an arbitrary queue.
+    func dedupFileName(for copiedURL: URL) -> URL {
+        let name = copiedURL.lastPathComponent
         var finalName = name
         var counter = 1
         while usedFileNames.contains(finalName) {
@@ -234,11 +310,26 @@ open class ShareIntentMacosViewController: NSViewController {
             }
             counter += 1
         }
-        usedFileNames.insert(finalName)
-        return finalName
+        guard finalName != name else {
+            usedFileNames.insert(finalName)
+            return copiedURL
+        }
+        let finalURL = copiedURL.deletingLastPathComponent()
+            .appendingPathComponent(finalName)
+        do {
+            try FileManager.default.moveItem(at: copiedURL, to: finalURL)
+            usedFileNames.insert(finalName)
+            return finalURL
+        } catch {
+            Self.logger.error(
+                "[zuraffa_intents] cannot rename copied file \(name, privacy: .public) to \(finalName, privacy: .public): \(String(describing: error), privacy: .public)"
+            )
+            usedFileNames.insert(name)
+            return copiedURL
+        }
     }
 
-    func getExtension(from url: URL, type: SharedAttachmentType) -> String {
+    nonisolated func getExtension(from url: URL, type: SharedAttachmentType) -> String {
         let parts = url.lastPathComponent.components(separatedBy: ".")
         var ex: String? = nil
         if parts.count > 1 {
@@ -259,14 +350,13 @@ open class ShareIntentMacosViewController: NSViewController {
         return ex ?? "Unknown"
     }
 
-    func copyFile(at srcURL: URL, to dstURL: URL) -> Bool {
+    nonisolated func copyFile(at srcURL: URL, to dstURL: URL) -> Bool {
         do {
-            if FileManager.default.fileExists(atPath: dstURL.path) {
-                try FileManager.default.removeItem(at: dstURL)
-            }
             try FileManager.default.copyItem(at: srcURL, to: dstURL)
         } catch (let error) {
-            print("Cannot copy item at \(srcURL) to \(dstURL): \(error)")
+            Self.logger.error(
+                "[zuraffa_intents] cannot copy item at \(srcURL.path, privacy: .public) to \(dstURL.path, privacy: .public): \(String(describing: error), privacy: .public)"
+            )
             return false
         }
         return true

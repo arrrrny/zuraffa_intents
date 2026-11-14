@@ -76,6 +76,15 @@ void main() {
         isNot(contains('loadItem(forTypeIdentifier: fileURLType')),
         reason: 'loadItem hands back the sender-side original path',
       );
+      expect(
+        source,
+        contains('continuation.resume(returning: self.copySharedFile(at: tempURL'),
+        reason:
+            'the App Group copy must happen inside the loadFileRepresentation '
+            'completion — the provider-vended URL is only valid until the '
+            'block returns, so hoisting the copy out of the closure '
+            'reintroduces the lifetime bug this PR fixes',
+      );
     });
 
     test('macOS getNewFileUrl fails loudly instead of force-unwrapping', () {
