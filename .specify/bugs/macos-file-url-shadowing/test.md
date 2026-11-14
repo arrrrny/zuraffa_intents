@@ -58,3 +58,15 @@
   shipping the .appex — the companion zuraffa_browser work (extension target
   + `2D3QTPZG5J.group.*` App Group entitlements) is tracked separately.
   Until a host exists, this controller is dormant code.
+
+## Follow-up verification (review notes, same branch)
+
+- Guard test extended 5 → 7 pins: `copySharedFile(at:) -> URL?` seam +
+  `if item.isFileURL` routing in `handleUrl`, and `!configured.isEmpty` +
+  the missing-or-empty log in `loadIds`.
+- Both new pins red on the pre-follow-up commit (`bebb60f`), green after.
+- Re-run: guard test **7/7**, A7/A8/U10 native-consistency pins PASS,
+  bootstrap/intents/platform-interface/sender suites PASS (+1/+19/+23/+17).
+- `dart analyze` on the guard test: `No issues found!`; `dart format`: clean.
+- 32 remaining tdd files unaffected by this change set (no Dart production
+  code touched since the full 40/40 run on the same branch).

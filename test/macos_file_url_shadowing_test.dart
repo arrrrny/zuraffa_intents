@@ -114,5 +114,45 @@ void main() {
             'actually produced one',
       );
     });
+
+    test('macOS handleUrl routes file URLs through the App Group copy', () {
+      final source = File(_macosController).readAsStringSync();
+      expect(
+        source,
+        contains('func copySharedFile(at sourceURL: URL) -> URL?'),
+        reason: 'the App Group copy must be one reusable seam',
+      );
+      expect(
+        source,
+        contains('if item.isFileURL'),
+        reason:
+            'senders that register a file URL under public.url without '
+            'public.file-url must not slip through handleUrl as text',
+      );
+      expect(
+        source,
+        contains('copySharedFile(at: item)'),
+        reason:
+            'a file URL reaching handleUrl takes the App Group copy, '
+            'never the raw sender path',
+      );
+    });
+
+    test('macOS loadIds treats an empty AppGroupId as missing', () {
+      final source = File(_macosController).readAsStringSync();
+      expect(
+        source,
+        contains('!configured.isEmpty'),
+        reason:
+            'an empty-string AppGroupId must take the fallback: '
+            'UserDefaults(suiteName: "") returns nil and the lazy '
+            'userDefaults force-unwrap would trap',
+      );
+      expect(
+        source,
+        contains('AppGroupId missing or empty in Info.plist'),
+        reason: 'the loud log must name both misconfigurations',
+      );
+    });
   });
 }

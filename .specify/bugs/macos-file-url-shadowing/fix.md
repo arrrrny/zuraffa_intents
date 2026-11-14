@@ -63,3 +63,23 @@ The kernel-dill escape was unnecessary (single-file `flutter test` fits the
   lanes as the definitive gate.
 - Swift is not compiled by this repo's CI; the first downstream host build
   that links the SPM product gates the semantics.
+
+## Follow-up (review notes on PR #18, applied to the same branch)
+
+Two edge cases flagged in review were folded in without changing the
+original four edits' shape:
+
+7. **`loadIds` — empty-string `AppGroupId` treated as missing.** A present
+   but empty `AppGroupId` slipped past the `??` fallback (it only fires on
+   nil) and trapped the lazy `userDefaults` force-unwrap via
+   `UserDefaults(suiteName: "")` returning nil. Both missing and empty now
+   take the fallback with one loud log.
+8. **`handleUrl` — file URLs routed through the App Group copy.** Senders
+   that register a file URL under `public.url` without `public.file-url`
+   could still cross the raw path as text; `item.isFileURL` now sends them
+   through the same copy. The copy itself was extracted into a reusable
+   `copySharedFile(at:) -> URL?` seam shared by both intake paths.
+
+Two new guard pins lock these in (`copySharedFile` seam + `isFileURL`
+routing, `!configured.isEmpty` + the combined missing-or-empty log);
+red on the pre-follow-up commit, green after.

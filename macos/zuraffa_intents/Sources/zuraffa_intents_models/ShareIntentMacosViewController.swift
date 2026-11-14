@@ -25,12 +25,19 @@ open class ShareIntentMacosViewController: NSViewController {
         ShareIntentMacosViewController.hostAppBundleIdentifier = String(
             shareExtensionAppBundleIdentifier[..<lastIndexOfPoint!])
 
-        ShareIntentMacosViewController.appGroupId =
-            (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String)
-            ?? "group.\(ShareIntentMacosViewController.hostAppBundleIdentifier)"
-        if Bundle.main.object(forInfoDictionaryKey: "AppGroupId") == nil {
+        // An empty-string AppGroupId is as broken as a missing one: the ??
+        // fallback only fires on nil, and UserDefaults(suiteName: "") returns
+        // nil (the lazy userDefaults force-unwrap would trap), so empty and
+        // missing both take the fallback here.
+        if let configured = Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String,
+            !configured.isEmpty
+        {
+            ShareIntentMacosViewController.appGroupId = configured
+        } else {
+            ShareIntentMacosViewController.appGroupId =
+                "group.\(ShareIntentMacosViewController.hostAppBundleIdentifier)"
             print(
-                "[zuraffa_intents] AppGroupId missing from Info.plist — the group.<bundle-id> fallback is iOS-shaped and will not resolve on macOS (App Group ids need the Team ID prefix)"
+                "[zuraffa_intents] AppGroupId missing or empty in Info.plist — the group.<bundle-id> fallback is iOS-shaped and will not resolve on macOS (App Group ids need the Team ID prefix)"
             )
         }
     }
@@ -91,7 +98,18 @@ open class ShareIntentMacosViewController: NSViewController {
     {
         let data = try await attachment.loadItem(forTypeIdentifier: urlContentType, options: nil)
         if let item = data as? URL {
-            sharedText.append(item.absoluteString)
+            // Some senders register a file URL under public.url without
+            // public.file-url; the branch order alone would let those slip
+            // through as text. Route real file URLs through the same App
+            // Group copy — a raw sender path must never cross into the host.
+            if item.isFileURL {
+                if let destinationURL = copySharedFile(at: item) {
+                    sharedAttachments.append(
+                        SharedAttachment.init(path: destinationURL.absoluteString, type: .file))
+                }
+            } else {
+                sharedText.append(item.absoluteString)
+            }
         }
     }
 
@@ -115,13 +133,7 @@ open class ShareIntentMacosViewController: NSViewController {
                     continuation.resume(returning: nil)
                     return
                 }
-                let fileName = self.getFileName(from: tempURL, type: .file)
-                guard let destinationURL = self.getNewFileUrl(fileName: fileName) else {
-                    continuation.resume(returning: nil)
-                    return
-                }
-                let copied = self.copyFile(at: tempURL, to: destinationURL)
-                continuation.resume(returning: copied ? destinationURL : nil)
+                continuation.resume(returning: self.copySharedFile(at: tempURL))
             }
         }
 
@@ -129,6 +141,17 @@ open class ShareIntentMacosViewController: NSViewController {
             sharedAttachments.append(
                 SharedAttachment.init(path: destinationURL.absoluteString, type: .file))
         }
+    }
+
+    /// Copies a shared file into the App Group container while the extension
+    /// still holds the provider's transient sandbox grant, returning the
+    /// copied URL — or nil when the container or the copy is unavailable.
+    func copySharedFile(at sourceURL: URL) -> URL? {
+        let fileName = getFileName(from: sourceURL, type: .file)
+        guard let destinationURL = getNewFileUrl(fileName: fileName) else {
+            return nil
+        }
+        return copyFile(at: sourceURL, to: destinationURL) ? destinationURL : nil
     }
 
     public func getNewFileUrl(fileName: String) -> URL? {
