@@ -182,10 +182,13 @@ extension URL {
 
         var queryStrings = [String: String]()
         for pair in query.components(separatedBy: "&") {
-            let key = pair.components(separatedBy: "=")[0]
+            // A parameter may carry no "=" at all — indexing the split
+            // unconditionally crashes the host on such URLs.
+            let components = pair.components(separatedBy: "=")
+            guard components.count > 1 else { continue }
+            let key = components[0]
             let value =
-                pair
-                .components(separatedBy: "=")[1]
+                components[1]
                 .replacingOccurrences(of: "+", with: " ")
                 .removingPercentEncoding ?? ""
             queryStrings[key] = value

@@ -28,6 +28,11 @@ open class ShareIntentMacosViewController: NSViewController {
         ShareIntentMacosViewController.appGroupId =
             (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String)
             ?? "group.\(ShareIntentMacosViewController.hostAppBundleIdentifier)"
+        if Bundle.main.object(forInfoDictionaryKey: "AppGroupId") == nil {
+            print(
+                "[zuraffa_intents] AppGroupId missing from Info.plist — the group.<bundle-id> fallback is iOS-shaped and will not resolve on macOS (App Group ids need the Team ID prefix)"
+            )
+        }
     }
 
     open override func viewDidLoad() {
@@ -43,11 +48,17 @@ open class ShareIntentMacosViewController: NSViewController {
             if let contents = content.attachments {
                 for (index, attachment) in (contents).enumerated() {
                     do {
-                        if attachment.hasItemConformingToTypeIdentifier(urlContentType) {
-                            try await handleUrl(
-                                content: content, attachment: attachment, index: index)
-                        } else if attachment.hasItemConformingToTypeIdentifier(fileURLType) {
+                        // public.file-url conforms to public.url, so the
+                        // file check MUST come first: with the url check
+                        // first, every shared file matches the url branch,
+                        // is handled as text, and the App Group copy in
+                        // handleFiles is never reached (the iOS controller
+                        // checks files first for the same reason).
+                        if attachment.hasItemConformingToTypeIdentifier(fileURLType) {
                             try await handleFiles(
+                                content: content, attachment: attachment, index: index)
+                        } else if attachment.hasItemConformingToTypeIdentifier(urlContentType) {
+                            try await handleUrl(
                                 content: content, attachment: attachment, index: index)
                         } else if attachment.hasItemConformingToTypeIdentifier(textContentType) {
                             try await handleText(
@@ -87,24 +98,58 @@ open class ShareIntentMacosViewController: NSViewController {
     public func handleFiles(content: NSExtensionItem, attachment: NSItemProvider, index: Int)
         async throws
     {
-        let data = try await attachment.loadItem(forTypeIdentifier: fileURLType, options: nil)
-        if let url = data as? URL {
-            let fileName = getFileName(from: url, type: .file)
-            let newFileUrl = getNewFileUrl(fileName: fileName)
-            let copied = copyFile(at: url, to: newFileUrl)
-            if copied {
-                sharedAttachments.append(
-                    SharedAttachment.init(path: newFileUrl.absoluteString, type: .file))
+        // loadFileRepresentation (not loadItem): the provider vends a
+        // coordinated copy the extension is guaranteed to read, and the
+        // returned URL is only valid inside this completion handler — so the
+        // copy into the App Group container happens here, before the block
+        // returns and the temporary URL disappears.
+        let copiedURL: URL? = try await withCheckedThrowingContinuation {
+            (continuation: CheckedContinuation<URL?, Error>) in
+            attachment.loadFileRepresentation(forTypeIdentifier: fileURLType) {
+                tempURL, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                guard let tempURL = tempURL else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                let fileName = self.getFileName(from: tempURL, type: .file)
+                guard let destinationURL = self.getNewFileUrl(fileName: fileName) else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                let copied = self.copyFile(at: tempURL, to: destinationURL)
+                continuation.resume(returning: copied ? destinationURL : nil)
             }
+        }
+
+        if let destinationURL = copiedURL {
+            sharedAttachments.append(
+                SharedAttachment.init(path: destinationURL.absoluteString, type: .file))
         }
     }
 
-    public func getNewFileUrl(fileName: String) -> URL {
-        let newFileUrl = FileManager.default
-            .containerURL(
-                forSecurityApplicationGroupIdentifier: ShareIntentMacosViewController.appGroupId)!
-            .appendingPathComponent(fileName)
-        return newFileUrl
+    public func getNewFileUrl(fileName: String) -> URL? {
+        // On macOS the App Group identifier must carry the Team ID prefix
+        // (e.g. "2D3QTPZG5J.group.dev.zuzu.zuraffa") and both the host app
+        // and this extension must list it in their
+        // com.apple.security.application-groups entitlements. When the
+        // AppGroupId Info.plist entry is missing or unprefixed,
+        // containerURL returns nil here — fail loudly and skip the
+        // attachment instead of crashing the extension mid-share.
+        guard
+            let groupURL = FileManager.default.containerURL(
+                forSecurityApplicationGroupIdentifier:
+                    ShareIntentMacosViewController.appGroupId)
+        else {
+            print(
+                "[zuraffa_intents] cannot resolve App Group container for \"\(ShareIntentMacosViewController.appGroupId)\" — set AppGroupId in Info.plist to the team-prefixed macOS group id and add the com.apple.security.application-groups entitlement"
+            )
+            return nil
+        }
+        return groupURL.appendingPathComponent(fileName)
     }
 
     public func redirectToHostApp() {
