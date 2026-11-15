@@ -930,6 +930,16 @@ void main() {
               'not just the Swift name handleOpen(_:)',
         );
 
+        // Adjacency: the pin must sit directly above the open-URL hook
+        // declaration — somewhere-after alone would miss the skew case
+        // where the selector gets pinned onto an earlier method.
+        const anchored = '$pin\n    public func handleOpen(_ urls: [URL]) -> Bool';
+        expect(
+          macosPlugin,
+          contains(anchored),
+          reason: '$pin must sit directly above the open-URL hook declaration',
+        );
+
         const decl = 'func handleOpen(_ urls: [URL]) -> Bool';
         final start = macosPlugin.indexOf(decl, pinStart);
         expect(
