@@ -249,8 +249,12 @@ open class ShareIntentMacosViewController: NSViewController {
 
         // Open the host app URL and call completeRequest from the completion
         // handler so the source app only processes the dismissal after the
-        // host app has launched.
-        NSWorkspace.shared.open(url, configuration: NSWorkspace.OpenConfiguration()) {
+        // host app has launched. promptsUserIfNeeded defaults to true, which
+        // makes macOS gate the extension-to-host open with the
+        // "Keeping app data separate" confirmation on every share (#22).
+        let openConfiguration = NSWorkspace.OpenConfiguration()
+        openConfiguration.promptsUserIfNeeded = false
+        NSWorkspace.shared.open(url, configuration: openConfiguration) {
             [weak self] _, _ in
             self?.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
         }
