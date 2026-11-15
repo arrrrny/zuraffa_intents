@@ -54,11 +54,28 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         return true
     }
 
+    /// The lifecycle-delegate open-URL hook `FlutterAppDelegate` actually
+    /// calls: it probes the *Objective-C selector* `handleOpenURLs:` on every
+    /// registered delegate (`FlutterAppDelegate.mm`, `application:openURLs:`).
+    /// Swift's importer renames the protocol requirement to `handleOpen(_:)`
+    /// (Swift 3 omit-needless-words), but the runtime only knows the selector:
+    /// a method named `handleOpen(_:)` is exported as `handleOpen:`, which the
+    /// engine never probes — verified on host Swift 6.2.4 with
+    /// `responds(to: Selector("handleOpenURLs:"))` (false bare, true pinned).
+    /// Hence the explicit `@objc` pin; the `FlutterAppLifecycleDelegate`
+    /// conformance declared below keeps the contract visible.
+    @objc(handleOpenURLs:)
     public func handleOpen(_ urls: [URL]) -> Bool {
         var handled = false
         for url in urls {
             if hasMatchingSchemePrefix(url: url) {
                 handled = true
+                // `setInitialData: true` on purpose: on a cold launch the
+                // URL arrives before the Dart isolate subscribes to
+                // sharedMediaStream, so `eventSink` is nil and the live
+                // event is dropped. Buffering is what getInitialSharedMedia()
+                // hands back once Dart boots; the live emit still fires
+                // either way, so warm and cold delivery behave the same.
                 _ = handleUrl(url: url, setInitialData: true)
             }
         }
@@ -175,6 +192,14 @@ public class ZuraffaIntentsPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         initialMedia = nil
     }
 }
+
+// `addApplicationDelegate:` takes `NSObject<FlutterAppLifecycleDelegate>*`, so
+// the declared conformance documents the plugin's lifecycle-delegate role and
+// names the protocol the open-URL hook belongs to. Note every requirement of
+// that protocol is `@optional`, so conformance alone does not compiler-check the
+// method names — the `@objc(handleOpenURLs:)` pin above is what fixes the
+// selector.
+extension ZuraffaIntentsPlugin: FlutterAppLifecycleDelegate {}
 
 extension URL {
     var queryDictionary: [String: String]? {

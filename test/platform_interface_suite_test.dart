@@ -897,8 +897,8 @@ void main() {
     });
 
     test(
-      'U42: the macOS plugin implements the lifecycle-delegate open-URL '
-      'selector handleOpen(_:) and routes it through handleUrl (issue #11)',
+      'U42: the macOS plugin exports the lifecycle-delegate open-URL '
+      'selector handleOpenURLs: and routes it through handleUrl (issue #11)',
       () {
         final macosPlugin = File(
           'macos/zuraffa_intents/Sources/zuraffa_intents/ZuraffaIntentsPlugin.swift',
@@ -911,19 +911,31 @@ void main() {
         );
 
         // ... and FlutterAppDelegate fans open-URL events out to lifecycle
-        // delegates through the Objective-C selector handleOpenURLs:, which
-        // imports into Swift as handleOpen(_:). Without it the whole macOS
-        // receive path (scheme URLs and file:// shares, cold-start buffer and
-        // live stream alike) is dead code.
-        const selector = 'func handleOpen(_ urls: [URL]) -> Bool';
-        final start = macosPlugin.indexOf(selector);
+        // delegates through the *Objective-C selector* handleOpenURLs:
+        // (FlutterAppDelegate.mm, application:openURLs:). Swift's importer
+        // renames that requirement to handleOpen(_:) (Swift 3
+        // omit-needless-words), but the runtime only knows the selector: a
+        // plain handleOpen(_:) is exported as handleOpen: and the engine
+        // never probes it. Verified on host Swift 6.2.4:
+        // responds(to: Selector("handleOpenURLs:")) is false for a bare
+        // handleOpen(_:) and true once the selector is pinned.
+        const pin = '@objc(handleOpenURLs:)';
+        final pinStart = macosPlugin.indexOf(pin);
         expect(
-          start,
+          pinStart,
           greaterThanOrEqualTo(0),
           reason:
-              'macOS receive path is unreachable: FlutterAppDelegate calls '
-              'handleOpen(_:) on registered lifecycle delegates, never '
-              'application(_:open urls:)',
+              'macOS receive path is unreachable: the plugin must pin the '
+              'ObjC selector handleOpenURLs: that FlutterAppDelegate probes, '
+              'not just the Swift name handleOpen(_:)',
+        );
+
+        const decl = 'func handleOpen(_ urls: [URL]) -> Bool';
+        final start = macosPlugin.indexOf(decl, pinStart);
+        expect(
+          start,
+          greaterThan(pinStart),
+          reason: '$pin must annotate the open-URL hook declaration',
         );
 
         final body = macosPlugin.substring(
@@ -933,19 +945,31 @@ void main() {
         expect(
           body,
           isNot(contains('func application(')),
-          reason: 'body slice must stay inside handleOpen(_:)',
+          reason: 'body slice must stay inside the open-URL hook',
         );
         expect(
           body,
           contains('hasMatchingSchemePrefix(url: url)'),
-          reason: 'handleOpen(_:) must reuse the scheme/file prefix guard',
+          reason: 'the open-URL hook must reuse the scheme/file prefix guard',
         );
         expect(
           body,
           contains('handleUrl(url: url, setInitialData: true)'),
           reason:
-              'handleOpen(_:) must reuse the payload machinery and keep '
+              'the open-URL hook must reuse the payload machinery and keep '
               'the cold-start buffer getInitialSharedMedia() reads',
+        );
+
+        // Declared conformance: addApplicationDelegate: takes
+        // NSObject<FlutterAppLifecycleDelegate>*, so the protocol names the
+        // contract instead of leaving it to memory.
+        expect(
+          macosPlugin,
+          contains(
+            'extension ZuraffaIntentsPlugin: FlutterAppLifecycleDelegate {}',
+          ),
+          reason:
+              'the plugin must declare FlutterAppLifecycleDelegate conformance',
         );
       },
     );
