@@ -34,9 +34,22 @@ flutter run            # pick an android / ios / macos device
   target that hands the payload to the app (the standard
   `zikzak_share_handler` setup this plugin replaces). Add the extension in
   Xcode and forward to `ZuraffaIntentsPlugin`; then share into the app.
-- **macOS** — same as iOS: add a Share Extension in
-  `macos/Runner.xcodeproj`, or use the in-memory demo mode to explore the
-  API surface.
+- **macOS** — the app declares `CFBundleDocumentTypes` in
+  `macos/Runner/Info.plist` (`public.image`, `public.text`,
+  `public.file-url`), so a Dock drop or **Open With** delivers the item
+  through `FlutterAppDelegate`'s `application:openURLs:` hook, which fans out
+  to the plugin's `handleOpenURLs:` selector. That is the path issue #11
+  fixed — the `NSApplicationDelegate` spellings the plugin used to rely on
+  are never called on macOS, so shares were silently dropped. To try it:
+  `flutter run -d macos`, then drag an image onto the app's Dock icon (or
+  right-click a file → *Open With* → *zuraffa_intents_example*). A cold
+  launch fills the "Boot-time initial share" card; while the app runs the
+  "Live share stream" feed appends instead.
+
+  A Share Extension is only needed for the `key=` handoff (extension →
+  App Group → host). Wiring one up means adding `AppGroupId` to
+  `Info.plist` *and* the matching App Group entitlement — the plugin falls
+  back to `group.<bundle-id>`, which does not resolve under App Sandbox.
 
 The widget test (`test/`) drives the complete flow over the in-memory
 driver — boot share → reset → live event → record — as the executable

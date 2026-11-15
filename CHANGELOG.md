@@ -1,3 +1,22 @@
+## 7.4.3 - 2026-11-15
+
+macOS receiving actually fires (issue #11). `ZuraffaIntentsPlugin` now exports
+the Objective-C selector `handleOpenURLs:` — the one `FlutterAppDelegate`
+probes in `application:openURLs:` — so open-URL events reach the plugin. The
+`NSApplicationDelegate` spellings (`application(_:open:)`) the plugin relied on
+are never called on macOS, so shares were silently dropped. The `FlutterAppLifecycleDelegate`
+conformance is declared for documentation only: every requirement of that
+protocol is `@optional`, so the `@objc` pin is what actually fixes the selector.
+
+Shared files are treated as files (issue #18): `public.file-url` conforms to
+`public.url`, so with the URL branch checked first the file branch was shadowed,
+the App Group copy never ran, and the raw sender path crossed into the host app.
+The `fileURLType` conformance check now precedes `urlContentType`, and an empty
+`AppGroupId` in Info.plist is treated as missing rather than as a usable id.
+
+The macOS example app declares document types, so a Dock drop or "Open With"
+exercises the receive path end to end.
+
 ## 7.4.2 - 2026-11-13
 
 - Mono-version fleet alignment to 7.4.2; internal dependencies refreshed; xml override 7.1.0.
