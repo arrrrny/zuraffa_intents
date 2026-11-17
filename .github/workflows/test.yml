@@ -23,6 +23,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Issue #28: a sibling `path:` override only resolves on a developer
+      # checkout, so it has to be caught here. `flutter pub get` is the next
+      # step, and its failure reddens the base for every later PR (#15-#27).
+      - name: guard against path dependencies outside the repo
+        run: python3 scripts/check_path_deps.py
+
       - uses: subosito/flutter-action@v2
         with:
           channel: stable

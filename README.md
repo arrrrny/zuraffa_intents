@@ -175,12 +175,21 @@ flutter pub get
 flutter test                 # 59 behaviors (spec-001: 19, spec-002: 22, spec-003: 17, bootstrap: 1)
 flutter analyze
 flutter pub publish --dry-run
+python3 scripts/check_path_deps.py   # base guard: no `path:` dependency may leave the repo
 ```
 
 CI runs the suite on **Linux and macOS** (`.github/workflows/test.yml`):
 `defaultIsAppleLikeUriPath()` takes the Apple branch on macOS and the
 non-Apple branch on Linux, so both halves of the platform-conditional
 logic are exercised before every release (issue #4).
+
+`scripts/check_path_deps.py` runs before `flutter pub get` in that workflow:
+the fleet mono-version alignment keeps appending a sibling `path:` override
+(`zuraffa: path: ../zuraffa`) that only resolves on a developer checkout, and
+in CI it killed `flutter pub get` and reddened the base for every later PR
+(#15–#27). The guard names the offender in the change that introduces it,
+`test/path_dependency_guard_test.dart` pins it, and `example/pubspec.lock`
+stays untracked so SDK drift cannot dirty the tree either (#27).
 
 Evidence chain per spec: `specs/<id>/spec.md`, `tasks.md`, and
 `tdd/{test-list,cycle-log,mutant-run,verification}.md`.
