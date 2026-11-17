@@ -59,7 +59,11 @@ open class ShareIntentMacosViewController: NSViewController {
     }
 
     func handleInputItems() async {
-        if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
+        // Guarded access: an extension context with no (or late) input
+        // items must not crash the process on the force-unwrapped [0]
+        // subscript (mirrors the iOS hardening).
+        let items = extensionContext?.inputItems ?? []
+        if let content = items.first as? NSExtensionItem {
             if let contents = content.attachments {
                 for (index, attachment) in (contents).enumerated() {
                     do {
