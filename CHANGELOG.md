@@ -7,10 +7,14 @@
   it (documented only for Share/Intents), SIGSEGV-ing the extension process
   on iOS 26 before the handoff ever ran (observed as a dead Action-extension
   row in a consumer app). The extension point is read from the bundle's
-  `NSExtensionPointIdentifier` and `.intent` is called only for
-  `com.apple.share-services`. Also hardened both platforms'
+  `NSExtension` → `NSExtensionPointIdentifier` dictionary (the documented
+  location; the flat key stays as a fallback) and `.intent` is called only
+  for `com.apple.share-services`. Also hardened both platforms'
   `handleInputItems()` against an empty/late `inputItems` array (the
-  `extensionContext!.inputItems[0]` force-subscript crashed the same way).
+  `extensionContext!.inputItems[0]` force-subscript crashed the same way) —
+  and that path now fails LOUDLY (an error alert on iOS, an os_log error plus
+  `completeRequest` on macOS) instead of leaving the share sheet up with no
+  feedback.
 
 ## 7.5.0 - 2026-11-15
 

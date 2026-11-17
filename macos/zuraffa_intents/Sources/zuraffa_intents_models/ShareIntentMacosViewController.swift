@@ -93,6 +93,15 @@ open class ShareIntentMacosViewController: NSViewController {
                 }
             }
             redirectToHostApp()
+        } else {
+            // Explicit failure path, mirroring the iOS controller: returning
+            // silently would leave the share window up with nothing to do —
+            // the user sees a dead window instead of the loud crash the guard
+            // above replaced.
+            Self.logger.error(
+                "[zuraffa_intents] share dropped: the extension context carried no NSExtensionItem — nothing to hand to the host"
+            )
+            extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
         }
     }
 

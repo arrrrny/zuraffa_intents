@@ -106,6 +106,12 @@ open class ShareIntentIosViewController: UIViewController {
             // source app's dismiss overlay stuck. The system will terminate this
             // extension when the app switches.
             redirectToHostApp()
+        } else {
+            // Explicit failure path. Returning silently would leave the share
+            // sheet on screen with no feedback at all — the user stares at a
+            // dead sheet, which is harder to diagnose than the loud crash the
+            // guard above replaced.
+            dismissWithError()
         }
     }
 
@@ -294,7 +300,10 @@ open class ShareIntentIosViewController: UIViewController {
 
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-        extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+        // Nil-tolerant on purpose: the intake guards above now accept a nil
+        // extensionContext, so the error path must not turn that tolerance
+        // into a second force-unwrap crash.
+        extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
 
     public func redirectToHostApp() {
@@ -324,9 +333,24 @@ open class ShareIntentIosViewController: UIViewController {
         // it — and call `.intent` only on the share point; every other
         // extension point passes nil intent (the fields it feeds were nil
         // for those flows anyway).
-        let isSharePoint = Bundle.main.object(
-            forInfoDictionaryKey: "NSExtensionPointIdentifier") as? String
-            == "com.apple.share-services"
+        //
+        // NSExtensionPointIdentifier is a CHILD of the NSExtension dictionary
+        // (Information Property List → NSExtension →
+        // NSExtensionPointIdentifier), so a flat lookup alone returns nil on a
+        // stock extension Info.plist — that would make isSharePoint false in
+        // every extension and silently drop the intent metadata this guard
+        // exists to preserve. The flat key stays as a fallback for
+        // hand-flattened Info.plists.
+        let extensionInfo = Bundle.main.object(forInfoDictionaryKey: "NSExtension")
+            as? [String: Any]
+        let extensionPoint = (extensionInfo?["NSExtensionPointIdentifier"] as? String)
+            ?? Bundle.main.object(forInfoDictionaryKey: "NSExtensionPointIdentifier")
+                as? String
+        // The scope is deliberate: only the share extension point declares
+        // `intent`. An Intents extension point (com.apple.intents-service /
+        // com.apple.intents-ui-service) hosting this controller is NOT in the
+        // allowlist and receives a nil intent by design.
+        let isSharePoint = extensionPoint == "com.apple.share-services"
         let intent = isSharePoint
             ? self.extensionContext?.intent as? INSendMessageIntent
             : nil
