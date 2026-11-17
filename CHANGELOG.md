@@ -1,3 +1,21 @@
+## 7.5.1 - 2026-11-17
+
+- **iOS share VC hardening (arrrrny/zik_zak#893, fixed there in zik_zak#892)**:
+  `ShareIntentIosViewController.saveSharedMedia()` no longer calls
+  `NSExtensionContext.intent` off the share extension point — the property
+  THROWS an uncaught ObjC exception from extension points that don't declare
+  it (documented only for Share/Intents), SIGSEGV-ing the extension process
+  on iOS 26 before the handoff ever ran (observed as a dead Action-extension
+  row in a consumer app). The extension point is read from the bundle's
+  `NSExtension` → `NSExtensionPointIdentifier` dictionary (the documented
+  location; the flat key stays as a fallback) and `.intent` is called only
+  for `com.apple.share-services`. Also hardened both platforms'
+  `handleInputItems()` against an empty/late `inputItems` array (the
+  `extensionContext!.inputItems[0]` force-subscript crashed the same way) —
+  and that path now fails LOUDLY (an error alert on iOS, an os_log error plus
+  `completeRequest` on macOS) instead of leaving the share sheet up with no
+  feedback.
+
 ## 7.5.0 - 2026-11-15
 
 Release 7.5.0: Signal-backed view-state migration template with SignalScope ownership (#2076); signal listener/subscription cleanup on eager-delivery throw (#2081, #2083); UseCase/StreamUseCase catch-all SEVERE logs now carry the cause (#2077, #2079); dependencies upgraded and pinned to latest resolvable.

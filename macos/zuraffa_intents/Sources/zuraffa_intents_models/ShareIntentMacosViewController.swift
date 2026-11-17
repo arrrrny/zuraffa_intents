@@ -59,7 +59,11 @@ open class ShareIntentMacosViewController: NSViewController {
     }
 
     func handleInputItems() async {
-        if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
+        // Guarded access: an extension context with no (or late) input
+        // items must not crash the process on the force-unwrapped [0]
+        // subscript (mirrors the iOS hardening).
+        let items = extensionContext?.inputItems ?? []
+        if let content = items.first as? NSExtensionItem {
             if let contents = content.attachments {
                 for (index, attachment) in (contents).enumerated() {
                     do {
@@ -89,6 +93,15 @@ open class ShareIntentMacosViewController: NSViewController {
                 }
             }
             redirectToHostApp()
+        } else {
+            // Explicit failure path, mirroring the iOS controller: returning
+            // silently would leave the share window up with nothing to do —
+            // the user sees a dead window instead of the loud crash the guard
+            // above replaced.
+            Self.logger.error(
+                "[zuraffa_intents] share dropped: the extension context carried no NSExtensionItem — nothing to hand to the host"
+            )
+            extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
         }
     }
 

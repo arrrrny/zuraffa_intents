@@ -63,7 +63,11 @@ open class ShareIntentIosViewController: UIViewController {
     }
 
     func handleInputItems() async {
-        if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
+        // Guarded access: an extension point that delivers no (or late)
+        // input items must not crash the process on the force-unwrapped
+        // [0] subscript — see the intent-throw note in saveSharedMedia().
+        let items = extensionContext?.inputItems ?? []
+        if let content = items.first as? NSExtensionItem {
             if let contents = content.attachments {
                 for (index, attachment) in (contents).enumerated() {
                     do {
@@ -102,6 +106,12 @@ open class ShareIntentIosViewController: UIViewController {
             // source app's dismiss overlay stuck. The system will terminate this
             // extension when the app switches.
             redirectToHostApp()
+        } else {
+            // Explicit failure path. Returning silently would leave the share
+            // sheet on screen with no feedback at all — the user stares at a
+            // dead sheet, which is harder to diagnose than the loud crash the
+            // guard above replaced.
+            dismissWithError()
         }
     }
 
@@ -290,7 +300,10 @@ open class ShareIntentIosViewController: UIViewController {
 
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-        extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+        // Nil-tolerant on purpose: the intake guards above now accept a nil
+        // extensionContext, so the error path must not turn that tolerance
+        // into a second force-unwrap crash.
+        extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
 
     public func redirectToHostApp() {
@@ -309,14 +322,48 @@ open class ShareIntentIosViewController: UIViewController {
     }
 
     private func saveSharedMedia() {
-        let intent = self.extensionContext?.intent as? INSendMessageIntent
+        // NSExtensionContext.intent THROWS from extension points that don't
+        // declare it — an uncaught ObjC exception (SIGSEGV; faulting frame
+        // "-[NSExtensionContext(ShareExtension) intent]" under
+        // saveSharedMedia) that killed a consumer's Action extension on
+        // every tap on iOS 26, because the property is documented only for
+        // the Share/Intents extension points (arrrrny/zik_zak#893, fixed
+        // there in arrrrny/zik_zak#892). Read the extension point from THIS
+        // bundle's Info.plist — the context object exposes no property for
+        // it — and call `.intent` only on the share point; every other
+        // extension point passes nil intent (the fields it feeds were nil
+        // for those flows anyway).
+        //
+        // NSExtensionPointIdentifier is a CHILD of the NSExtension dictionary
+        // (Information Property List → NSExtension →
+        // NSExtensionPointIdentifier), so a flat lookup alone returns nil on a
+        // stock extension Info.plist — that would make isSharePoint false in
+        // every extension and silently drop the intent metadata this guard
+        // exists to preserve. The flat key stays as a fallback for
+        // hand-flattened Info.plists.
+        let extensionInfo = Bundle.main.object(forInfoDictionaryKey: "NSExtension")
+            as? [String: Any]
+        let extensionPoint = (extensionInfo?["NSExtensionPointIdentifier"] as? String)
+            ?? Bundle.main.object(forInfoDictionaryKey: "NSExtensionPointIdentifier")
+                as? String
+        // The scope is deliberate: only the share extension point declares
+        // `intent`. An Intents extension point (com.apple.intents-service /
+        // com.apple.intents-ui-service) hosting this controller is NOT in the
+        // allowlist and receives a nil intent by design.
+        let isSharePoint = extensionPoint == "com.apple.share-services"
+        let intent = isSharePoint
+            ? self.extensionContext?.intent as? INSendMessageIntent
+            : nil
 
         let conversationIdentifier = intent?.conversationIdentifier
         let sender = intent?.sender
         let serviceName = intent?.serviceName
         let speakableGroupName = intent?.speakableGroupName
 
-        let extensionItem = extensionContext?.inputItems[0] as? NSExtensionItem
+        // Guarded access: an extension point that delivers no (or late)
+        // input items must not crash the process on the [0] subscript —
+        // same crash family as the intent throw above.
+        let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem
         let subject = extensionItem?.attributedContentText?.string
 
         let sharedMedia = SharedMedia.init(
