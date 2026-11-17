@@ -65,6 +65,72 @@ flutter:
 
       expect(result.exitCode, 0, reason: result.output);
     });
+
+    test('fails for a dependency_overrides path that escapes the repo',
+        () async {
+      // `dependency_overrides:` is the section `update_fleet.sh` actually
+      // appends to, so the escape guard must be pinned there too.
+      final root = await _fixture(<String, String>{
+        'pubspec.yaml': _pubspec('fixture'),
+        'example/pubspec.yaml': _pubspec(
+          'fixture_example',
+          extra: '''
+dependency_overrides:
+  zuraffa:
+    path: ../../zuraffa
+''',
+        ),
+      });
+
+      final result = await _run(root);
+
+      expect(result.exitCode, isNot(0));
+      expect(result.output, contains('example/pubspec.yaml'));
+      expect(result.output, contains('outside the repo'));
+    });
+
+    test('fails for an in-repo target that does not exist', () async {
+      // example/ + `path: ../zuraffa` stays inside the repo but the target is
+      // missing — `flutter pub get` dies on it just like an escaping path.
+      final root = await _fixture(<String, String>{
+        'pubspec.yaml': _pubspec('fixture'),
+        'example/pubspec.yaml': _pubspec(
+          'fixture_example',
+          extra: '''
+  zuraffa:
+    path: ../zuraffa
+''',
+        ),
+      });
+
+      final result = await _run(root);
+
+      expect(result.exitCode, isNot(0));
+      expect(result.output, contains('example/pubspec.yaml'));
+      expect(result.output, contains('zuraffa'));
+      expect(result.output, contains('does not exist'));
+    });
+
+    test('ignores a path: nested under a git: dependency', () async {
+      // A git dependency's `path:` is a sub-path inside the cloned repo, never
+      // a filesystem path, so it must not fail (or inflate the in-repo count).
+      final root = await _fixture(<String, String>{
+        'pubspec.yaml': _pubspec(
+          'fixture',
+          extra: '''
+  some_git_pkg:
+    git:
+      url: https://github.com/example/some_git_pkg.git
+      ref: main
+      path: ../../sibling-dir
+''',
+        ),
+      });
+
+      final result = await _run(root);
+
+      expect(result.exitCode, 0, reason: result.output);
+    });
   });
 }
 
